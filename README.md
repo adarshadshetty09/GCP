@@ -93,7 +93,6 @@ gcloud compute instances create test-vm1-linux --project=fleet-bongo-453603-d1 -
 
 ## OR
 
-
 ```
 gcloud compute instances create test-vm3-linux \
   --project=fleet-bongo-453603-d1 \
@@ -122,5 +121,146 @@ gcloud compute instances ops-agents policies create goog-ops-agent-v2-x86-templa
 
 ##### You can also enable deletion protection on VM
 
-
 ### Provisioning Windows based VM and RDP into it.
+
+#### In Service-Account You can create a Key.
+
+### Pre-Requisites
+
+```
+PS C:\Users\User\Downloads> terraform -v
+Terraform v1.10.5
+on windows_amd64
+
+Your version of Terraform is out of date! The latest version
+is 1.11.2. You can update by downloading from https://www.terraform.io/downloads.html
+PS C:\Users\User\Downloads>
+PS C:\Users\User\Downloads>
+PS C:\Users\User\Downloads> gcloud -v
+Google Cloud SDK 514.0.0
+bq 2.1.14
+core 2025.03.07
+gcloud-crc32c 1.0.0
+gsutil 5.33
+PS C:\Users\User\Downloads>
+```
+
+```
+gcloud auth login
+```
+
+```
+PS C:\Users\User\Downloads> gcloud auth login
+Your browser has been opened to visit:
+
+    https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A8085%2F&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=2i1n7UdH3q5EdZrCM6v1OiSfMEhMTU&access_type=offline&code_challenge=8UdLyou3w9VAvrV2H0ZxAVKujCMqvhVMImfTNUlwuZY&code_challenge_method=S256
+
+
+You are now logged in as [adarshadshetty09@gmail.com].
+Your current project is [None].  You can change this setting by running:
+  $ gcloud config set project PROJECT_ID
+PS C:\Users\User\Downloads>
+```
+
+#### Enable API for compute Engine and Cloud Engine API
+
+```
+gcloud services enable compute.googleapis.com storage.googleapis.com
+
+```
+
+```
+PS C:\Users\User\Downloads> gcloud config set project fleet-bongo-453603-d1
+Updated property [core/project].
+PS C:\Users\User\Downloads> gcloud services enable compute.googleapis.com storage.googleapis.com
+Operation "operations/acat.p2-772540397444-37ffa9b6-ec7f-4af6-a96c-5769dc16a0ac" finished successfully.
+PS C:\Users\User\Downloads>
+```
+
+```
+ $ gcloud config set project VALUE
+```
+
+### $ gcloud config configurations list
+
+```
+PS C:\Users\User\Downloads> gcloud config configurations list
+NAME: default
+IS_ACTIVE: True
+ACCOUNT: adarshadshetty09@gmail.com
+PROJECT: fleet-bongo-453603-d1
+COMPUTE_DEFAULT_ZONE:
+COMPUTE_DEFAULT_REGION:
+PS C:\Users\User\Downloads>
+```
+
+### $ gcloud init  [To initialize the gcloud configuaration ]
+
+```
+PS C:\Users\User\Desktop\GCP\GCP\GCP_TERRAFORM\GCP_VM> gcloud compute images list --project debian-cloud --filter="family:debian-11" --format="get(name)"
+debian-11-bullseye-v20250311
+PS C:\Users\User\Desktop\GCP\GCP\GCP_TERRAFORM\GCP_VM>
+```
+
+**find the exact image name**: If you want to check the exact image names available for your region, you can use the GCP Console or the `gcloud` command-line tool.
+
+To list available images for Debian 10 or Debian 11, you can run:
+
+```
+gcloud compute images list --project debian-cloud --filter="family:debian-11" --format="get(name)"
+```
+
+#### Switch between the users
+
+```
+sudo -u adarshadshetty09 bash
+```
+
+```
+sudo -u User bash
+```
+
+### ssh-keygen
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~
+$ ssh-keygen -t rsa -b 2048 \
+> -f ~/.ssh/gcp-lesson-120 \
+> -C my-username
+Generating public/private rsa key pair.
+Enter passphrase for "/c/Users/User/.ssh/gcp-lesson-120" (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /c/Users/User/.ssh/gcp-lesson-120
+Your public key has been saved in /c/Users/User/.ssh/gcp-lesson-120.pub
+The key fingerprint is:
+SHA256:0C5WGWayKcVoPpu4g9OrxCWl4ENMGB/hVAWAE0q6nSg my-username
+The key's randomart image is:
++---[RSA 2048]----+
+|+*=+o=+ +        |
+|X+ .o..B o       |
+|++o+. + +        |
+|++o.o. +         |
+|E=oo +o S        |
+|o = o. .         |
+| = .             |
+|+ +              |
+|.o.o             |
++----[SHA256]-----+
+
+User@DESKTOP-KM01E29 MINGW64 ~
+$ cd .ssh/
+
+User@DESKTOP-KM01E29 MINGW64 ~/.ssh
+$ ls
+config          gcp-lesson-120.pub     google_compute_engine.ppk  known_hosts
+gcp-lesson-120  google_compute_engine  google_compute_engine.pub  known_hosts.old
+
+User@DESKTOP-KM01E29 MINGW64 ~/.ssh
+
+```
+
+### Login throught the SSH
+
+```
+$ ssh -i ~/.ssh/gcp-lesson-120 my-username@35.184.16.91
+```
