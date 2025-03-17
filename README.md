@@ -264,3 +264,8 @@ User@DESKTOP-KM01E29 MINGW64 ~/.ssh
 ```
 $ ssh -i ~/.ssh/gcp-lesson-120 my-username@35.184.16.91
 ```
+
+#### [General-purpose machine family for Compute Engine  |  Compute Engine Documentation  |  Google Cloud](https://cloud.google.com/compute/docs/general-purpose-machines)
+
+
+#### [How can you configure the boot disk for your VM instance in Compute Engine? - EITCA Academy](https://eitca.org/cloud-computing/eitc-cl-gcp-google-cloud-platform/getting-started-with-gcp/compute-engine/examination-review-compute-engine/how-can-you-configure-the-boot-disk-for-your-vm-instance-in-compute-engine/)

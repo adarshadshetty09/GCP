@@ -1,12 +1,12 @@
 // Terraform plugin for creating random ids
 
-# resource "random_id" "instance_id" {
-#   byte_length = 8
-# }
+resource "random_id" "instance_id" {
+  byte_length = 8
+}
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "my-instance"
-  machine_type = "n2-standard-2"
+  name         = "my-instance-${random_id.instance_id.hex}"
+  machine_type = "f1-micro"
   zone         = "us-central1-a"
 
   tags = ["test", "demo1"]
@@ -28,5 +28,5 @@ resource "google_compute_instance" "vm_instance" {
     foo = "bar"
   }
 
-  metadata_startup_script = "echo hi > /test.txt"
+  metadata_startup_script = "echo hi > metadatastartupscript.txt"
 }
