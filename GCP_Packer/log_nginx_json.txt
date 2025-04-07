@@ -1,0 +1,409 @@
+[1;32mgooglecompute: output will be in this color.[0m
+
+[1;32m==> googlecompute: Checking image does not exist...[0m
+[1;32m==> googlecompute: Creating temporary RSA SSH key for instance...[0m
+[1;32m==> googlecompute: no persistent disk to create[0m
+[1;32m==> googlecompute: Using image: centos-stream-9-v20250311[0m
+[1;32m==> googlecompute: Creating instance...[0m
+[0;32m    googlecompute: Loading zone: us-central1-a[0m
+[0;32m    googlecompute: Loading machine type: n1-standard-8[0m
+[0;32m    googlecompute: Requesting instance creation...[0m
+[0;32m    googlecompute: Waiting for creation operation to complete...[0m
+[0;32m    googlecompute: Instance has been created![0m
+[1;32m==> googlecompute: Waiting for the instance to become running...[0m
+[0;32m    googlecompute: IP: 34.42.60.70[0m
+[1;32m==> googlecompute: Using SSH communicator to connect: 34.42.60.70[0m
+[1;32m==> googlecompute: Waiting for SSH to become available...[0m
+[1;32m==> googlecompute: Connected to SSH![0m
+[1;32m==> googlecompute: Provisioning with shell script: /tmp/packer-shell3322213227[0m
+[0;32m    googlecompute: CentOS Stream 9 - BaseOS                         12 MB/s | 8.7 MB     00:00[0m
+[0;32m    googlecompute: CentOS Stream 9 - AppStream                      20 MB/s |  23 MB     00:01[0m
+[0;32m    googlecompute: CentOS Stream 9 - Extras packages                45 kB/s |  20 kB     00:00[0m
+[0;32m    googlecompute: Google Compute Engine                            30 kB/s | 7.2 kB     00:00[0m
+[0;32m    googlecompute: Google Cloud SDK                                 63 MB/s | 140 MB     00:02[0m
+[0;32m    googlecompute: Dependencies resolved.[0m
+[0;32m    googlecompute: =========================================================================================[0m
+[0;32m    googlecompute:  Package                      Arch    Version                Repository              Size[0m
+[0;32m    googlecompute: =========================================================================================[0m
+[0;32m    googlecompute: Installing:[0m
+[0;32m    googlecompute:  kernel                       x86_64  5.14.0-575.el9         baseos                  75 k[0m
+[0;32m    googlecompute: Upgrading:[0m
+[0;32m    googlecompute:  NetworkManager               x86_64  1:1.53.1-1.el9         baseos                 2.3 M[0m
+[0;32m    googlecompute:  NetworkManager-libnm         x86_64  1:1.53.1-1.el9         baseos                 1.9 M[0m
+[0;32m    googlecompute:  NetworkManager-team          x86_64  1:1.53.1-1.el9         baseos                  29 k[0m
+[0;32m    googlecompute:  NetworkManager-tui           x86_64  1:1.53.1-1.el9         baseos                 238 k[0m
+[0;32m    googlecompute:  binutils                     x86_64  2.35.2-63.el9          baseos                 4.6 M[0m
+[0;32m    googlecompute:  binutils-gold                x86_64  2.35.2-63.el9          baseos                 735 k[0m
+[0;32m    googlecompute:  dracut                       x86_64  057-87.git20250311.el9 baseos                 475 k[0m
+[0;32m    googlecompute:  dracut-config-rescue         x86_64  057-87.git20250311.el9 baseos                  13 k[0m
+[0;32m    googlecompute:  dracut-network               x86_64  057-87.git20250311.el9 baseos                  86 k[0m
+[0;32m    googlecompute:  dracut-squash                x86_64  057-87.git20250311.el9 baseos                  13 k[0m
+[0;32m    googlecompute:  glibc                        x86_64  2.34-180.el9           baseos                 2.0 M[0m
+[0;32m    googlecompute:  glibc-common                 x86_64  2.34-180.el9           baseos                 304 k[0m
+[0;32m    googlecompute:  glibc-gconv-extra            x86_64  2.34-180.el9           baseos                 1.7 M[0m
+[0;32m    googlecompute:  glibc-langpack-en            x86_64  2.34-180.el9           baseos                 658 k[0m
+[0;32m    googlecompute:  google-cloud-cli             x86_64  517.0.0-1              google-cloud-sdk        98 M[0m
+[0;32m    googlecompute:  google-cloud-cli-anthoscli   x86_64  517.0.0-1              google-cloud-sdk        27 M[0m
+[0;32m    googlecompute:  google-guest-agent           x86_64  1:20250306.00-g1.el9   google-compute-engine   18 M[0m
+[0;32m    googlecompute:  google-osconfig-agent        x86_64  1:20250320.00-g1.el9   google-compute-engine  7.5 M[0m
+[0;32m    googlecompute:  ima-evm-utils                x86_64  1.6.2-1.el9            baseos                  78 k[0m
+[0;32m    googlecompute:  kernel-tools                 x86_64  5.14.0-575.el9         baseos                 366 k[0m
+[0;32m    googlecompute:  kernel-tools-libs            x86_64  5.14.0-575.el9         baseos                  92 k[0m
+[0;32m    googlecompute:  kpartx                       x86_64  0.8.7-37.el9           baseos                  47 k[0m
+[0;32m    googlecompute:  libblockdev                  x86_64  2.28-13.el9            appstream               91 k[0m
+[0;32m    googlecompute:  libblockdev-crypto           x86_64  2.28-13.el9            appstream               30 k[0m
+[0;32m    googlecompute:  libblockdev-fs               x86_64  2.28-13.el9            appstream               32 k[0m
+[0;32m    googlecompute:  libblockdev-loop             x86_64  2.28-13.el9            appstream               16 k[0m
+[0;32m    googlecompute:  libblockdev-mdraid           x86_64  2.28-13.el9            appstream               21 k[0m
+[0;32m    googlecompute:  libblockdev-part             x86_64  2.28-13.el9            appstream               24 k[0m
+[0;32m    googlecompute:  libblockdev-swap             x86_64  2.28-13.el9            appstream               16 k[0m
+[0;32m    googlecompute:  libblockdev-utils            x86_64  2.28-13.el9            appstream               26 k[0m
+[0;32m    googlecompute:  libsepol                     x86_64  3.6-3.el9              baseos                 329 k[0m
+[0;32m    googlecompute:  openssl                      x86_64  1:3.2.2-7.el9          baseos                 1.4 M[0m
+[0;32m    googlecompute:  openssl-libs                 x86_64  1:3.2.2-7.el9          baseos                 2.4 M[0m
+[0;32m    googlecompute:  python3-setuptools-wheel     noarch  53.0.0-14.el9          baseos                 468 k[0m
+[0;32m    googlecompute:  qemu-guest-agent             x86_64  17:9.1.0-16.el9        appstream              495 k[0m
+[0;32m    googlecompute: Installing dependencies:[0m
+[0;32m    googlecompute:  kernel-core                  x86_64  5.14.0-575.el9         baseos                  16 M[0m
+[0;32m    googlecompute:  kernel-modules               x86_64  5.14.0-575.el9         baseos                  37 M[0m
+[0;32m    googlecompute:  kernel-modules-core          x86_64  5.14.0-575.el9         baseos                  29 M[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Transaction Summary[0m
+[0;32m    googlecompute: =========================================================================================[0m
+[0;32m    googlecompute: Install   4 Packages[0m
+[0;32m    googlecompute: Upgrade  35 Packages[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Total download size: 255 M[0m
+[0;32m    googlecompute: Downloading Packages:[0m
+[0;32m    googlecompute: (1/39): kernel-5.14.0-575.el9.x86_64.rpm        449 kB/s |  75 kB     00:00[0m
+[0;32m    googlecompute: (2/39): kernel-core-5.14.0-575.el9.x86_64.rpm    27 MB/s |  16 MB     00:00[0m
+[0;32m    googlecompute: (3/39): NetworkManager-1.53.1-1.el9.x86_64.rpm   41 MB/s | 2.3 MB     00:00[0m
+[0;32m    googlecompute: (4/39): NetworkManager-libnm-1.53.1-1.el9.x86_6  34 MB/s | 1.9 MB     00:00[0m
+[0;32m    googlecompute: (5/39): NetworkManager-team-1.53.1-1.el9.x86_64 813 kB/s |  29 kB     00:00[0m
+[0;32m    googlecompute: (6/39): kernel-modules-core-5.14.0-575.el9.x86_  40 MB/s |  29 MB     00:00[0m
+[0;32m    googlecompute: (7/39): NetworkManager-tui-1.53.1-1.el9.x86_64. 1.5 MB/s | 238 kB     00:00[0m
+[0;32m    googlecompute: (8/39): binutils-gold-2.35.2-63.el9.x86_64.rpm   16 MB/s | 735 kB     00:00[0m
+[0;32m    googlecompute: (9/39): binutils-2.35.2-63.el9.x86_64.rpm        48 MB/s | 4.6 MB     00:00[0m
+[0;32m    googlecompute: (10/39): kernel-modules-5.14.0-575.el9.x86_64.r  31 MB/s |  37 MB     00:01[0m
+[0;32m    googlecompute: (11/39): dracut-config-rescue-057-87.git2025031  64 kB/s |  13 kB     00:00[0m
+[0;32m    googlecompute: (12/39): dracut-057-87.git20250311.el9.x86_64.r 1.8 MB/s | 475 kB     00:00[0m
+[0;32m    googlecompute: (13/39): dracut-network-057-87.git20250311.el9. 2.4 MB/s |  86 kB     00:00[0m
+[0;32m    googlecompute: (14/39): dracut-squash-057-87.git20250311.el9.x 373 kB/s |  13 kB     00:00[0m
+[0;32m    googlecompute: (15/39): glibc-2.34-180.el9.x86_64.rpm           36 MB/s | 2.0 MB     00:00[0m
+[0;32m    googlecompute: (16/39): glibc-common-2.34-180.el9.x86_64.rpm   7.8 MB/s | 304 kB     00:00[0m
+[0;32m    googlecompute: (17/39): glibc-gconv-extra-2.34-180.el9.x86_64.  30 MB/s | 1.7 MB     00:00[0m
+[0;32m    googlecompute: (18/39): glibc-langpack-en-2.34-180.el9.x86_64.  15 MB/s | 658 kB     00:00[0m
+[0;32m    googlecompute: (19/39): ima-evm-utils-1.6.2-1.el9.x86_64.rpm   2.2 MB/s |  78 kB     00:00[0m
+[0;32m    googlecompute: (20/39): kernel-tools-5.14.0-575.el9.x86_64.rpm 9.4 MB/s | 366 kB     00:00[0m
+[0;32m    googlecompute: (21/39): kernel-tools-libs-5.14.0-575.el9.x86_6 2.5 MB/s |  92 kB     00:00[0m
+[0;32m    googlecompute: (22/39): kpartx-0.8.7-37.el9.x86_64.rpm         1.3 MB/s |  47 kB     00:00[0m
+[0;32m    googlecompute: (23/39): libsepol-3.6-3.el9.x86_64.rpm          8.5 MB/s | 329 kB     00:00[0m
+[0;32m    googlecompute: (24/39): openssl-3.2.2-7.el9.x86_64.rpm          28 MB/s | 1.4 MB     00:00[0m
+[0;32m    googlecompute: (25/39): openssl-libs-3.2.2-7.el9.x86_64.rpm     37 MB/s | 2.4 MB     00:00[0m
+[0;32m    googlecompute: (26/39): python3-setuptools-wheel-53.0.0-14.el9  10 MB/s | 468 kB     00:00[0m
+[0;32m    googlecompute: (27/39): libblockdev-fs-2.28-13.el9.x86_64.rpm  285 kB/s |  32 kB     00:00[0m
+[0;32m    googlecompute: (28/39): libblockdev-crypto-2.28-13.el9.x86_64. 250 kB/s |  30 kB     00:00[0m
+[0;32m    googlecompute: (29/39): libblockdev-2.28-13.el9.x86_64.rpm     524 kB/s |  91 kB     00:00[0m
+[0;32m    googlecompute: (30/39): libblockdev-loop-2.28-13.el9.x86_64.rp 399 kB/s |  16 kB     00:00[0m
+[0;32m    googlecompute: (31/39): libblockdev-mdraid-2.28-13.el9.x86_64. 536 kB/s |  21 kB     00:00[0m
+[0;32m    googlecompute: (32/39): libblockdev-part-2.28-13.el9.x86_64.rp 666 kB/s |  24 kB     00:00[0m
+[0;32m    googlecompute: (33/39): libblockdev-swap-2.28-13.el9.x86_64.rp 414 kB/s |  16 kB     00:00[0m
+[0;32m    googlecompute: (34/39): libblockdev-utils-2.28-13.el9.x86_64.r 493 kB/s |  26 kB     00:00[0m
+[0;32m    googlecompute: (35/39): qemu-guest-agent-9.1.0-16.el9.x86_64.r 4.4 MB/s | 495 kB     00:00[0m
+[0;32m    googlecompute: (36/39): 93e0c7e2de027f41c5d9c11473b0935e3d82c2  35 MB/s |  18 MB     00:00[0m
+[0;32m    googlecompute: (37/39): 99f5d0c7bc45291dd6098f41a552f65cd2f124  12 MB/s | 7.5 MB     00:00[0m
+[0;32m    googlecompute: (38/39): 96d496e0a9c7c61e27fd93653d0f5551384cbd  56 MB/s |  27 MB     00:00[0m
+[0;32m    googlecompute: (39/39): 6d057d1fb936268dc4950eeee9bcd3b95be664  62 MB/s |  98 MB     00:01[0m
+[0;32m    googlecompute: --------------------------------------------------------------------------------[0m
+[0;32m    googlecompute: Total                                            66 MB/s | 255 MB     00:03[0m
+[0;32m    googlecompute: Running transaction check[0m
+[0;32m    googlecompute: Transaction check succeeded.[0m
+[0;32m    googlecompute: Running transaction test[0m
+[0;32m    googlecompute: Transaction test succeeded.[0m
+[0;32m    googlecompute: Running transaction[0m
+[0;32m    googlecompute:   Preparing        :                                                        1/1[0m
+[0;32m    googlecompute:   Upgrading        : glibc-common-2.34-180.el9.x86_64                      1/74[0m
+[0;32m    googlecompute:   Upgrading        : glibc-gconv-extra-2.34-180.el9.x86_64                 2/74[0m
+[0;32m    googlecompute:   Running scriptlet: glibc-gconv-extra-2.34-180.el9.x86_64                 2/74[0m
+[0;32m    googlecompute:   Upgrading        : glibc-langpack-en-2.34-180.el9.x86_64                 3/74[0m
+[0;32m    googlecompute:   Running scriptlet: glibc-2.34-180.el9.x86_64                             4/74[0m
+[0;32m    googlecompute:   Upgrading        : glibc-2.34-180.el9.x86_64                             4/74[0m
+[0;32m    googlecompute:   Running scriptlet: glibc-2.34-180.el9.x86_64                             4/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-utils-2.28-13.el9.x86_64                  5/74[0m
+[0;32m    googlecompute:   Upgrading        : openssl-libs-1:3.2.2-7.el9.x86_64                     6/74[0m
+[0;32m    googlecompute:   Upgrading        : NetworkManager-libnm-1:1.53.1-1.el9.x86_64            7/74[0m
+[0;32m    googlecompute:   Running scriptlet: NetworkManager-1:1.53.1-1.el9.x86_64                  8/74[0m
+[0;32m    googlecompute:   Upgrading        : NetworkManager-1:1.53.1-1.el9.x86_64                  8/74[0m
+[0;32m    googlecompute:   Running scriptlet: NetworkManager-1:1.53.1-1.el9.x86_64                  8/74[0m
+[0;32m    googlecompute:   Upgrading        : binutils-gold-2.35.2-63.el9.x86_64                    9/74[0m
+[0;32m    googlecompute:   Upgrading        : binutils-2.35.2-63.el9.x86_64                        10/74[0m
+[0;32m    googlecompute:   Running scriptlet: binutils-2.35.2-63.el9.x86_64                        10/74[0m
+[0;32m    googlecompute:   Upgrading        : kernel-tools-libs-5.14.0-575.el9.x86_64              11/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-tools-libs-5.14.0-575.el9.x86_64              11/74[0m
+[0;32m    googlecompute:   Upgrading        : kpartx-0.8.7-37.el9.x86_64                           12/74[0m
+[0;32m    googlecompute:   Upgrading        : dracut-057-87.git20250311.el9.x86_64                 13/74[0m
+[0;32m    googlecompute:   Installing       : kernel-modules-core-5.14.0-575.el9.x86_64            14/74[0m
+[0;32m    googlecompute:   Installing       : kernel-core-5.14.0-575.el9.x86_64                    15/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-core-5.14.0-575.el9.x86_64                    15/74[0m
+[0;32m    googlecompute:   Installing       : kernel-modules-5.14.0-575.el9.x86_64                 16/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-modules-5.14.0-575.el9.x86_64                 16/74[0m
+[0;32m    googlecompute:   Upgrading        : google-cloud-cli-anthoscli-517.0.0-1.x86_64          17/74[0m
+[0;32m    googlecompute:   Upgrading        : google-cloud-cli-517.0.0-1.x86_64                    18/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-cloud-cli-517.0.0-1.x86_64                    18/74[0m
+[0;32m    googlecompute:   Installing       : kernel-5.14.0-575.el9.x86_64                         19/74[0m
+[0;32m    googlecompute:   Upgrading        : dracut-config-rescue-057-87.git20250311.el9.x86_64   20/74[0m
+[0;32m    googlecompute:   Upgrading        : dracut-network-057-87.git20250311.el9.x86_64         21/74[0m
+[0;32m    googlecompute:   Upgrading        : dracut-squash-057-87.git20250311.el9.x86_64          22/74[0m
+[0;32m    googlecompute:   Upgrading        : kernel-tools-5.14.0-575.el9.x86_64                   23/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-tools-5.14.0-575.el9.x86_64                   23/74[0m
+[0;32m    googlecompute:   Upgrading        : NetworkManager-team-1:1.53.1-1.el9.x86_64            24/74[0m
+[0;32m    googlecompute:   Upgrading        : NetworkManager-tui-1:1.53.1-1.el9.x86_64             25/74[0m
+[0;32m    googlecompute:   Upgrading        : ima-evm-utils-1.6.2-1.el9.x86_64                     26/74[0m
+[0;32m    googlecompute:   Upgrading        : openssl-1:3.2.2-7.el9.x86_64                         27/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-2.28-13.el9.x86_64                       28/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-crypto-2.28-13.el9.x86_64                29/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-fs-2.28-13.el9.x86_64                    30/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-loop-2.28-13.el9.x86_64                  31/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-mdraid-2.28-13.el9.x86_64                32/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-part-2.28-13.el9.x86_64                  33/74[0m
+[0;32m    googlecompute:   Upgrading        : libblockdev-swap-2.28-13.el9.x86_64                  34/74[0m
+[0;32m    googlecompute:   Upgrading        : libsepol-3.6-3.el9.x86_64                            35/74[0m
+[0;32m    googlecompute:   Upgrading        : qemu-guest-agent-17:9.1.0-16.el9.x86_64              36/74[0m
+[0;32m    googlecompute:   Running scriptlet: qemu-guest-agent-17:9.1.0-16.el9.x86_64              36/74[0m
+[0;32m    googlecompute:   Upgrading        : google-osconfig-agent-1:20250320.00-g1.el9.x86_64    37/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-osconfig-agent-1:20250320.00-g1.el9.x86_64    37/74[0m
+[0;32m    googlecompute:   Upgrading        : google-guest-agent-1:20250306.00-g1.el9.x86_64       38/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-guest-agent-1:20250306.00-g1.el9.x86_64       38/74[0m
+[0;32m    googlecompute:   Upgrading        : python3-setuptools-wheel-53.0.0-14.el9.noarch        39/74[0m
+[0;32m    googlecompute:   Cleanup          : NetworkManager-tui-1:1.52.0-1.el9.x86_64             40/74[0m
+[0;32m    googlecompute:   Running scriptlet: qemu-guest-agent-17:9.1.0-15.el9.x86_64              41/74[0m
+[0;32m    googlecompute:   Cleanup          : qemu-guest-agent-17:9.1.0-15.el9.x86_64              41/74[0m
+[0;32m    googlecompute:   Running scriptlet: qemu-guest-agent-17:9.1.0-15.el9.x86_64              41/74[0m
+[0;32m    googlecompute:   Cleanup          : openssl-1:3.2.2-6.el9.x86_64                         42/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-tools-5.14.0-570.el9.x86_64                   43/74[0m
+[0;32m    googlecompute:   Cleanup          : kernel-tools-5.14.0-570.el9.x86_64                   43/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-tools-5.14.0-570.el9.x86_64                   43/74[0m
+[0;32m    googlecompute:   Running scriptlet: binutils-2.35.2-60.el9.x86_64                        44/74[0m
+[0;32m    googlecompute:   Cleanup          : binutils-2.35.2-60.el9.x86_64                        44/74[0m
+[0;32m    googlecompute:   Running scriptlet: binutils-2.35.2-60.el9.x86_64                        44/74[0m
+[0;32m    googlecompute:   Cleanup          : ima-evm-utils-1.5-3.el9.x86_64                       45/74[0m
+[0;32m    googlecompute:   Cleanup          : binutils-gold-2.35.2-60.el9.x86_64                   46/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-part-2.28-12.el9.x86_64                  47/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-fs-2.28-12.el9.x86_64                    48/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-crypto-2.28-12.el9.x86_64                49/74[0m
+[0;32m    googlecompute:   Cleanup          : libsepol-3.6-2.el9.x86_64                            50/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-loop-2.28-12.el9.x86_64                  51/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-mdraid-2.28-12.el9.x86_64                52/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-2.28-12.el9.x86_64                       53/74[0m
+[0;32m    googlecompute:   Cleanup          : kernel-tools-libs-5.14.0-570.el9.x86_64              54/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-tools-libs-5.14.0-570.el9.x86_64              54/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-swap-2.28-12.el9.x86_64                  55/74[0m
+[0;32m    googlecompute:   Cleanup          : libblockdev-utils-2.28-12.el9.x86_64                 56/74[0m
+[0;32m    googlecompute:   Cleanup          : NetworkManager-team-1:1.52.0-1.el9.x86_64            57/74[0m
+[0;32m    googlecompute:   Cleanup          : dracut-network-057-86.git20250217.el9.x86_64         58/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-cloud-cli-514.0.0-1.x86_64                    59/74[0m
+[0;32m    googlecompute:   Cleanup          : google-cloud-cli-514.0.0-1.x86_64                    59/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-cloud-cli-514.0.0-1.x86_64                    59/74[0m
+[0;32m    googlecompute:   Cleanup          : dracut-squash-057-86.git20250217.el9.x86_64          60/74[0m
+[0;32m    googlecompute:   Cleanup          : dracut-config-rescue-057-86.git20250217.el9.x86_64   61/74[0m
+[0;32m    googlecompute:   Cleanup          : google-cloud-cli-anthoscli-514.0.0-1.x86_64          62/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-osconfig-agent-1:20250206.01-g1.el9.x86_64    63/74[0m
+[0;32m    googlecompute:   Cleanup          : google-osconfig-agent-1:20250206.01-g1.el9.x86_64    63/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-osconfig-agent-1:20250206.01-g1.el9.x86_64    63/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-guest-agent-1:20250204.01-g1.el9.x86_64       64/74[0m
+[0;32m    googlecompute:   Cleanup          : google-guest-agent-1:20250204.01-g1.el9.x86_64       64/74[0m
+[0;32m    googlecompute:   Running scriptlet: google-guest-agent-1:20250204.01-g1.el9.x86_64       64/74[0m
+[0;32m    googlecompute:   Cleanup          : python3-setuptools-wheel-53.0.0-13.el9.noarch        65/74[0m
+[0;32m    googlecompute:   Running scriptlet: NetworkManager-1:1.52.0-1.el9.x86_64                 66/74[0m
+[0;32m    googlecompute:   Cleanup          : NetworkManager-1:1.52.0-1.el9.x86_64                 66/74[0m
+[0;32m    googlecompute:   Running scriptlet: NetworkManager-1:1.52.0-1.el9.x86_64                 66/74[0m
+[0;32m    googlecompute:   Cleanup          : NetworkManager-libnm-1:1.52.0-1.el9.x86_64           67/74[0m
+[0;32m    googlecompute:   Cleanup          : dracut-057-86.git20250217.el9.x86_64                 68/74[0m
+[0;32m    googlecompute:   Cleanup          : openssl-libs-1:3.2.2-6.el9.x86_64                    69/74[0m
+[0;32m    googlecompute:   Cleanup          : kpartx-0.8.7-35.el9.x86_64                           70/74[0m
+[0;32m    googlecompute:   Cleanup          : glibc-2.34-170.el9.x86_64                            71/74[0m
+[0;32m    googlecompute:   Cleanup          : glibc-langpack-en-2.34-170.el9.x86_64                72/74[0m
+[0;32m    googlecompute:   Cleanup          : glibc-gconv-extra-2.34-170.el9.x86_64                73/74[0m
+[0;32m    googlecompute:   Running scriptlet: glibc-gconv-extra-2.34-170.el9.x86_64                73/74[0m
+[0;32m    googlecompute:   Cleanup          : glibc-common-2.34-170.el9.x86_64                     74/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-modules-core-5.14.0-575.el9.x86_64            74/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-core-5.14.0-575.el9.x86_64                    74/74[0m
+[0;32m    googlecompute:   Running scriptlet: kernel-modules-5.14.0-575.el9.x86_64                 74/74[0m
+[0;32m    googlecompute:   Running scriptlet: glibc-common-2.34-170.el9.x86_64                     74/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-5.14.0-575.el9.x86_64                          1/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-core-5.14.0-575.el9.x86_64                     2/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-modules-5.14.0-575.el9.x86_64                  3/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-modules-core-5.14.0-575.el9.x86_64             4/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-1:1.53.1-1.el9.x86_64                  5/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-1:1.52.0-1.el9.x86_64                  6/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-libnm-1:1.53.1-1.el9.x86_64            7/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-libnm-1:1.52.0-1.el9.x86_64            8/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-team-1:1.53.1-1.el9.x86_64             9/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-team-1:1.52.0-1.el9.x86_64            10/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-tui-1:1.53.1-1.el9.x86_64             11/74[0m
+[0;32m    googlecompute:   Verifying        : NetworkManager-tui-1:1.52.0-1.el9.x86_64             12/74[0m
+[0;32m    googlecompute:   Verifying        : binutils-2.35.2-63.el9.x86_64                        13/74[0m
+[0;32m    googlecompute:   Verifying        : binutils-2.35.2-60.el9.x86_64                        14/74[0m
+[0;32m    googlecompute:   Verifying        : binutils-gold-2.35.2-63.el9.x86_64                   15/74[0m
+[0;32m    googlecompute:   Verifying        : binutils-gold-2.35.2-60.el9.x86_64                   16/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-057-87.git20250311.el9.x86_64                 17/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-057-86.git20250217.el9.x86_64                 18/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-config-rescue-057-87.git20250311.el9.x86_64   19/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-config-rescue-057-86.git20250217.el9.x86_64   20/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-network-057-87.git20250311.el9.x86_64         21/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-network-057-86.git20250217.el9.x86_64         22/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-squash-057-87.git20250311.el9.x86_64          23/74[0m
+[0;32m    googlecompute:   Verifying        : dracut-squash-057-86.git20250217.el9.x86_64          24/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-2.34-180.el9.x86_64                            25/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-2.34-170.el9.x86_64                            26/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-common-2.34-180.el9.x86_64                     27/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-common-2.34-170.el9.x86_64                     28/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-gconv-extra-2.34-180.el9.x86_64                29/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-gconv-extra-2.34-170.el9.x86_64                30/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-langpack-en-2.34-180.el9.x86_64                31/74[0m
+[0;32m    googlecompute:   Verifying        : glibc-langpack-en-2.34-170.el9.x86_64                32/74[0m
+[0;32m    googlecompute:   Verifying        : ima-evm-utils-1.6.2-1.el9.x86_64                     33/74[0m
+[0;32m    googlecompute:   Verifying        : ima-evm-utils-1.5-3.el9.x86_64                       34/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-tools-5.14.0-575.el9.x86_64                   35/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-tools-5.14.0-570.el9.x86_64                   36/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-tools-libs-5.14.0-575.el9.x86_64              37/74[0m
+[0;32m    googlecompute:   Verifying        : kernel-tools-libs-5.14.0-570.el9.x86_64              38/74[0m
+[0;32m    googlecompute:   Verifying        : kpartx-0.8.7-37.el9.x86_64                           39/74[0m
+[0;32m    googlecompute:   Verifying        : kpartx-0.8.7-35.el9.x86_64                           40/74[0m
+[0;32m    googlecompute:   Verifying        : libsepol-3.6-3.el9.x86_64                            41/74[0m
+[0;32m    googlecompute:   Verifying        : libsepol-3.6-2.el9.x86_64                            42/74[0m
+[0;32m    googlecompute:   Verifying        : openssl-1:3.2.2-7.el9.x86_64                         43/74[0m
+[0;32m    googlecompute:   Verifying        : openssl-1:3.2.2-6.el9.x86_64                         44/74[0m
+[0;32m    googlecompute:   Verifying        : openssl-libs-1:3.2.2-7.el9.x86_64                    45/74[0m
+[0;32m    googlecompute:   Verifying        : openssl-libs-1:3.2.2-6.el9.x86_64                    46/74[0m
+[0;32m    googlecompute:   Verifying        : python3-setuptools-wheel-53.0.0-14.el9.noarch        47/74[0m
+[0;32m    googlecompute:   Verifying        : python3-setuptools-wheel-53.0.0-13.el9.noarch        48/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-2.28-13.el9.x86_64                       49/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-2.28-12.el9.x86_64                       50/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-crypto-2.28-13.el9.x86_64                51/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-crypto-2.28-12.el9.x86_64                52/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-fs-2.28-13.el9.x86_64                    53/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-fs-2.28-12.el9.x86_64                    54/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-loop-2.28-13.el9.x86_64                  55/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-loop-2.28-12.el9.x86_64                  56/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-mdraid-2.28-13.el9.x86_64                57/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-mdraid-2.28-12.el9.x86_64                58/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-part-2.28-13.el9.x86_64                  59/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-part-2.28-12.el9.x86_64                  60/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-swap-2.28-13.el9.x86_64                  61/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-swap-2.28-12.el9.x86_64                  62/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-utils-2.28-13.el9.x86_64                 63/74[0m
+[0;32m    googlecompute:   Verifying        : libblockdev-utils-2.28-12.el9.x86_64                 64/74[0m
+[0;32m    googlecompute:   Verifying        : qemu-guest-agent-17:9.1.0-16.el9.x86_64              65/74[0m
+[0;32m    googlecompute:   Verifying        : qemu-guest-agent-17:9.1.0-15.el9.x86_64              66/74[0m
+[0;32m    googlecompute:   Verifying        : google-guest-agent-1:20250306.00-g1.el9.x86_64       67/74[0m
+[0;32m    googlecompute:   Verifying        : google-guest-agent-1:20250204.01-g1.el9.x86_64       68/74[0m
+[0;32m    googlecompute:   Verifying        : google-osconfig-agent-1:20250320.00-g1.el9.x86_64    69/74[0m
+[0;32m    googlecompute:   Verifying        : google-osconfig-agent-1:20250206.01-g1.el9.x86_64    70/74[0m
+[0;32m    googlecompute:   Verifying        : google-cloud-cli-517.0.0-1.x86_64                    71/74[0m
+[0;32m    googlecompute:   Verifying        : google-cloud-cli-514.0.0-1.x86_64                    72/74[0m
+[0;32m    googlecompute:   Verifying        : google-cloud-cli-anthoscli-517.0.0-1.x86_64          73/74[0m
+[0;32m    googlecompute:   Verifying        : google-cloud-cli-anthoscli-514.0.0-1.x86_64          74/74[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Upgraded:[0m
+[0;32m    googlecompute:   NetworkManager-1:1.53.1-1.el9.x86_64[0m
+[0;32m    googlecompute:   NetworkManager-libnm-1:1.53.1-1.el9.x86_64[0m
+[0;32m    googlecompute:   NetworkManager-team-1:1.53.1-1.el9.x86_64[0m
+[0;32m    googlecompute:   NetworkManager-tui-1:1.53.1-1.el9.x86_64[0m
+[0;32m    googlecompute:   binutils-2.35.2-63.el9.x86_64[0m
+[0;32m    googlecompute:   binutils-gold-2.35.2-63.el9.x86_64[0m
+[0;32m    googlecompute:   dracut-057-87.git20250311.el9.x86_64[0m
+[0;32m    googlecompute:   dracut-config-rescue-057-87.git20250311.el9.x86_64[0m
+[0;32m    googlecompute:   dracut-network-057-87.git20250311.el9.x86_64[0m
+[0;32m    googlecompute:   dracut-squash-057-87.git20250311.el9.x86_64[0m
+[0;32m    googlecompute:   glibc-2.34-180.el9.x86_64[0m
+[0;32m    googlecompute:   glibc-common-2.34-180.el9.x86_64[0m
+[0;32m    googlecompute:   glibc-gconv-extra-2.34-180.el9.x86_64[0m
+[0;32m    googlecompute:   glibc-langpack-en-2.34-180.el9.x86_64[0m
+[0;32m    googlecompute:   google-cloud-cli-517.0.0-1.x86_64[0m
+[0;32m    googlecompute:   google-cloud-cli-anthoscli-517.0.0-1.x86_64[0m
+[0;32m    googlecompute:   google-guest-agent-1:20250306.00-g1.el9.x86_64[0m
+[0;32m    googlecompute:   google-osconfig-agent-1:20250320.00-g1.el9.x86_64[0m
+[0;32m    googlecompute:   ima-evm-utils-1.6.2-1.el9.x86_64[0m
+[0;32m    googlecompute:   kernel-tools-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:   kernel-tools-libs-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:   kpartx-0.8.7-37.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-crypto-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-fs-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-loop-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-mdraid-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-part-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-swap-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libblockdev-utils-2.28-13.el9.x86_64[0m
+[0;32m    googlecompute:   libsepol-3.6-3.el9.x86_64[0m
+[0;32m    googlecompute:   openssl-1:3.2.2-7.el9.x86_64[0m
+[0;32m    googlecompute:   openssl-libs-1:3.2.2-7.el9.x86_64[0m
+[0;32m    googlecompute:   python3-setuptools-wheel-53.0.0-14.el9.noarch[0m
+[0;32m    googlecompute:   qemu-guest-agent-17:9.1.0-16.el9.x86_64[0m
+[0;32m    googlecompute: Installed:[0m
+[0;32m    googlecompute:   kernel-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:   kernel-core-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:   kernel-modules-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:   kernel-modules-core-5.14.0-575.el9.x86_64[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Complete![0m
+[0;32m    googlecompute: Last metadata expiration check: 0:03:12 ago on Mon 07 Apr 2025 10:04:24 AM UTC.[0m
+[0;32m    googlecompute: Dependencies resolved.[0m
+[0;32m    googlecompute: ================================================================================[0m
+[0;32m    googlecompute:  Package                 Arch        Version               Repository      Size[0m
+[0;32m    googlecompute: ================================================================================[0m
+[0;32m    googlecompute: Installing:[0m
+[0;32m    googlecompute:  nginx                   x86_64      2:1.20.1-22.el9       appstream       37 k[0m
+[0;32m    googlecompute: Installing dependencies:[0m
+[0;32m    googlecompute:  centos-logos-httpd      noarch      90.8-2.el9            appstream      1.5 M[0m
+[0;32m    googlecompute:  nginx-core              x86_64      2:1.20.1-22.el9       appstream      570 k[0m
+[0;32m    googlecompute:  nginx-filesystem        noarch      2:1.20.1-22.el9       appstream      9.8 k[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Transaction Summary[0m
+[0;32m    googlecompute: ================================================================================[0m
+[0;32m    googlecompute: Install  4 Packages[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Total download size: 2.1 M[0m
+[0;32m    googlecompute: Installed size: 4.3 M[0m
+[0;32m    googlecompute: Downloading Packages:[0m
+[0;32m    googlecompute: (1/4): nginx-1.20.1-22.el9.x86_64.rpm            82 kB/s |  37 kB     00:00[0m
+[0;32m    googlecompute: (2/4): nginx-core-1.20.1-22.el9.x86_64.rpm      849 kB/s | 570 kB     00:00[0m
+[0;32m    googlecompute: (3/4): centos-logos-httpd-90.8-2.el9.noarch.rpm 1.9 MB/s | 1.5 MB     00:00[0m
+[0;32m    googlecompute: (4/4): nginx-filesystem-1.20.1-22.el9.noarch.rp  28 kB/s | 9.8 kB     00:00[0m
+[0;32m    googlecompute: --------------------------------------------------------------------------------[0m
+[0;32m    googlecompute: Total                                           2.2 MB/s | 2.1 MB     00:00[0m
+[0;32m    googlecompute: Running transaction check[0m
+[0;32m    googlecompute: Transaction check succeeded.[0m
+[0;32m    googlecompute: Running transaction test[0m
+[0;32m    googlecompute: Transaction test succeeded.[0m
+[0;32m    googlecompute: Running transaction[0m
+[0;32m    googlecompute:   Preparing        :                                                        1/1[0m
+[0;32m    googlecompute:   Running scriptlet: nginx-filesystem-2:1.20.1-22.el9.noarch                1/4[0m
+[0;32m    googlecompute:   Installing       : nginx-filesystem-2:1.20.1-22.el9.noarch                1/4[0m
+[0;32m    googlecompute:   Installing       : nginx-core-2:1.20.1-22.el9.x86_64                      2/4[0m
+[0;32m    googlecompute:   Installing       : centos-logos-httpd-90.8-2.el9.noarch                   3/4[0m
+[0;32m    googlecompute:   Installing       : nginx-2:1.20.1-22.el9.x86_64                           4/4[0m
+[0;32m    googlecompute:   Running scriptlet: nginx-2:1.20.1-22.el9.x86_64                           4/4[0m
+[0;32m    googlecompute:   Verifying        : centos-logos-httpd-90.8-2.el9.noarch                   1/4[0m
+[0;32m    googlecompute:   Verifying        : nginx-2:1.20.1-22.el9.x86_64                           2/4[0m
+[0;32m    googlecompute:   Verifying        : nginx-core-2:1.20.1-22.el9.x86_64                      3/4[0m
+[0;32m    googlecompute:   Verifying        : nginx-filesystem-2:1.20.1-22.el9.noarch                4/4[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Installed:[0m
+[0;32m    googlecompute:   centos-logos-httpd-90.8-2.el9.noarch  nginx-2:1.20.1-22.el9.x86_64[0m
+[0;32m    googlecompute:   nginx-core-2:1.20.1-22.el9.x86_64     nginx-filesystem-2:1.20.1-22.el9.noarch[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: Complete![0m
+[1;31m==> googlecompute: Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.[0m
+[1;32m==> googlecompute: Deleting instance...[0m
+[0;32m    googlecompute: Instance has been deleted![0m
+[1;32m==> googlecompute: Creating image...[0m
+[1;32m==> googlecompute: Deleting disk...[0m
+[0;32m    googlecompute: Disk has been deleted![0m
+[1;32mBuild 'googlecompute' finished after 6 minutes 37 seconds.[0m
+
+==> Wait completed after 6 minutes 37 seconds
+
+==> Builds finished. The artifacts of successful builds are:
+--> googlecompute: A disk image was created in the 'fleet-bongo-453603-d1' project: nginx-image-1744020211
