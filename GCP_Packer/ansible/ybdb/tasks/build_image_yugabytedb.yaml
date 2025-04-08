@@ -30,18 +30,18 @@
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
   register: download_output
 
-- name: Extract Yugabyte tarball
-  unarchive: 
-    src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-    dest: /home/packer/
-    remote_src: yes
-    owner: "packer"
-    group: "packer"
+# - name: Extract Yugabyte tarball
+#   unarchive: 
+#     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
+#     dest: /home/packer/
+#     remote_src: yes
+#     owner: "packer"
+#     group: "packer"
 
-- name: Remove tar file 
-  ansible.builtin.file:
-    path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
-    state: absent
+# - name: Remove tar file 
+#   ansible.builtin.file:
+#     path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
+#     state: absent
 
 # - name: Run YugabyteDB post_installation script
 #   ansible.builtin.command:
