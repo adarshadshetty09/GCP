@@ -66,3 +66,38 @@ User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP/GCP_Packer (main)
 $
 
 ```
+
+
+## Create the VM Instance
+
+```
+gcloud compute instances create packer-ansible \
+  --project fleet-bongo-453603-d1 \
+  --image-family ubuntu-2004-lts \
+  --image-project ubuntu-os-cloud \
+  --network "projects/fleet-bongo-453603-d1/global/networks/default" \
+  --zone us-central1-a \
+  --service-account=packer@fleet-bongo-453603-d1.iam.gserviceaccount.com \
+  --scopes="https://www.googleapis.com/auth/cloud-platform"
+```
+
+### After creation
+
+```
+$ gcloud compute instances create packer-ansible \
+  --project fleet-bongo-453603-d1 \
+  --image-family ubuntu-2004-lts \
+  --image-project ubuntu-os-cloud \
+  --network "projects/fleet-bongo-453603-d1/global/networks/default" \
+  --zone us-central1-a \
+  --service-account=packer@fleet-bongo-453603-d1.iam.gserviceaccount.com \
+  --scopes="https://www.googleapis.com/auth/cloud-platform"
+Created [https://www.googleapis.com/compute/v1/projects/fleet-bongo-453603-d1/zones/us-central1-a/instances/packer-ansible].
+NAME: packer-ansible
+ZONE: us-central1-a
+MACHINE_TYPE: n1-standard-1
+PREEMPTIBLE:
+INTERNAL_IP: 10.128.15.198
+EXTERNAL_IP: 35.202.182.130
+STATUS: RUNNING
+```
