@@ -1,25 +1,26 @@
 ---
-##
-- name: Update the system package 
-  yum:  
+## Update the system package
+- name: Update the system package
+  dnf:  
+    name: "*"
     state: latest
-    register: Update_Output
+  register: Update_Output
 
 - name: Print the update_Output
   ansible.builtin.debug:
-    msg: "{{Update_Output}}"
-    
-- name: Install required package (wget curl tar)
-  ansible.builtin.dnf:
-    name: 
-      - wget 
-      - tar 
+    msg: "{{ Update_Output }}"
+
+- name: Install required package (wget, curl, tar)
+  dnf:
+    name:
+      - wget
+      - tar
       - curl
     state: present
-    register: Installation_output
+  register: Installation_output
 
 - name: Print the Installation_output
-  ansible.builtin.debug: 
+  ansible.builtin.debug:
     msg: "{{ Installation_output }}"
 
 - name: Download Yugabyte tarball
@@ -27,50 +28,48 @@
     url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
 
-- name: Extract Yugabyte tarball 
+- name: Extract Yugabyte tarball
   unarchive: 
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /home/packer
-    remote_src: yes 
-  
-- name: Change to YugabyteDB Directory 
-  ansible.builtin.command: chdir=/home/packer/yugabyte-2.25.0.0/ pwd
+    remote_src: yes
+
+- name: Change to YugabyteDB Directory
+  ansible.builtin.command:
+    cmd: pwd
+    chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_directory
   ignore_errors: true
 
-- name: Run yugabyteDB post_installation script
-  ansible.builtin.command: ./bin/post_install.sh 
-  args:
+- name: Run YugabyteDB post_installation script
+  ansible.builtin.command:
+    cmd: ./bin/post_install.sh
     chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Change ownership of YugabyteDB files
   ansible.builtin.file: 
     path: /home/packer/yugabyte-2.25.0.0/
-    owner: packer 
-    group: packer 
-    recurse: yes 
+    owner: packer
+    group: packer
+    recurse: yes
 
-- name: Start the YugabyteDB 
-  ansible.builtin.command: ./bin/yugabyted start 
-  args: 
+- name: Start the YugabyteDB
+  ansible.builtin.command:
+    cmd: ./bin/yugabyted start
     chdir: /home/packer/yugabyte-2.25.0.0/
-  
-- name: Check YugabyteDB Status 
-  ansible.builtin.command: ./bin/yugabyted status 
-  args:
+
+- name: Check YugabyteDB Status
+  ansible.builtin.command:
+    cmd: ./bin/yugabyted status
     chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
   ignore_errors: true
 
-- name: Output success message 
+- name: Output success message
   ansible.builtin.debug: 
-    msg: "Yugabyte setup completed successfully !"
+    msg: "Yugabyte setup completed successfully!"
 
-- name: Calulate and Display execution time 
+- name: Calculate and Display execution time
   ansible.builtin.debug: 
     msg: "Total execution time: {{ ansible_date_time.iso8601 }} seconds"
-
-
-
-
