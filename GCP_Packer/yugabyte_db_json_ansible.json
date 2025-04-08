@@ -1,0 +1,21 @@
+{
+	"builders": [
+		{
+			"type": "googlecompute",
+			"project_id": "fleet-bongo-453603-d1",
+			"source_image": "centos-stream-9-v20250311",
+			"zone": "us-central1-a",
+			"machine_type": "n1-standard-8",
+			"disk_size": 30,
+			"image_name": "yugabyte-ansible-{{timestamp}}",
+			"disk_type": "pd-ssd",
+			"ssh_username": "packer",
+			"tags": [
+				"yugabytedb-ansible-image"
+			]
+		}
+	],
+"provisioners": [{
+	"type": "ansible",
+	"playbook_file": "",
+	"ansible_env_vars": [""]
