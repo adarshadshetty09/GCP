@@ -10,6 +10,7 @@
 			"image_name": "yugabyte-ansible-{{timestamp}}",
 			"disk_type": "pd-ssd",
 			"ssh_username": "packer",
+			"image_storage_locations": ["asia-south1"],
 			"tags": [
 				"yugabytedb-ansible-image"
 			]

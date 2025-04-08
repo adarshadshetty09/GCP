@@ -48,3 +48,21 @@ EMAIL: 772540397444-compute@developer.gserviceaccount.com
 DISABLED: False
 ```
 ````
+
+### gcloud iam service-accounts list --project=<PROJECT_ID>
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP/GCP_Packer (main)
+$ gcloud iam service-accounts list --project=fleet-bongo-453603-d1
+DISPLAY NAME: Packer Service Account
+EMAIL: packer@fleet-bongo-453603-d1.iam.gserviceaccount.com
+DISABLED: False
+
+DISPLAY NAME: Compute Engine default service account
+EMAIL: 772540397444-compute@developer.gserviceaccount.com
+DISABLED: False
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP/GCP_Packer (main)
+$
+
+```
