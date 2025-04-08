@@ -27,9 +27,20 @@
   ansible.builtin.get_url: 
     url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
+  register: download_ouptut
+
+- name: Print the download output 
+  ansible.builtin.debug:
+    msg: "{{ download_ouptut }}"
+
+- name: Ensure /home/packer/ directory exists
+  ansible.builtin.file:
+    path: /home/packer
+    state: directory
+    mode: '0755'
 
 - name: Extract Yugabyte tarball
-  unarchive: 
+  ansible.builtin.unarchive: 
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /home/packer/
     remote_src: yes
