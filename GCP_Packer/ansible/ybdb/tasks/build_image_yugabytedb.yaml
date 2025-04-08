@@ -24,63 +24,53 @@
     msg: "{{ Installation_output }}"
 
 - name: Download Yugabyte tarball
-  ansible.builtin.get_url:
+  ansible.builtin.get_url: 
     url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
   register: download_ouptut
 
-- name: Print the download output
-  ansible.builtin.debug:
-    msg: "{{ download_ouptut }}"
-
-- name: Ensure /home/packer/ directory exists
-  ansible.builtin.file:
-    path: /home/packer
-    state: directory
-    mode: '0755'
-
 - name: Extract Yugabyte tarball
-  ansible.builtin.unarchive:
+  unarchive: 
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /home/packer/
     remote_src: yes
 
 - name: Change to YugabyteDB Directory
-  ansible.builtin.command: pwd
-  args:
+  ansible.builtin.command:
+    cmd: pwd
     chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_directory
   ignore_errors: true
 
 - name: Run YugabyteDB post_installation script
-  ansible.builtin.command: ./bin/post_install.sh
-  args:
+  ansible.builtin.command:
+    cmd: ./bin/post_install.sh
     chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Change ownership of YugabyteDB files
-  ansible.builtin.file:
+  ansible.builtin.file: 
     path: /home/packer/yugabyte-2.25.0.0/
     owner: packer
     group: packer
     recurse: yes
 
 - name: Start the YugabyteDB
-  ansible.builtin.command: ./bin/yugabyted start
-  args:
+  ansible.builtin.command:
+    cmd: ./bin/yugabyted start
     chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Check YugabyteDB Status
-  ansible.builtin.command: ./bin/yugabyted status
-  args:
+  ansible.builtin.command:
+    cmd: ./bin/yugabyted status
     chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
   ignore_errors: true
 
 - name: Output success message
-  ansible.builtin.debug:
+  ansible.builtin.debug: 
     msg: "Yugabyte setup completed successfully!"
 
 - name: Calculate and Display execution time
-  ansible.builtin.debug:
+  ansible.builtin.debug: 
     msg: "Total execution time: {{ ansible_date_time.iso8601 }} seconds"
