@@ -49,8 +49,8 @@
 - name: Change ownership of YugabyteDB files
   ansible.builtin.file: 
     path: /home/adarshadshetty09/yugabyte-2.25.0.0/
-    owner: packer
-    group: packer
+    owner: adarshadshetty09
+    group: adarshadshetty09
     recurse: yes
 
 - name: Start the YugabyteDB
