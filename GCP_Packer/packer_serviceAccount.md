@@ -67,7 +67,6 @@ $
 
 ```
 
-
 ## Create the VM Instance
 
 ```
@@ -110,7 +109,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashi
 sudo apt update && sudo apt install packer
 ```
 
-## Packer Version 
+## Packer Version
 
 ```
 adarshadshetty09@packer-ansible:~$ packer
@@ -141,7 +140,6 @@ adarshadshetty09@packer-ansible:~$
 sudo apt install speedtest-cli
 ```
 
-
 ## speedtest-cli
 
 ```
@@ -156,4 +154,11 @@ Download: 2042.61 Mbit/s
 Testing upload speed......................................................................................................
 Upload: 479.90 Mbit/s
 adarshadshetty09@packer-ansible:~$ 
+```
+
+
+## Remove The Packer Version
+
+```
+sudo apt-get remove --purge packer
 ```
