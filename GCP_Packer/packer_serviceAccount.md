@@ -1,0 +1,50 @@
+#### Running on Google Cloud
+
+If you run the `googlecompute` Packer builder on GCE or GKE, you can configure that instance or cluster to use a [Google Service Account](https://cloud.google.com/compute/docs/authentication). This will allow Packer to authenticate to Google Cloud without having to bake in a separate credential/authentication file.
+
+It is recommended that you create a custom service account for Packer and assign it `Compute Instance Admin (v1)` & `Service Account User` roles.
+
+For `gcloud`, you can run the following commands:
+
+```
+gcloud iam service-accounts create packer \
+  --project YOUR_GCP_PROJECT \
+  --description="Packer Service Account" \
+  --display-name="Packer Service Account"
+
+$ gcloud projects add-iam-policy-binding YOUR_GCP_PROJECT \
+    --member=serviceAccount:packer@YOUR_GCP_PROJECT.iam.gserviceaccount.com \
+    --role=roles/compute.instanceAdmin.v1
+
+$ gcloud projects add-iam-policy-binding YOUR_GCP_PROJECT \
+    --member=serviceAccount:packer@YOUR_GCP_PROJECT.iam.gserviceaccount.com \
+    --role=roles/iam.serviceAccountUser
+
+$ gcloud projects add-iam-policy-binding YOUR_GCP_PROJECT \
+    --member=serviceAccount:packer@YOUR_GCP_PROJECT.iam.gserviceaccount.com \
+    --role=roles/iap.tunnelResourceAccessor
+
+$ gcloud compute instances create INSTANCE-NAME \
+  --project YOUR_GCP_PROJECT \
+  --image-family ubuntu-2004-lts \
+  --image-project ubuntu-os-cloud \
+  --network YOUR_GCP_NETWORK \
+  --zone YOUR_GCP_ZONE \
+  --service-account=packer@YOUR_GCP_PROJECT.iam.gserviceaccount.com \
+  --scopes="https://www.googleapis.com/auth/cloud-platform"
+
+```
+
+## List all the ServiceAccount Present in GCP
+
+````
+$ gcloud iam service-accounts list
+DISPLAY NAME: Packer Service Account
+EMAIL: packer@fleet-bongo-453603-d1.iam.gserviceaccount.com
+DISABLED: False
+
+DISPLAY NAME: Compute Engine default service account
+EMAIL: 772540397444-compute@developer.gserviceaccount.com
+DISABLED: False
+```
+````

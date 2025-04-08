@@ -19,3 +19,5 @@
 	"type": "ansible",
 	"playbook_file": "",
 	"ansible_env_vars": [""]
+}]
+}
