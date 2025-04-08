@@ -43,40 +43,40 @@
     path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
     state: absent
 
-- name: Run YugabyteDB post_installation script
-  ansible.builtin.command:
-    cmd: ./bin/post_install.sh
-    args:
-      chdir: /home/packer/yugabyte-2.25.0.0/
-  register: post_install_output
-  failed_when: "'Setup failed' in post_install_output.stderr"
+# - name: Run YugabyteDB post_installation script
+#   ansible.builtin.command:
+#     cmd: ./bin/post_install.sh
+#     args:
+#       chdir: /home/packer/yugabyte-2.25.0.0/
+#   register: post_install_output
+#   failed_when: "'Setup failed' in post_install_output.stderr"
 
-- name: Print the Post install output
-  ansible.builtin.debug:
-    msg: "{{ post_install_output.stdout }}"
+# - name: Print the Post install output
+#   ansible.builtin.debug:
+#     msg: "{{ post_install_output.stdout }}"
 
-- name: Start the YugabyteDB
-  ansible.builtin.command:
-    cmd: ./bin/yugabyted start
-    args:
-      chdir: /home/packer/yugabyte-2.25.0.0/
-  register: yugabyte_start
+# - name: Start the YugabyteDB
+#   ansible.builtin.command:
+#     cmd: ./bin/yugabyted start
+#     args:
+#       chdir: /home/packer/yugabyte-2.25.0.0/
+#   register: yugabyte_start
 
-- name: Print the yugabyte_start
-  ansible.builtin.debug:
-    msg: "{{ yugabyte_start.stdout }}"
+# - name: Print the yugabyte_start
+#   ansible.builtin.debug:
+#     msg: "{{ yugabyte_start.stdout }}"
 
-- name: Check YugabyteDB Status
-  ansible.builtin.command:
-    cmd: ./bin/yugabyted status
-    chdir: /home/packer/yugabyte-2.25.0.0/
-  register: yugabyte_status
-  failed_when: "'Setup failed' in yugabyte_status.stderr"
+# - name: Check YugabyteDB Status
+#   ansible.builtin.command:
+#     cmd: ./bin/yugabyted status
+#     chdir: /home/packer/yugabyte-2.25.0.0/
+#   register: yugabyte_status
+#   failed_when: "'Setup failed' in yugabyte_status.stderr"
 
-- name: Output success message
-  ansible.builtin.debug: 
-    msg: "Yugabyte setup completed successfully!"
+# - name: Output success message
+#   ansible.builtin.debug: 
+#     msg: "Yugabyte setup completed successfully!"
 
-- name: Calculate and Display execution time
-  ansible.builtin.debug: 
-    msg: "Total execution time: {{ ansible_date_time.iso8601 }}"
+# - name: Calculate and Display execution time
+#   ansible.builtin.debug: 
+#     msg: "Total execution time: {{ ansible_date_time.iso8601 }}"
