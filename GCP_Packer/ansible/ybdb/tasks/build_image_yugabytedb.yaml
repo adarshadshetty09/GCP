@@ -24,12 +24,12 @@
     msg: "{{ Installation_output }}"
 
 - name: Download Yugabyte tarball
-  ansible.builtin.get_url: 
+  ansible.builtin.get_url:
     url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
   register: download_ouptut
 
-- name: Print the download output 
+- name: Print the download output
   ansible.builtin.debug:
     msg: "{{ download_ouptut }}"
 
@@ -40,25 +40,25 @@
     mode: '0755'
 
 - name: Extract Yugabyte tarball
-  ansible.builtin.unarchive: 
+  ansible.builtin.unarchive:
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /home/packer/
     remote_src: yes
 
 - name: Change to YugabyteDB Directory
   ansible.builtin.command:
-    cmd: pwd
     chdir: /home/packer/yugabyte-2.25.0.0/
+    _raw_params: pwd
   register: yugabyte_directory
   ignore_errors: true
 
 - name: Run YugabyteDB post_installation script
   ansible.builtin.command:
-    cmd: ./bin/post_install.sh
     chdir: /home/packer/yugabyte-2.25.0.0/
+    _raw_params: ./bin/post_install.sh
 
 - name: Change ownership of YugabyteDB files
-  ansible.builtin.file: 
+  ansible.builtin.file:
     path: /home/packer/yugabyte-2.25.0.0/
     owner: packer
     group: packer
@@ -66,21 +66,21 @@
 
 - name: Start the YugabyteDB
   ansible.builtin.command:
-    cmd: ./bin/yugabyted start
     chdir: /home/packer/yugabyte-2.25.0.0/
+    _raw_params: ./bin/yugabyted start
 
 - name: Check YugabyteDB Status
   ansible.builtin.command:
-    cmd: ./bin/yugabyted status
     chdir: /home/packer/yugabyte-2.25.0.0/
+    _raw_params: ./bin/yugabyted status
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
   ignore_errors: true
 
 - name: Output success message
-  ansible.builtin.debug: 
+  ansible.builtin.debug:
     msg: "Yugabyte setup completed successfully!"
 
 - name: Calculate and Display execution time
-  ansible.builtin.debug: 
+  ansible.builtin.debug:
     msg: "Total execution time: {{ ansible_date_time.iso8601 }} seconds"
