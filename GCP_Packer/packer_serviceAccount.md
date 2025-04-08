@@ -134,3 +134,26 @@ adarshadshetty09@packer-ansible:~$ packer --version
 Packer v1.12.0
 adarshadshetty09@packer-ansible:~$ 
 ```
+
+## Check Internet Speed on Ubuntu
+
+```
+sudo apt install speedtest-cli
+```
+
+
+## speedtest-cli
+
+```
+adarshadshetty09@packer-ansible:~$ speedtest-cli
+Retrieving speedtest.net configuration...
+Testing from Google Cloud (35.202.182.130)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by CenturyLink (Omaha, NE) [12.44 km]: 28.437 ms
+Testing download speed................................................................................
+Download: 2042.61 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 479.90 Mbit/s
+adarshadshetty09@packer-ansible:~$ 
+```

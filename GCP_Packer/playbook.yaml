@@ -1,0 +1,7 @@
+---
+- name: Install YugabyteDB 
+  hosts: all
+  become: true
+
+  roles: 
+    - ./ansible  

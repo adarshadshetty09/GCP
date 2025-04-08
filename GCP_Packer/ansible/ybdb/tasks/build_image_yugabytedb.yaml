@@ -1,0 +1,7 @@
+---
+##
+- name: Update the system package 
+  ansible.builtin.yum: 
+    name: Update the machine 
+    state: latest
+    register: update_Output
