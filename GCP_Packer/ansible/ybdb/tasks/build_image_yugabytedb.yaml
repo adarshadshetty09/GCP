@@ -31,37 +31,37 @@
 - name: Extract Yugabyte tarball
   unarchive: 
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-    dest: /home/adarshadshetty09/
+    dest: /home/packer/
     remote_src: yes
 
 - name: Change to YugabyteDB Directory
   ansible.builtin.command:
     cmd: pwd
-    chdir: /home/adarshadshetty09/yugabyte-2.25.0.0/
+    chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_directory
   ignore_errors: true
 
 - name: Run YugabyteDB post_installation script
   ansible.builtin.command:
     cmd: ./bin/post_install.sh
-    chdir: /home/adarshadshetty09/yugabyte-2.25.0.0/
+    chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Change ownership of YugabyteDB files
   ansible.builtin.file: 
-    path: /home/adarshadshetty09/yugabyte-2.25.0.0/
-    owner: adarshadshetty09
-    group: adarshadshetty09
+    path: /home/packer/yugabyte-2.25.0.0/
+    owner: packer
+    group: packer
     recurse: yes
 
 - name: Start the YugabyteDB
   ansible.builtin.command:
     cmd: ./bin/yugabyted start
-    chdir: /home/adarshadshetty09/yugabyte-2.25.0.0/
+    chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Check YugabyteDB Status
   ansible.builtin.command:
     cmd: ./bin/yugabyted status
-    chdir: /home/adarshadshetty09/yugabyte-2.25.0.0/
+    chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
   ignore_errors: true
