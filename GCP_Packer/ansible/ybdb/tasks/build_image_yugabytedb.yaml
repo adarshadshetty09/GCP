@@ -11,7 +11,7 @@
     msg: "{{ Update_Output }}"
 
 - name: Install required package (wget, curl, tar)
-  dnf:
+  ansible.builtin.yum:
     name:
       - wget
       - tar
