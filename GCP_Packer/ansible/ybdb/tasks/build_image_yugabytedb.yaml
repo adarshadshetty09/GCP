@@ -4,4 +4,9 @@
   ansible.builtin.yum: 
     name: Update the machine 
     state: latest
-    register: update_Output
+    register: Update_Output
+
+- name: Print the update_Output
+  ansible.builtin.debug:
+    msg: "{{Update_Output}}"
+    

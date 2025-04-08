@@ -7,19 +7,18 @@
 		"zone": "us-central1-a",
 		"machine_type": "n1-standard-8",
 		"disk_size": 30,
-		"image_name": "yugabyte-ansible-{{timestamp}}",
+		"image_name": "nginx-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
-		"ssh_username": "packer",
-		"image_storage_locations": ["asia-south1"],
+		"ssh_username": "centos",
 		"tags": [
-		  "yugabytedb-ansible-image"
+		  "yugabytedb-image"
 		]
 	  }
 	],
 	"provisioners": [
 	  {
 		"type": "ansible",
-		"playbook_file": "playbook.yaml", 
+		"playbook_file": "playbook.yaml",
 		"ansible_env_vars": ["GCP/main.yaml"]
 	  }
 	]
