@@ -17,6 +17,11 @@
       - tar 
       - curl
     state: present
+    register: Installation_output
+
+- name: Print the Installation_output
+  ansible.builtin.debug: 
+    msg: "{{ Installation_output }}"
 
 - name: Download Yugabyte tarball
   ansible.builtin.get_url: 
