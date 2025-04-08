@@ -101,3 +101,36 @@ INTERNAL_IP: 10.128.15.198
 EXTERNAL_IP: 35.202.182.130
 STATUS: RUNNING
 ```
+
+## Install Packer In this VM 35.202.182.130
+
+```
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install packer
+```
+
+## Packer Version 
+
+```
+adarshadshetty09@packer-ansible:~$ packer
+Usage: packer [--version] [--help] <command> [<args>]
+
+Available commands are:
+    build           build image(s) from template
+    console         creates a console for testing variable interpolation
+    fix             fixes templates from old versions of packer
+    fmt             Rewrites HCL2 config files to canonical format
+    hcl2_upgrade    transform a JSON template into an HCL2 configuration
+    init            Install missing plugins or upgrade plugins
+    inspect         see components of a template
+    plugins         Interact with Packer plugins and catalog
+    validate        check that a template is valid
+    version         Prints the Packer version
+
+adarshadshetty09@packer-ansible:~$ packer version 
+Packer v1.12.0
+adarshadshetty09@packer-ansible:~$ packer --version 
+Packer v1.12.0
+adarshadshetty09@packer-ansible:~$ 
+```
