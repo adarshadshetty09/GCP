@@ -46,16 +46,16 @@
     remote_src: yes
 
 - name: Change to YugabyteDB Directory
-  ansible.builtin.command:
+  ansible.builtin.command: pwd
+  args:
     chdir: /home/packer/yugabyte-2.25.0.0/
-    _raw_params: pwd
   register: yugabyte_directory
   ignore_errors: true
 
 - name: Run YugabyteDB post_installation script
-  ansible.builtin.command:
+  ansible.builtin.command: ./bin/post_install.sh
+  args:
     chdir: /home/packer/yugabyte-2.25.0.0/
-    _raw_params: ./bin/post_install.sh
 
 - name: Change ownership of YugabyteDB files
   ansible.builtin.file:
@@ -65,14 +65,14 @@
     recurse: yes
 
 - name: Start the YugabyteDB
-  ansible.builtin.command:
+  ansible.builtin.command: ./bin/yugabyted start
+  args:
     chdir: /home/packer/yugabyte-2.25.0.0/
-    _raw_params: ./bin/yugabyted start
 
 - name: Check YugabyteDB Status
-  ansible.builtin.command:
+  ansible.builtin.command: ./bin/yugabyted status
+  args:
     chdir: /home/packer/yugabyte-2.25.0.0/
-    _raw_params: ./bin/yugabyted status
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
   ignore_errors: true
