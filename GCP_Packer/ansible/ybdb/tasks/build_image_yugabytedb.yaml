@@ -1,7 +1,7 @@
 ---
 ## Update the system package
 - name: Update the system package
-  dnf:  
+  ansible.builtin.yum:
     name: "*"
     state: latest
   register: Update_Output
