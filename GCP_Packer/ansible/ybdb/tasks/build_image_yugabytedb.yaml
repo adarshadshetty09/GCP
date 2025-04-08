@@ -29,43 +29,24 @@
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
   register: download_ouptut
 
-- name: Run ls command in yugabyteDB directory 
-  ansible.builtin.command: 
-    cmd: ls 
-    chdir: /tmp/ 
-  register: ls_output 
-
-- name: print ls_output
-  ansible.builtin.debug: 
-    msg: "Ls Output: {{ ls_output.stdout }}"
-
-- name: Run pwd command in YugabyteDB directory 
-  ansible.builtin.command: 
-    cmd: pwd 
-    chdir: /tmp/
-  register: pwd_output
-
-- name: print pwd command output 
-  ansible.builtin.debug:
-    msg: "PWD Output {{ pwd_output }}"
-
 - name: Extract Yugabyte tarball
   unarchive: 
     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /home/packer/
     remote_src: yes
+    owner: "packer"
+    group: "packer"
 
-- name: Change to YugabyteDB Directory
-  ansible.builtin.command:
-    cmd: pwd
-    chdir: /home/packer/yugabyte-2.25.0.0/
-  register: yugabyte_directory
-  ignore_errors: true
+- name: remove tar file 
+  ansible.builtin.file:
+    path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
+    state: absent 
 
 - name: Run YugabyteDB post_installation script
   ansible.builtin.command:
     cmd: ./bin/post_install.sh
-    chdir: /home/packer/yugabyte-2.25.0.0/
+    args:
+      chdir: /home/packer/yugabyte-2.25.0.0/
 
 - name: Change ownership of YugabyteDB files
   ansible.builtin.file: 
