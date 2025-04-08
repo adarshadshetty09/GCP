@@ -9,7 +9,7 @@
 		"disk_size": 30,
 		"image_name": "nginx-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
-		"ssh_username": "centos",
+		"ssh_username": "packer",
 		"tags": [
 		  "yugabytedb-image"
 		]
