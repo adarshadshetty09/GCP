@@ -17,18 +17,18 @@
       - tar
       - curl
     state: present
+    update_cache: yes
   register: Installation_output
 
 - name: Print the Installation_output
   ansible.builtin.debug:
     msg: "{{ Installation_output }}"
 
-
 - name: Download Yugabyte tarball
   ansible.builtin.get_url: 
     url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-  register: download_ouptut
+  register: download_output
 
 - name: Extract Yugabyte tarball
   unarchive: 
@@ -38,28 +38,33 @@
     owner: "packer"
     group: "packer"
 
-- name: remove tar file 
+- name: Remove tar file 
   ansible.builtin.file:
     path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
-    state: absent 
+    state: absent
 
 - name: Run YugabyteDB post_installation script
   ansible.builtin.command:
     cmd: ./bin/post_install.sh
     args:
       chdir: /home/packer/yugabyte-2.25.0.0/
+  register: post_install_output
+  failed_when: "'Setup failed' in post_install_output.stderr"
 
-- name: Change ownership of YugabyteDB files
-  ansible.builtin.file: 
-    path: /home/packer/yugabyte-2.25.0.0/
-    owner: packer
-    group: packer
-    mode: "0755"
+- name: Print the Post install output
+  ansible.builtin.debug:
+    msg: "{{ post_install_output.stdout }}"
 
 - name: Start the YugabyteDB
   ansible.builtin.command:
     cmd: ./bin/yugabyted start
-    chdir: /home/packer/yugabyte-2.25.0.0/
+    args:
+      chdir: /home/packer/yugabyte-2.25.0.0/
+  register: yugabyte_start
+
+- name: Print the yugabyte_start
+  ansible.builtin.debug:
+    msg: "{{ yugabyte_start.stdout }}"
 
 - name: Check YugabyteDB Status
   ansible.builtin.command:
@@ -67,7 +72,6 @@
     chdir: /home/packer/yugabyte-2.25.0.0/
   register: yugabyte_status
   failed_when: "'Setup failed' in yugabyte_status.stderr"
-  ignore_errors: true
 
 - name: Output success message
   ansible.builtin.debug: 
@@ -75,4 +79,4 @@
 
 - name: Calculate and Display execution time
   ansible.builtin.debug: 
-    msg: "Total execution time: {{ ansible_date_time.iso8601 }} seconds"
+    msg: "Total execution time: {{ ansible_date_time.iso8601 }}"
