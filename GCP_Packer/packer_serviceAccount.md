@@ -156,9 +156,33 @@ Upload: 479.90 Mbit/s
 adarshadshetty09@packer-ansible:~$ 
 ```
 
-
 ## Remove The Packer Version
 
 ```
 sudo apt-get remove --purge packer
 ```
+
+
+
+## Packer Installation For JSON Format
+
+```
+sudo apt-get remove --purge packer
+sudo apt-get install -y wget unzip
+wget https://releases.hashicorp.com/packer/1.8.6/packer_1.8.6_linux_amd64.zip
+unzip packer_1.8.6_linux_amd64.zip
+sudo mv packer /usr/local/bin/
+packer version
+
+
+packer build yugabyte_db_json_ansible.json
+```
+
+
+## Cache the Password For GITHUB Repo git
+
+```
+git config --global credential.helper cache
+```
+
+It will cache your username and password (Token)

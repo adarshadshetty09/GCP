@@ -9,7 +9,7 @@
     msg: "{{ Update_Output }}"
 
 - name: Check the Which User Packer is creating 
-  ansible.builtin.command: whoami
+  ansible.builtin.shell: whoami
   register: username
 
 - name: Print the user name
