@@ -16,3 +16,17 @@
 # - name: Print the user name
 #   ansible.builtin.debug:
 #     msg: "{{ username.stdout }}"
+
+- name: Install Required Package (wget, curl, tar)
+  ansible.builtin.yum:
+    name: 
+      - wget 
+      - tar 
+      - curl 
+    state: present 
+    Update_cache: yes
+  register: Installation_Output
+
+- name: Print the Above task 
+  ansible.builtin.debug: 
+    msg: "{{ Installation_Output }}"
