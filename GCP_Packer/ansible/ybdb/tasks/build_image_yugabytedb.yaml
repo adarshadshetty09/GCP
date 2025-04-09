@@ -1,82 +1,9 @@
 ---
-## Update the system package
-- name: Update the system package
+- name: Update the System Package
   ansible.builtin.yum:
     name: "*"
-    state: latest
   register: Update_Output
 
-- name: Print the update_Output
-  ansible.builtin.debug:
+- name: Print the Update_Output
+  ansible.builtin.debug: 
     msg: "{{ Update_Output }}"
-
-- name: Install required package (wget, curl, tar)
-  ansible.builtin.yum:
-    name:
-      - wget
-      - tar
-      - curl
-    state: present
-    update_cache: yes
-  register: Installation_output
-
-- name: Print the Installation_output
-  ansible.builtin.debug:
-    msg: "{{ Installation_output }}"
-
-- name: Download Yugabyte tarball
-  ansible.builtin.get_url: 
-    url: https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-    dest: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-  register: download_output
-
-# - name: Extract Yugabyte tarball
-#   unarchive: 
-#     src: /tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz
-#     dest: /home/packer/
-#     remote_src: yes
-#     owner: "packer"
-#     group: "packer"
-
-# - name: Remove tar file 
-#   ansible.builtin.file:
-#     path: "/tmp/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"
-#     state: absent
-
-# - name: Run YugabyteDB post_installation script
-#   ansible.builtin.command:
-#     cmd: ./bin/post_install.sh
-#     args:
-#       chdir: /home/packer/yugabyte-2.25.0.0/
-#   register: post_install_output
-#   failed_when: "'Setup failed' in post_install_output.stderr"
-
-# - name: Print the Post install output
-#   ansible.builtin.debug:
-#     msg: "{{ post_install_output.stdout }}"
-
-# - name: Start the YugabyteDB
-#   ansible.builtin.command:
-#     cmd: ./bin/yugabyted start
-#     args:
-#       chdir: /home/packer/yugabyte-2.25.0.0/
-#   register: yugabyte_start
-
-# - name: Print the yugabyte_start
-#   ansible.builtin.debug:
-#     msg: "{{ yugabyte_start.stdout }}"
-
-# - name: Check YugabyteDB Status
-#   ansible.builtin.command:
-#     cmd: ./bin/yugabyted status
-#     chdir: /home/packer/yugabyte-2.25.0.0/
-#   register: yugabyte_status
-#   failed_when: "'Setup failed' in yugabyte_status.stderr"
-
-# - name: Output success message
-#   ansible.builtin.debug: 
-#     msg: "Yugabyte setup completed successfully!"
-
-# - name: Calculate and Display execution time
-#   ansible.builtin.debug: 
-#     msg: "Total execution time: {{ ansible_date_time.iso8601 }}"
