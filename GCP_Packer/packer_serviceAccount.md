@@ -162,8 +162,6 @@ adarshadshetty09@packer-ansible:~$
 sudo apt-get remove --purge packer
 ```
 
-
-
 ## Packer Installation For JSON Format
 
 ```
@@ -178,7 +176,6 @@ packer version
 packer build yugabyte_db_json_ansible.json
 ```
 
-
 ## Cache the Password For GITHUB Repo git
 
 ```
@@ -186,3 +183,49 @@ git config --global credential.helper cache
 ```
 
 It will cache your username and password (Token)
+
+### Varify the URL is Reachable or Not
+
+```
+[packer@instance-yugabyte tmp]$ ls
+ssh-XXXXDyFVBe                                                           systemd-private-6000b5dfa6a44755ada0867b356a307a-dbus-broker.service-mIKdVN
+ssh-XXXXNyCxwN                                                           systemd-private-6000b5dfa6a44755ada0867b356a307a-kdump.service-abLigS
+systemd-private-6000b5dfa6a44755ada0867b356a307a-chronyd.service-6Z9jnp  systemd-private-6000b5dfa6a44755ada0867b356a307a-systemd-logind.service-pAm5uR
+[packer@instance-yugabyte tmp]$ curl -I https://software.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
+HTTP/2 302 
+date: Wed, 09 Apr 2025 07:14:48 GMT
+location: https://downloads.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
+strict-transport-security: max-age=31536000; includeSubDomains
+
+[packer@instance-yugabyte tmp]$ curl -I https://downloads.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
+HTTP/2 200 
+date: Wed, 09 Apr 2025 07:15:22 GMT
+content-type: application/x-tar
+content-length: 441784223
+cf-ray: 92d8367e0d54aca0-YYZ
+cf-cache-status: MISS
+accept-ranges: bytes
+cache-control: max-age=14400
+etag: "650bd9b0807f801408351c26439bb138-53"
+last-modified: Fri, 21 Mar 2025 17:03:14 GMT
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Accept-Encoding
+via: 1.1 04fa8a9e73b27e301fb4b6d36f313186.cloudfront.net (CloudFront)
+referrer-policy: strict-origin-when-cross-origin
+x-amz-cf-id: 7hYDJj35JzdeWQIJMB1TT8YuObOEh1hGn5-EPttHE1M0lMiUqjntuA==
+x-amz-cf-pop: YTO50-P2
+x-amz-version-id: LBFbtYDQ21YzqWA0SEqroj3kebgRS5m4
+x-cache: Hit from cloudfront
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+report-to: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=mHO4p8%2FHYQd%2FYA%2BGJcWeftm7X3%2FdjK09YpBEMhZoJHMk%2BIzzkbJVeOop2o4ntz7Ej2Q47JqlYidHZre5FoFc8Q8FJ30HMRo2T2U5HVVdVKwHIjmOsEor0iQSloDcYi6VeCpN9gj9IZQ%3D"}],"group":"cf-nel","max_age":604800}
+nel: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+server: cloudflare
+server-timing: cfL4;desc="?proto=TCP&rtt=9418&min_rtt=9276&rtt_var=2699&sent=7&recv=9&lost=0&retrans=0&sent_bytes=3389&recv_bytes=875&delivery_rate=455368&cwnd=152&unsent_bytes=0&cid=06d1e097ed18f4a0&ts=99&x=0"
+
+[packer@instance-yugabyte tmp]$ ^C
+[packer@instance-yugabyte tmp]$ 
+```
+
+# ,
