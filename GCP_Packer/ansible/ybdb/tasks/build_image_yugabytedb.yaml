@@ -18,13 +18,12 @@
 #     msg: "{{ username.stdout }}"
 
 - name: Install Required Package (wget, curl, tar)
-  ansible.builtin.dnf:
+  ansible.builtin.pacakge:
     name: 
       - wget 
       - tar 
       - curl 
     state: present 
-    Update_cache: yes
   register: Installation_Output
 
 - name: Print the Above task 
