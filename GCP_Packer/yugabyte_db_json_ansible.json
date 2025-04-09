@@ -7,7 +7,7 @@
 		"zone": "us-central1-a",
 		"machine_type": "n1-standard-8",
 		"disk_size": 30,
-		"image_name": "nginx-image-{{timestamp}}",
+		"image_name": "yugabytedb-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
 		"ssh_username": "packer",
 		"tags": [
