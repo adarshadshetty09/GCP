@@ -32,10 +32,10 @@
 
 - name: Download Yugabyte tar file 
   ansible.builtin.get_url: 
-    url: https://software.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
+    url: https://downloads.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
     dest: /tmp/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
-    force: yes 
-  register: downloaded_file 
+  register: downloaded_file
+ 
 
 - name: Check if yugabyte tar file exists
   ansible.builtin.stat:
