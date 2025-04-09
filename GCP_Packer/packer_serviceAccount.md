@@ -228,4 +228,39 @@ server-timing: cfL4;desc="?proto=TCP&rtt=9418&min_rtt=9276&rtt_var=2699&sent=7&r
 [packer@instance-yugabyte tmp]$ 
 ```
 
-# ,
+# Service Account Creation 
+
+```
+winter-cocoa-437211-s2
+
+
+
+gcloud iam service-accounts create packer \
+  --project winter-cocoa-437211-s2 \
+  --description="Packer Service Account" \
+  --display-name="Packer Service Account"
+
+
+gcloud projects add-iam-policy-binding winter-cocoa-437211-s2 \
+    --member=serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com \
+    --role=roles/compute.instanceAdmin.v1
+
+
+gcloud projects add-iam-policy-binding winter-cocoa-437211-s2 \
+    --member=serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com \
+    --role=roles/iam.serviceAccountUser
+
+gcloud projects add-iam-policy-binding winter-cocoa-437211-s2 \
+    --member=serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com \
+    --role=roles/iap.tunnelResourceAccessor
+
+
+gcloud compute instances create packertest \
+  --project winter-cocoa-437211-s2 \
+  --image-family ubuntu-2004-lts \
+  --image-project ubuntu-os-cloud \
+  --network default \
+  --zone us-central1-a \
+  --service-account=packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com \
+  --scopes="https://www.googleapis.com/auth/cloud-platform"
+```
