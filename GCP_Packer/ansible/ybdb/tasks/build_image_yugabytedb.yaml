@@ -37,6 +37,9 @@
     force: yes 
   register: downloaded_file
  
+- name: Print above task
+  ansible.builtin.debug: 
+    msg: "{{ downloaded_file }}"
 
 - name: Check if yugabyte tar file exists
   ansible.builtin.stat:
