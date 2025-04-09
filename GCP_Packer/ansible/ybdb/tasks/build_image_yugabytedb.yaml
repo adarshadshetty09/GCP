@@ -1,20 +1,18 @@
 ---
+- name: Update the System Package
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+  register: Update_Output
 
-- name: Check the Which User Packer is creating
-  ansible.builtin.shell: "whoami"
-  register: username
-
-- name: Print the user name
+- name: Print the Update_Output
   ansible.builtin.debug:
-    msg: "{{ username.stdout }}"
+    msg: "{{ Update_Output }}"
 
-# - name: Update the System Package
-#   ansible.builtin.yum:
-#     name: "*"
-#     state: latest
-#   register: Update_Output
+# - name: Check the Which User Packer is creating
+#   ansible.builtin.shell: "whoami"
+#   register: username
 
-# - name: Print the Update_Output
+# - name: Print the user name
 #   ansible.builtin.debug:
-#     msg: "{{ Update_Output }}"
-
+#     msg: "{{ username.stdout }}"
