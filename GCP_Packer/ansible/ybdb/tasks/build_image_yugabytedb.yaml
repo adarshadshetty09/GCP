@@ -10,8 +10,8 @@
 
 - name: Check the Which User Packer is creating 
   ansible.builtin.command: whoami
-  register: "username"
+  register: username
 
 - name: Print the user name
   ansible.builtin.debug: 
-    msg: "{{ username }}"
+    msg: "{{ username.stdout }}"
