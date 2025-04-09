@@ -1,7 +1,7 @@
 ---
 - name: Install YugabyteDB 
   hosts: localhost
-  # become: true
+  become: true
 
   roles: 
     - ./ansible/ybdb 

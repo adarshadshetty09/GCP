@@ -9,7 +9,7 @@
 		"disk_size": 30,
 		"image_name": "yugabytedb-imag-{{timestamp}}",
 		"disk_type": "pd-ssd",
-		"ssh_username": "packer",
+		"ssh_username": "adarshadshetty09",
 		"tags": [
 		  "yugabytedb-image"
 		]
