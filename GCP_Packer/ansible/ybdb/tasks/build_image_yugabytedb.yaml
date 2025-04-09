@@ -30,3 +30,13 @@
 - name: Print the Above task 
   ansible.builtin.debug: 
     msg: "{{ Installation_Output }}"
+
+- name: Download Yugabyte tar file 
+  ansible.builtin.get_url: 
+    url: wget https://software.yugabyte.com/releases/2.25.1.0/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
+    dest: /tmp/
+  register: downloaded_file 
+
+- name: Print the above task 
+  ansible.builtin.debug: 
+    msg: "{{ downloaded_file }}"
