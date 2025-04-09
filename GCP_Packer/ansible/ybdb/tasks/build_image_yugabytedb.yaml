@@ -18,7 +18,7 @@
 #     msg: "{{ username.stdout }}"
 
 - name: Install Required Package (wget, curl, tar)
-  ansible.builtin.pacakge:
+  ansible.builtin.package:
     name: 
       - wget 
       - tar 
