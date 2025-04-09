@@ -5,13 +5,13 @@
   register: Update_Output
 
 - name: Print the Update_Output
-  ansible.builtin.debug: 
+  ansible.builtin.debug:
     msg: "{{ Update_Output }}"
 
-- name: Check the Which User Packer is creating 
+- name: Check the Which User Packer is creating
   ansible.builtin.shell: whoami
   register: username
 
 - name: Print the user name
-  ansible.builtin.debug: 
+  ansible.builtin.debug:
     msg: "{{ username.stdout }}"
