@@ -1,0 +1,28 @@
+{
+    "builders": [
+      {
+        "type": "googlecompute",
+        "project_id": "winter-cocoa-437211-s2",
+        "source_image_family": "centos-stream-9",
+        "source_image_project_id": "centos-cloud",
+        "zone": "us-central1-a",
+        "machine_type": "n1-standard-8",
+        "disk_size": 30,
+        "image_name": "yugabytedb-image-{{timestamp}}",
+        "disk_type": "pd-ssd",
+        "ssh_username": "packer",
+        "tags": [
+          "yugabytedb-image",
+          "cutom-image"
+        ]
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "ansible",
+        "playbook_file": "playbook.yaml",
+        "ansible_env_vars": ["GCP/main.yaml"]
+      }
+    ]
+  }
+  

@@ -228,7 +228,7 @@ server-timing: cfL4;desc="?proto=TCP&rtt=9418&min_rtt=9276&rtt_var=2699&sent=7&r
 [packer@instance-yugabyte tmp]$ 
 ```
 
-# Service Account Creation 
+# Service Account Creation
 
 ```
 winter-cocoa-437211-s2
@@ -263,4 +263,24 @@ gcloud compute instances create packertest \
   --zone us-central1-a \
   --service-account=packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com \
   --scopes="https://www.googleapis.com/auth/cloud-platform"
+```
+
+
+## Create instance with CutomeImage - launch instance
+
+```
+$ gcloud compute instances create nginx-test-instance \
+  --zone=us-central1-a \
+  --machine-type=n1-standard-1 \
+  --image=nginx-image-1744262094 \
+  --image-project=winter-cocoa-437211-s2 \
+  --tags=nginx-server
+Created [https://www.googleapis.com/compute/v1/projects/fleet-bongo-453603-d1/zones/us-central1-a/instances/nginx-test-instance].
+NAME: nginx-test-instance
+ZONE: us-central1-a
+MACHINE_TYPE: n1-standard-1
+PREEMPTIBLE:
+INTERNAL_IP: 10.128.0.29
+EXTERNAL_IP: 34.45.81.149
+STATUS: RUNNING
 ```
