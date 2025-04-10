@@ -1,6 +1,6 @@
 ---
 - name: Update the System Package
-  ansible.builtin.yum:
+  ansible.builtin.apt:
     name: "*"
     state: latest
   register: Update_Output
