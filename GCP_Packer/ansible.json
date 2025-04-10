@@ -21,7 +21,11 @@
       {
         "type": "shell",
         "inline": [
+          "cd",
           "set -e",
+          "cd",
+          "exit",
+          "cd",
           "USER_NAME=$(whoami)",
           "echo \"Running as user: $USER_NAME\"",
           "start_time=$(date +%s)",
