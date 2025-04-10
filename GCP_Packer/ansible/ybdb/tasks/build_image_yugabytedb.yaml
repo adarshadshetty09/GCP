@@ -33,7 +33,7 @@
    - name: Extract Yugabyte archive
      unarchive:
        src: "/tmp/{{ yb_tar_file }}"
-       dest: "/home/centos"
+       dest: "/home/packer"
        remote_src: yes
        owner: "{{ yb_user }}"
        group: "{{ yb_user }}"

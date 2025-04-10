@@ -3,6 +3,6 @@
 yb_file_vr: "2024.2.2.1"
 yb_vr_build: "b6"
 yb_user: "packer"
-yb_dir: "/home/centos/yugabyte-{{ yb_file_vr }}"
+yb_dir: "/home/packer/yugabyte-{{ yb_file_vr }}"
 yb_file_url: "https://software.yugabyte.com/releases/{{ yb_file_vr }}/yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
 yb_tar_file: "yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
