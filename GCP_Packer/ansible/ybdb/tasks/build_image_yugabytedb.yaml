@@ -1,25 +1,4 @@
 ---
-- name: Install and configure
-  hosts: all
-  become: true
-  vars:
-    yb_file_vr: "2024.2.2.1"
-    yb_vr_build: "b6"
-    yb_user: "packer"
-    yb_dir: "/home/centos/yugabyte-{{ yb_file_vr }}"
-    yb_file_url: "https://software.yugabyte.com/releases/{{ yb_file_vr }}/yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
-    yb_tar_file: "yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
-  tasks:
-#  - name: Update package (Ubuntu/redhat)
-#    ansible.builtin.dnf:
-#      name: "*"
-#      update_cache: yes
-#      #disable_excludes: all
-#      lock_timeout: 300
-#      state: latest
-#    become: yes
-#    when: ansible_os_family == 'RedHat'
-
    - name: Install openssh-server
      package:
        name: openssh-server
