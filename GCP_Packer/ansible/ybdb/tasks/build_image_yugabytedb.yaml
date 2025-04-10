@@ -1,55 +1,77 @@
 ---
-- name: Update the System Package
-  ansible.builtin.apt:
-    name: "*"
-    state: latest
-  register: Update_Output
+- name: Install and configure
+  hosts: all
+  become: true
+  vars:
+    yb_file_vr: "2024.2.2.1"
+    yb_vr_build: "b6"
+    yb_user: "packer"
+    yb_dir: "/home/centos/yugabyte-{{ yb_file_vr }}"
+    yb_file_url: "https://software.yugabyte.com/releases/{{ yb_file_vr }}/yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
+    yb_tar_file: "yugabyte-{{ yb_file_vr }}-{{ yb_vr_build }}-linux-x86_64.tar.gz"
+  tasks:
+#  - name: Update package (Ubuntu/redhat)
+#    ansible.builtin.dnf:
+#      name: "*"
+#      update_cache: yes
+#      #disable_excludes: all
+#      lock_timeout: 300
+#      state: latest
+#    become: yes
+#    when: ansible_os_family == 'RedHat'
 
-- name: Print the Update_Output
-  ansible.builtin.debug:
-    msg: "{{ Update_Output }}"
+   - name: Install openssh-server
+     package:
+       name: openssh-server
+       state: present
+    #become: true
 
-# - name: Check the Which User Packer is creating
-#   ansible.builtin.shell: "whoami"
-#   register: username
+   - name: Installation required Packages
+     package:
+       name:
+         - wget
+         - openssl
+       state: present
 
-# - name: Print the user name
-#   ansible.builtin.debug:
-#     msg: "{{ username.stdout }}"
+   - name: create a directory
+     file:
+        path: /usr/lib/sftp-server
+        state: directory
 
-- name: Install Required Package (wget, curl, tar)
-  ansible.builtin.package:
-    name: 
-      - wget 
-      - tar 
-      - curl 
-    state: present 
-  register: Installation_Output
+   - name: Create symlink for sftp-server if missing
+     file:
+        src: /usr/libexec/openssh/sftp-server
+        dest: /usr/lib/sftp-server
+        state: link
+        force: true
+     when: ansible_facts['os_family'] == "CentOS"
 
-- name: Print the Above task 
-  ansible.builtin.debug: 
-    msg: "{{ Installation_Output }}"
+   - name: Download tar
+     get_url:
+       url: "{{ yb_file_url }}"
+       dest: "/tmp/{{ yb_tar_file }}"
 
-- name: Download Yugabyte tar file 
-  ansible.builtin.get_url: 
-    url: https://software.yugabyte.com/releases/2024.2.2.1/yugabyte-2024.2.2.1-b6-linux-x86_64.tar.gz
-    dest: /tmp/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
-    force: yes 
-  register: downloaded_file
- 
-- name: Print above task
-  ansible.builtin.debug: 
-    msg: "{{ downloaded_file }}"
+   - name: Extract Yugabyte archive
+     unarchive:
+       src: "/tmp/{{ yb_tar_file }}"
+       dest: "/home/centos"
+       remote_src: yes
+       owner: "{{ yb_user }}"
+       group: "{{ yb_user }}"
 
-- name: Check if yugabyte tar file exists
-  ansible.builtin.stat:
-    path: /tmp/yugabyte-2.25.1.0-b381-linux-x86_64.tar.gz
-  register: file_stat
+   - name: remove tar file
+     file:
+       path: "/tmp/{{ yb_tar_file }}"
+       state: absent
 
-- name: Print above task
-  ansible.builtin.debug: 
-    msg: "{{ file_stat }}"
+   - name: change directory
+     command: "./bin/post_install.sh"
+     args:
+       chdir: "{{ yb_dir }}"
 
-- name: Print the above task 
-  ansible.builtin.debug: 
-    msg: "{{ downloaded_file }}"
+   - name: Change ownership
+     file:
+       path: "{{ yb_dir }}"
+       owner: "{{ yb_user }}"
+       group: "{{ yb_user }}"
+       mode: "0755"
