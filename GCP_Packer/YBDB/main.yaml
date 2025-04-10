@@ -1,0 +1,66 @@
+---
+- name: YugabyteDB Installation
+  hosts: all
+  become: yes
+  vars:
+    yugabyte_version: "2.25.0.0"
+    yugabyte_build: "b489"
+    yugabyte_tarball: "yugabyte-{{ yugabyte_version }}-{{ yugabyte_build }}-linux-x86_64.tar.gz"
+    yugabyte_dir: "yugabyte-{{ yugabyte_version }}"
+    start_time: "{{ lookup('pipe', 'date +%s') }}"
+
+  tasks:
+    - name: Print start message
+      ansible.builtin.debug:
+        msg: "Starting YugabyteDB installation..."
+
+    - name: Install wget
+      ansible.builtin.yum:
+        name: wget
+        state: present
+
+    - name: Download YugabyteDB tarball
+      ansible.builtin.get_url:
+        url: "https://downloads.yugabyte.com/releases/{{ yugabyte_version }}/{{ yugabyte_tarball }}"
+        dest: "/home/packer/{{ yugabyte_tarball }}"
+        mode: '0644'
+
+    - name: Extract YugabyteDB tarball
+      ansible.builtin.unarchive:
+        src: "/home/packer/{{ yugabyte_tarball }}"
+        dest: "/home/packer/"
+        remote_src: yes
+
+    - name: Run post_install.sh
+      ansible.builtin.command: ./bin/post_install.sh
+      args:
+        chdir: "/home/packer/{{ yugabyte_dir }}"
+
+    - name: Change ownership of openssl-config
+      ansible.builtin.file:
+        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+        owner: packer
+        group: packer
+        recurse: yes
+
+    - name: Start YugabyteDB
+      ansible.builtin.command: ./bin/yugabyted start
+      args:
+        chdir: "/home/packer/{{ yugabyte_dir }}"
+
+    - name: Check YugabyteDB status
+      ansible.builtin.shell: "./bin/yugabyted status || { echo 'Setup failed.'; exit 1; }"
+      args:
+        chdir: "/home/packer/{{ yugabyte_dir }}"
+
+    - name: Print success message
+      ansible.builtin.debug:
+        msg: "Setup completed successfully!"
+
+    - name: Calculate execution time
+      ansible.builtin.set_fact:
+        end_time: "{{ lookup('pipe', 'date +%s') }}"
+
+    - name: Print total execution time
+      ansible.builtin.debug:
+        msg: "Total execution time: {{ end_time | int - start_time | int }} seconds"
