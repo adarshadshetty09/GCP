@@ -4,8 +4,8 @@
 		"type": "googlecompute",
 		"project_id": "winter-cocoa-437211-s2",
 		"source_image": "centos-stream-9-v20250311",
-	    "zone": "us-south1-a", 
-		"machine_type": "n1-standard-8",
+	    "zone": "us-central1-a", 
+		"machine_type": "e2-medium",
 		"disk_size": 30,
 		"image_name": "yugabytedb-imag-{{timestamp}}",
 		"disk_type": "pd-ssd",
@@ -18,7 +18,7 @@
 	"provisioners": [
 	  {
 		"type": "ansible",
-		"playbook_file": "playbook.yaml",
+		"playbook_file": "main.yaml",
 		"ansible_env_vars": ["GCP/GCP_Packer/YBDB/main.yaml"]
 	  }
 	]
