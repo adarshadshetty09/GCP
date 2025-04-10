@@ -1,0 +1,78 @@
+[1;32mgooglecompute: output will be in this color.[0m
+
+[1;32m==> googlecompute: Checking image does not exist...[0m
+[1;32m==> googlecompute: Creating temporary RSA SSH key for instance...[0m
+[1;32m==> googlecompute: Using image: centos-stream-9-v20250311[0m
+[1;32m==> googlecompute: Creating instance...[0m
+[0;32m    googlecompute: Loading zone: us-central1-a[0m
+[0;32m    googlecompute: Loading machine type: e2-medium[0m
+[0;32m    googlecompute: Requesting instance creation...[0m
+[0;32m    googlecompute: Waiting for creation operation to complete...[0m
+[0;32m    googlecompute: Instance has been created![0m
+[1;32m==> googlecompute: Waiting for the instance to become running...[0m
+[0;32m    googlecompute: IP: 35.239.194.39[0m
+[1;32m==> googlecompute: Using SSH communicator to connect: 35.239.194.39[0m
+[1;32m==> googlecompute: Waiting for SSH to become available...[0m
+[1;32m==> googlecompute: Connected to SSH![0m
+[1;32m==> googlecompute: Provisioning with Ansible...[0m
+[0;32m    googlecompute: Setting up proxy adapter for Ansible....[0m
+[1;32m==> googlecompute: Executing Ansible: ansible-playbook -e packer_build_name="googlecompute" -e packer_builder_type=googlecompute --ssh-extra-args '-o IdentitiesOnly=yes' -e ansible_ssh_private_key_file=/tmp/ansible-key3080563076 -i /tmp/packer-provisioner-ansible3549099515 /home/adarshadshetty09/GCP/GCP_Packer/YBDB/main.yaml[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: PLAY [YugabyteDB Installation] *************************************************[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Gathering Facts] *********************************************************[0m
+[0;32m    googlecompute: ok: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print start message] *****************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": "Starting YugabyteDB installation..."[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Install wget] ************************************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Download YugabyteDB tarball] *********************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Extract YugabyteDB tarball] **********************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Run post_install.sh] *****************************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Change ownership of openssl-config] **************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Start YugabyteDB] ********************************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Check YugabyteDB status] *************************************************[0m
+[0;32m    googlecompute: changed: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print success message] ***************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": "Setup completed successfully!"[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Calculate execution time] ************************************************[0m
+[0;32m    googlecompute: ok: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print total execution time] **********************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": "Total execution time: 0 seconds"[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: PLAY RECAP *********************************************************************[0m
+[0;32m    googlecompute: default                    : ok=12   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0[0m
+[0;32m    googlecompute:[0m
+[1;32m==> googlecompute: Deleting instance...[0m
+[0;32m    googlecompute: Instance has been deleted![0m
+[1;32m==> googlecompute: Creating image...[0m
+[1;32m==> googlecompute: Deleting disk...[0m
+[0;32m    googlecompute: Disk has been deleted![0m
+[1;32mBuild 'googlecompute' finished after 7 minutes 18 seconds.[0m
+
+==> Wait completed after 7 minutes 18 seconds
+
+==> Builds finished. The artifacts of successful builds are:
+--> googlecompute: A disk image was created: yugabytedb-imag-1744296282
