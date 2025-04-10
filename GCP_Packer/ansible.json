@@ -29,7 +29,7 @@
               "tar xvfz yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz",
               "cd yugabyte-2.25.0.0/",
               "sudo ./bin/post_install.sh",
-              "sudo chown -R centos:centos /home/centos/yugabyte-2.25.0.0/openssl-config",
+              "sudo chown -R packer:packer /home/packer/yugabyte-2.25.0.0/openssl-config",
               "./bin/yugabyted start",
               "./bin/yugabyted status || { echo 'Setup failed.'; exit 1; }",
               "end_time=$(date +%s)",
