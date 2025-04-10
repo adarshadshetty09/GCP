@@ -1,6 +1,6 @@
-gcloud compute instances create yugabyte-test-instance-test \
+gcloud compute instances create yugabyte-test-instance-test-test \
   --zone=us-central1-a \
   --machine-type=n1-standard-1 \
-  --image=yugabytedb-image-1744269232 \
+  --image=yugabytedb-image-1744272070 \
   --image-project=winter-cocoa-437211-s2 \
   --tags=yugabyte-server
