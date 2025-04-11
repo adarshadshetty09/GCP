@@ -17,7 +17,7 @@
 		},
 		"image_storage_locations": ["asia-south1"],
 		"service_account_email": "packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com",
-		"omit_external_ip": true,
+		"omit_external_ip": false,
 		"use_internal_ip": true,
 		"tags": [
 		  "yugabytedb-image"
