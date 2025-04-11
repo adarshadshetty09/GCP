@@ -321,5 +321,183 @@ PRIMARY_ID: 1
 PRIMARY_STATE: ENABLED
 
 User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+```
+
+### Permission Needed
+
+```
+roles/compute.instanceAdmin.v1 – to create/delete VMs
+
+roles/iam.serviceAccountUser – to allow usage of service accounts
+
+roles/storage.objectViewer – if pulling base images from GCS
+```
+
+
+## Storage Permission
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud projects add-iam-policy-binding winter-cocoa-437211-s2 \
+  --member="serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role="roles/compute.storageAdmin"
+
+Updated IAM policy for project [winter-cocoa-437211-s2].
+bindings:
+- members:
+  - serviceAccount:service-121218740928@gcp-sa-cloudkms.iam.gserviceaccount.com
+  role: roles/cloudkms.serviceAgent
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/compute.instanceAdmin.v1
+- members:
+  - serviceAccount:service-121218740928@compute-system.iam.gserviceaccount.com
+  role: roles/compute.serviceAgent
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/compute.storageAdmin
+- members:
+  - serviceAccount:121218740928-compute@developer.gserviceaccount.com
+  - serviceAccount:121218740928@cloudservices.gserviceaccount.com
+  role: roles/editor
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/iam.serviceAccountUser
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/iap.tunnelResourceAccessor
+- members:
+  - user:adarshadshetty09@gmail.com
+  role: roles/owner
+etag: BwYye9NXvT0=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+
+```
+
+## Cryptokeyencrptordecyptor
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keys add-iam-policy-binding yugabytedbkeyRings \
+  --location asia-south1 \
+  --keyring yugabytedbKMS \
+  --member="serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role="roles/cloudkms.cryptoKeyEncrypterDecrypter" \
+  --project=winter-cocoa-437211-s2
+
+Updated IAM policy for key [yugabytedbkeyRings].
+bindings:
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/cloudkms.cryptoKeyEncrypterDecrypter
+etag: BwYye9FRTe4=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+
+```
+
+## List the keys
+
+```
+$ gcloud kms keys list --keyring=yugabytedbKMS --location=asia-south1 --project=winter-cocoa-437211-s2
+NAME: projects/winter-cocoa-437211-s2/locations/asia-south1/keyRings/yugabytedbKMS/cryptoKeys/yugabytedbkeyRings
+PURPOSE: ENCRYPT_DECRYPT
+ALGORITHM: GOOGLE_SYMMETRIC_ENCRYPTION
+PROTECTION_LEVEL: SOFTWARE
+LABELS:
+PRIMARY_ID: 1
+PRIMARY_STATE: ENABLED
+
+```
+
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keys add-iam-policy-binding yugabytedbkeyRings \
+  --keyring=yugabytedbKMS \
+  --location=asia-south1 \
+  --member="serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role="roles/cloudkms.cryptoKeyEncrypterDecrypter" \
+  --project=winter-cocoa-437211-s2
+Updated IAM policy for key [yugabytedbkeyRings].
+bindings:
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/cloudkms.cryptoKeyEncrypterDecrypter
+etag: BwYyfM1_7ss=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keys add-iam-policy-binding yugabytedbkeyRings \
+  --keyring=yugabytedbKMS \
+  --location=asia-south1 \
+  --member="serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role="roles/cloudkms.cryptoKeyEncrypterDecrypter" \
+  --project=winter-cocoa-437211-s2
+
+Updated IAM policy for key [yugabytedbkeyRings].
+bindings:
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/cloudkms.cryptoKeyEncrypterDecrypter
+etag: BwYyfOxqmqw=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
 $
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keyrings get-iam-policy yugabytedbKMS \
+  --location=asia-south1 \
+  --project=winter-cocoa-437211-s2
+etag: ACAB
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud projects add-iam-policy-binding winter-cocoa-437211-s2 \
+  --member="serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role="roles/cloudkms.admin"
+
+Updated IAM policy for project [winter-cocoa-437211-s2].
+bindings:
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/cloudkms.admin
+- members:
+  - serviceAccount:service-121218740928@gcp-sa-cloudkms.iam.gserviceaccount.com
+  role: roles/cloudkms.serviceAgent
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/compute.instanceAdmin.v1
+- members:
+  - serviceAccount:service-121218740928@compute-system.iam.gserviceaccount.com
+  role: roles/compute.serviceAgent
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/compute.storageAdmin
+- members:
+  - serviceAccount:121218740928-compute@developer.gserviceaccount.com
+  - serviceAccount:121218740928@cloudservices.gserviceaccount.com
+  role: roles/editor
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/iam.serviceAccountUser
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/iap.tunnelResourceAccessor
+- members:
+  - user:adarshadshetty09@gmail.com
+  role: roles/owner
+etag: BwYyfO-oENY=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+
+
+
 ```
