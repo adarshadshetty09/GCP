@@ -1,41 +1,39 @@
 ---
-##
 - name: Install wget
-  ansible.builtin.yum: 
+  ansible.builtin.yum:
     name: wget
-    state: present 
+    state: present
 
-- name: Download YugbayteDB yugabyte_tarball
-  ansible.builtin.get_url: 
+- name: Download YugabyteDB tarball
+  ansible.builtin.get_url:
     url: "https://downloads.yugabyte.com/releases/{{ yugabyte_version }}/{{ yugabyte_tarball }}"
     dest: "/home/packer/{{ yugabyte_tarball }}"
-    mode: '0644' 
+    mode: '0644'
 
-- name: Extract Yugbayte Tarball 
-  ansible.builtin.unarchive: 
+- name: Extract YugabyteDB tarball
+  ansible.builtin.unarchive:
     src: "/home/packer/{{ yugabyte_tarball }}"
     dest: "/home/packer/"
-    remote_src: yes 
+    remote_src: yes
 
-- name: Run post_install.sh 
-  ansible.builtin.command: ./bin/post_install.sh 
+- name: Run post_install.sh
+  ansible.builtin.command: ./bin/post_install.sh
   args:
     chdir: "/home/packer/{{ yugabyte_dir }}"
 
 - name: Change ownership of openssl-config
-  ansible.builtin.file: 
+  ansible.builtin.file:
     path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
-    owner: packer 
-    group: packer 
-    recurse: yes 
+    owner: packer
+    group: packer
+    recurse: yes
 
-- name: Start YugabyteDB 
-  ansible.builtin.command: ./bin/yugabyted start 
-  args: 
+- name: Start YugabyteDB
+  ansible.builtin.command: ./bin/yugabyted start
+  args:
     chdir: "/home/packer/{{ yugabyte_dir }}"
 
-- name: Check YugabyteDB Status 
+- name: Check YugabyteDB status
   ansible.builtin.shell: "./bin/yugabyted status || { echo 'Setup failed.'; exit 1; }"
-  args: 
+  args:
     chdir: "/home/packer/{{ yugabyte_dir }}"
-      
