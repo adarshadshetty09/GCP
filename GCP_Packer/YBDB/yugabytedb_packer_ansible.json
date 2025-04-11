@@ -3,7 +3,7 @@
 	  {
 		"type": "googlecompute",
 		"project_id": "winter-cocoa-437211-s2",
-		"zone": "asia-south-c",
+		"zone": "asia-south1-c",
 		"source_image": "centos-stream-9-v20250311",
 		"machine_type": "e2-medium",
 		"disk_size": 30,
