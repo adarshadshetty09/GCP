@@ -38,4 +38,4 @@
   ansible.builtin.shell: "./bin/yugabyted status || { echo 'Setup failed.'; exit 1; }"
   args: 
     chdir: "/home/packer/{{ yugabyte_dir }}"
-    
+      

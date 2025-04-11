@@ -18,8 +18,8 @@
 	"provisioners": [
 	  {
 		"type": "ansible",
-		"playbook_file": "playbook.yaml",
-		"ansible_env_vars": ["GCP/GCP_Packer/YBDB/playbook.yaml"]
+		"playbook_file": "main.yaml",
+		"ansible_env_vars": ["GCP/GCP_Packer/YBDB/main.yaml"]
 	  }
 	]
   }
