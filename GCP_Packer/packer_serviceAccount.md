@@ -265,7 +265,6 @@ gcloud compute instances create packertest \
   --scopes="https://www.googleapis.com/auth/cloud-platform"
 ```
 
-
 ## Create instance with CutomeImage - launch instance
 
 ```
@@ -283,4 +282,44 @@ PREEMPTIBLE:
 INTERNAL_IP: 10.128.0.29
 EXTERNAL_IP: 34.45.81.149
 STATUS: RUNNING
+```
+
+
+
+## Enable the Required Permission for the KMS using Gcloud
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keys add-iam-policy-binding yugabytedbkeyRings \
+  --location asia-south1 \
+  --keyring yugabytedbKMS \
+  --member "serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com" \
+  --role roles/cloudkms.cryptoKeyEncrypterDecrypter \
+  --project=winter-cocoa-437211-s2
+
+Updated IAM policy for key [yugabytedbkeyRings].
+bindings:
+- members:
+  - serviceAccount:packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com
+  role: roles/cloudkms.cryptoKeyEncrypterDecrypter
+etag: BwYye51J40s=
+version: 1
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+
+```
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$ gcloud kms keys list --keyring=yugabytedbKMS --location=asia-south1 --project=winter-cocoa-437211-s2
+NAME: projects/winter-cocoa-437211-s2/locations/asia-south1/keyRings/yugabytedbKMS/cryptoKeys/yugabytedbkeyRings
+PURPOSE: ENCRYPT_DECRYPT
+ALGORITHM: GOOGLE_SYMMETRIC_ENCRYPTION
+PROTECTION_LEVEL: SOFTWARE
+LABELS:
+PRIMARY_ID: 1
+PRIMARY_STATE: ENABLED
+
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
+$
 ```
