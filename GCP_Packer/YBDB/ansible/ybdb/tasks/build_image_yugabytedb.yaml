@@ -1,56 +1,41 @@
 ---
-   - name: Install openssh-server
-     package:
-       name: openssh-server
-       state: present
-    #become: true
+##
+- name: Install wget
+  ansible.builtin.yum: 
+    name: wget
+    state: present 
 
-   - name: Installation required Packages
-     package:
-       name:
-         - wget
-         - openssl
-       state: present
+- name: Download YugbayteDB yugabyte_tarball
+  ansible.builtin.get_url: 
+    url: "https://downloads.yugabyte.com/releases/{{ yugabyte_version }}/{{ yugabyte_tarball }}"
+    dest: "/home/packer/{{ yugabyte_tarball }}"
+    mode: '0644' 
 
-   - name: create a directory
-     file:
-        path: /usr/lib/sftp-server
-        state: directory
+- name: Extract Yugbayte Tarball 
+  ansible.builtin.unarchive: 
+    src: "/home/packer/{{ yugabyte_tarball }}"
+    dest: "/home/packer/"
+    remote_src: yes 
 
-   - name: Create symlink for sftp-server if missing
-     file:
-        src: /usr/libexec/openssh/sftp-server
-        dest: /usr/lib/sftp-server
-        state: link
-        force: true
-     when: ansible_facts['os_family'] == "CentOS"
+- name: Run post_install.sh 
+  ansible.builtin.command: ./bin/post_install.sh 
+  args:
+    chdir: "/home/packer/{{ yugabyte_dir }}"
 
-   - name: Download tar
-     get_url:
-       url: "{{ yb_file_url }}"
-       dest: "/tmp/{{ yb_tar_file }}"
+- name: Change ownership of openssl-config
+  ansible.builtin.file: 
+    path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+    owner: packer 
+    group: packer 
+    recurse: yes 
 
-   - name: Extract Yugabyte archive
-     unarchive:
-       src: "/tmp/{{ yb_tar_file }}"
-       dest: "/home/packer"
-       remote_src: yes
-       owner: "{{ yb_user }}"
-       group: "{{ yb_user }}"
+- name: Start YugabyteDB 
+  ansible.builtin.command: ./bin/yugabyted start 
+  args: 
+    chdir: "/home/packer/{{ yugabyte_dir }}"
 
-   - name: remove tar file
-     file:
-       path: "/tmp/{{ yb_tar_file }}"
-       state: absent
-
-   - name: change directory
-     command: "./bin/post_install.sh"
-     args:
-       chdir: "{{ yb_dir }}"
-
-   - name: Change ownership
-     file:
-       path: "{{ yb_dir }}"
-       owner: "{{ yb_user }}"
-       group: "{{ yb_user }}"
-       mode: "0755"
+- name: Check YugabyteDB Status 
+  ansible.builtin.shell: "./bin/yugabyted status || { echo 'Setup failed.'; exit 1; }"
+  args: 
+    chdir: "/home/packer/{{ yugabyte_dir }}"
+    
