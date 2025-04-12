@@ -1,0 +1,33 @@
+{
+	"builders": [
+	  {
+		"type": "googlecompute",
+		"project_id": "winter-cocoa-437211-s2",
+		"zone": "asia-south1-c",
+		"source_image": "centos-stream-9-v20250311",
+		"machine_type": "e2-medium",
+		"disk_size": 30,
+		"image_name": "yugabytedb-image-{{timestamp}}",
+		"disk_type": "pd-ssd",
+		"ssh_username": "packer",
+		"service_account_email": "packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com",
+		"scopes": ["https://www.googleapis.com/auth/cloud-platform"],
+		"image_encryption_key": {
+			"kmsKeyName": "projects/winter-cocoa-437211-s2/locations/asia-south1/keyRings/test/cryptoKeys/packertest"
+		},
+		"image_storage_locations": ["asia-south1"],
+		"tags": [
+		  "yugabytedb-image"
+		]
+	  }
+	],
+	"provisioners": [
+      {
+        "type": "shell",
+        "inline": [
+            "touch test"
+        ]
+      }
+    ]
+  }
+  
