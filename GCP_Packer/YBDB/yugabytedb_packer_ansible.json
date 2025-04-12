@@ -10,6 +10,8 @@
 		"image_name": "yugabytedb-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
 		"ssh_username": "packer",
+		"service_account_email": "packertest@winter-cocoa-437211-s2.iam.gserviceaccount.com",
+		"scopes": ["https://www.googleapis.com/auth/cloud-platform"],
 		"image_encryption_key": {
 			"kmsKeyName": "projects/winter-cocoa-437211-s2/locations/asia-south1/keyRings/test/cryptoKeys/packertest"
 		},
