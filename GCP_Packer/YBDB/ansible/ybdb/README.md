@@ -1,4 +1,4 @@
-~~~~Role Name
+~~~~Role
 =============
 
 A brief description of the role goes here.
@@ -36,3 +36,11 @@ Author Information
 ------------------
 
 An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+~~~~
+
+
+
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible -y
