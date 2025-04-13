@@ -5,10 +5,15 @@
 		"project_id": "devops-456705",
 		"zone": "asia-south1-a",
 		"source_image": "centos-stream-9-v20250311",
+		"source_image_project_id": "centos-cloud",
 		"machine_type": "e2-medium",
 		"disk_size": 30,
 		"image_name": "yugabytedb-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
+		"scopes": [
+			"https://www.googleapis.com/auth/cloud-platform"
+		],
+
 		"ssh_username": "packer",
 		"service_account_email": "packer-devops-456705-iam-gserv@devops-456705.iam.gserviceaccount.com",
 		"image_encryption_key": {
