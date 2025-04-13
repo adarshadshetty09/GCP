@@ -10,10 +10,6 @@
 		"disk_size": 30,
 		"image_name": "yugabytedb-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
-		"scopes": [
-			"https://www.googleapis.com/auth/cloud-platform"
-		],
-
 		"ssh_username": "packer",
 		"service_account_email": "test-practice@devops-456705.iam.gserviceaccount.com",
 		"image_encryption_key": {
