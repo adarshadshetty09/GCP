@@ -15,7 +15,7 @@
 		],
 
 		"ssh_username": "packer",
-		"service_account_email": "packer-devops-456705-iam-gserv@devops-456705.iam.gserviceaccount.com",
+		"service_account_email": "test-practice@devops-456705.iam.gserviceaccount.com",
 		"image_encryption_key": {
             "kmsKeyName": "projects/devops-456705/locations/us-central1/keyRings/packerdevopskeyring/cryptoKeys/packerdevopscryptokey"
 			
