@@ -3,4 +3,12 @@
 .terraform.lock.hcl
 *.tfstate
 *.tfstate.backup
+
+# Ignore private key and public key files
+id_rsa
+id_rsa.pub
+
+# Ignore the adarsha directory
+adarsha
+
 crash.log
