@@ -284,8 +284,6 @@ EXTERNAL_IP: 34.45.81.149
 STATUS: RUNNING
 ```
 
-
-
 ## Enable the Required Permission for the KMS using Gcloud
 
 ```
@@ -332,7 +330,6 @@ roles/iam.serviceAccountUser – to allow usage of service accounts
 
 roles/storage.objectViewer – if pulling base images from GCS
 ```
-
 
 ## Storage Permission
 
@@ -413,7 +410,6 @@ PRIMARY_STATE: ENABLED
 
 ```
 
-
 ```
 User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
 $ gcloud kms keys add-iam-policy-binding yugabytedbkeyRings \
@@ -493,11 +489,158 @@ bindings:
 etag: BwYyfO-oENY=
 version: 1
 
+User@DESKTOP-KM01E29 MINGW64 ~/Desktop/G
+```
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~
+$ gcloud compute instances describe yugabytedb-instance \
+  --zone=asia-south1-a \
+  --project=devops-456705
+
+canIpForward: false
+cpuPlatform: Intel Broadwell
+creationTimestamp: '2025-04-13T20:49:05.303-07:00'
+deletionProtection: false
+disks:
+- architecture: X86_64
+  autoDelete: true
+  boot: true
+  deviceName: persistent-disk-0
+  diskSizeGb: '30'
+  guestOsFeatures:
+  - type: UEFI_COMPATIBLE
+  - type: VIRTIO_SCSI_MULTIQUEUE
+  - type: SEV_CAPABLE
+  - type: SEV_SNP_CAPABLE
+  - type: SEV_LIVE_MIGRATABLE
+  - type: SEV_LIVE_MIGRATABLE_V2
+  - type: GVNIC
+  - type: IDPF
+  - type: TDX_CAPABLE
+  index: 0
+  interface: SCSI
+  kind: compute#attachedDisk
+  licenses:
+  - https://www.googleapis.com/compute/v1/projects/centos-cloud/global/licenses/centos-stream-9
+  mode: READ_WRITE
+  source: https://www.googleapis.com/compute/v1/projects/devops-456705/zones/asia-south1-a/disks/yugabytedb-instance
+  type: PERSISTENT
+fingerprint: TSiS7JcSaJA=
+id: '7027394062253636417'
+kind: compute#instance
+labelFingerprint: 42WmSpB8rSM=
+lastStartTimestamp: '2025-04-13T20:50:37.820-07:00'
+machineType: https://www.googleapis.com/compute/v1/projects/devops-456705/zones/asia-south1-a/machineTypes/e2-medium
+metadata:
+  fingerprint: qT0WRpV3IQ8=
+  items:
+  - key: ssh-keys
+    value: |-
+      adarshadshetty09:ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBD/pbKoqqX5bsUMXv5tS563mJOpXujMHS8j7+RMqQsZb8oHH2GMNm5zIb6J4YlhFsUenUrL+2exSviBOh3LW/cY= google-ssh {"userName":"adarshadshetty09@gmail.com","expireOn":"2025-04-14T03:54:33+0000"}
+      adarshadshetty09:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAHhScNy42vgOIK6pVMJZYSkLFRK8wo4IxYdmXnGSRt1sZyDxUwjb++IRwNPlQyxy62/nj44gfoP2fVX7PoXbyCKW9ATdiu6inBRaaLIgFrfA2dMywIj7MEywE8JZkHCea2uZotzamMO2T6rWWfABltto3GviPd1K9vTPfOTVofWqSptg8dBC1chSGMqgShl9Q2eybhwn9VVbTY6CFIH3fl/dzLLorFpLPx1N+f7y66JikbZ6ny+G2wMImXvXIhkzMSmFLInnenM2dL6swT/BGAA8peU1cpv+CIM5irdJxUWvsZBKaW1Bb0/+LLxARngATucmOKGYv1nqjLwAoIOHWqc= google-ssh {"userName":"adarshadshetty09@gmail.com","expireOn":"2025-04-14T03:54:38+0000"}
+  kind: compute#metadata
+name: yugabytedb-instance
+networkInterfaces:
+- accessConfigs:
+  - kind: compute#accessConfig
+    name: external-nat
+    natIP: 35.244.3.163
+    networkTier: PREMIUM
+    type: ONE_TO_ONE_NAT
+  fingerprint: UEyMqrUWVow=
+  kind: compute#networkInterface
+  name: nic0
+  network: https://www.googleapis.com/compute/v1/projects/devops-456705/global/networks/default
+  networkIP: 10.160.0.11
+  stackType: IPV4_ONLY
+  subnetwork: https://www.googleapis.com/compute/v1/projects/devops-456705/regions/asia-south1/subnetworks/default
+satisfiesPzi: true
+scheduling:
+  automaticRestart: true
+  onHostMaintenance: MIGRATE
+  preemptible: false
+  provisioningModel: STANDARD
+selfLink: https://www.googleapis.com/compute/v1/projects/devops-456705/zones/asia-south1-a/instances/yugabytedb-instance
+serviceAccounts:
+- email: test-practice@devops-456705.iam.gserviceaccount.com
+  scopes:
+  - https://www.googleapis.com/auth/cloud-platform
+shieldedInstanceConfig:
+  enableIntegrityMonitoring: true
+  enableSecureBoot: false
+  enableVtpm: true
+shieldedInstanceIntegrityPolicy:
+  updateAutoLearnPolicy: true
+startRestricted: false
+status: RUNNING
+tags:
+  fingerprint: hRXRB72fTQw=
+  items:
+  - yugabytedb-image
+zone: https://www.googleapis.com/compute/v1/projects/devops-456705/zones/asia-south1-a
+
+User@DESKTOP-KM01E29 MINGW64 ~
+```
+
+```
+User@DESKTOP-KM01E29 MINGW64 ~
+$ gcloud compute images describe yugabytedb-image-1744565557   --project=devops-456705
+architecture: X86_64
+archiveSizeBytes: '2442421184'
+creationTimestamp: '2025-04-13T10:37:57.827-07:00'
+description: Created by Packer
+diskSizeGb: '30'
+enableConfidentialCompute: false
+guestOsFeatures:
+- type: UEFI_COMPATIBLE
+- type: VIRTIO_SCSI_MULTIQUEUE
+- type: SEV_CAPABLE
+- type: SEV_SNP_CAPABLE
+- type: SEV_LIVE_MIGRATABLE
+- type: SEV_LIVE_MIGRATABLE_V2
+- type: GVNIC
+- type: IDPF
+- type: TDX_CAPABLE
+id: '694064390270765213'
+imageEncryptionKey:
+  kmsKeyName: projects/devops-456705/locations/us-central1/keyRings/packerdevopskeyring/cryptoKeys/packerdevopscryptokey/cryptoKeyVersions/1
+kind: compute#image
+labelFingerprint: 42WmSpB8rSM=
+licenseCodes:
+- '2587764519704208542'
+licenses:
+- https://www.googleapis.com/compute/v1/projects/centos-cloud/global/licenses/centos-stream-9
+name: yugabytedb-image-1744565557
+satisfiesPzi: true
+selfLink: https://www.googleapis.com/compute/v1/projects/devops-456705/global/images/yugabytedb-image-1744565557
+sourceDisk: https://www.googleapis.com/compute/v1/projects/devops-456705/zones/asia-south1-a/disks/packer-67fbf535-80e4-4626-5b1b-515875e37072
+sourceDiskId: '734582295697443796'
+sourceType: RAW
+status: READY
+storageLocations:
+- us-central1
+
+User@DESKTOP-KM01E29 MINGW64 ~
+
+
+```
+
+```
 User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
-$
+$ gcloud projects list
+PROJECT_ID: devops-456705
+NAME: devops
+PROJECT_NUMBER: 898537920396
+
+PROJECT_ID: fleet-bongo-453603-d1
+NAME: My First Project
+PROJECT_NUMBER: 772540397444
+
+PROJECT_ID: winter-cocoa-437211-s2
+NAME: My First Project
+PROJECT_NUMBER: 121218740928
 
 User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
-
-
 
 ```

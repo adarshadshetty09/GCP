@@ -14,8 +14,7 @@
 		"service_account_email": "test-practice@devops-456705.iam.gserviceaccount.com",
 		"image_encryption_key": {
             "kmsKeyName": "projects/devops-456705/locations/us-central1/keyRings/packerdevopskeyring/cryptoKeys/packerdevopscryptokey"
-			
-        },
+		},
 		"image_storage_locations": ["us-central1"],
 		"tags": [
 		  "yugabytedb-image"
