@@ -39,7 +39,7 @@ build {
       "gcloud secrets versions access latest --secret='yba_lic' > /tmp/yba.lic",
       "sudo mv /tmp/yba.lic /opt/yba-ctl/yba.lic",
       "sudo chmod 644 /opt/yba-ctl/yba.lic",
-      "echo yes | sudo ./yba-ctl preflight"
+      "yes | sudo ./yba-ctl preflight"
     ]
   }
 }
