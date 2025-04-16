@@ -9,6 +9,7 @@ packer {
 
 source "googlecompute" "yba-image" {
   project_id   = "devops-456705"
+  service_account_email = "test-practice@devops-456705.iam.gserviceaccount.com"
   source_image = "centos-stream-9-v20250311"
   zone         = "us-central1-a"
   machine_type = "e2-standard-4"
