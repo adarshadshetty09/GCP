@@ -24,7 +24,7 @@ build {
   sources = ["sources.googlecompute.yba-image"]
 
   provisioner "file" {
-    source      = "/c/Users/User/Desktop/yba.lic"                      # Local path
+    source      = "~/yba.lic"                      # Local path
     destination = "/opt/yba-ctl/yba.lic"         # Remote path required by yba-ctl
   }
 
