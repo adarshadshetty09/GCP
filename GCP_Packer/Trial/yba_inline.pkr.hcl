@@ -8,15 +8,15 @@ packer {
 }
 
 source "googlecompute" "yba-image" {
-  project_id            = "devops-456705"
+  project_id   = "devops-456705"
   service_account_email = "test-practice@devops-456705.iam.gserviceaccount.com"
-  source_image          = "centos-stream-9-v20250311"
-  zone                  = "us-central1-a"
-  machine_type          = "e2-standard-4"
-  disk_size             = 220
-  image_name            = "yba-image-{{timestamp}}"
-  disk_type             = "pd-ssd"
-  ssh_username          = "packer"
+  source_image = "centos-stream-9-v20250311"
+  zone         = "us-central1-a"
+  machine_type = "e2-standard-4"
+  disk_size    = 220
+  image_name   = "yba-image-{{timestamp}}"
+  disk_type    = "pd-ssd"
+  ssh_username = "packer"
 
   tags = ["yba-image"]
 
@@ -36,7 +36,7 @@ build {
       "tar -xf yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
       "cd yba_installer_full-2024.2.2.2-b2/",
       "sudo mkdir -p /opt/yba-ctl",
-      "gcloud secrets versions access latest --secret='yba_lic' > /tmp/yba.lic",
+      "gcloud secrets versions access latest --secret='yba_lic' > /tmp/yba.lic", # Fetch the secret to the instance
       "sudo mv /tmp/yba.lic /opt/yba-ctl/yba.lic",
       "sudo chmod 644 /opt/yba-ctl/yba.lic",
       "yes | sudo ./yba-ctl preflight"
