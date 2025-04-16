@@ -1,3 +1,4 @@
 ---
 # tasks file for ybdb
 - include_tasks: build_image_yugabytedb.yaml 
+- include_tasks: build_image_yba.yaml
