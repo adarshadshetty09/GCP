@@ -25,7 +25,7 @@ build {
 
     provisioner "shell" {
         inline = [
-            "set -e"
+            "set -e",
             "wget https://downloads.yugabyte.com/releases/2024.2.2.2/yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
             "tar -xf yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
             "cd yba_installer_full-2024.2.2.2-b2/",

@@ -1,9 +1,11 @@
-gcloud compute instances create yugabyte-test-instance-test-test \
-  --zone=us-central1-a \
-  --machine-type=n1-standard-1 \
-  --image=yugabytedb-imag-1744294309 \
-  --image-project=winter-cocoa-437211-s2 \
-  --tags=yugabyte-server
+gcloud compute instances create yba-instance \
+  --project devops-456705 \
+  --image-family ubuntu-2004-lts \
+  --image-project ubuntu-os-cloud \
+  --network default \
+  --zone us-central1-a \
+  --service-account=test-practice@devops-456705.iam.gserviceaccount.com \
+  --scopes="https://www.googleapis.com/auth/cloud-platform"
 
 
   ***************************************************
