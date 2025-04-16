@@ -25,7 +25,8 @@ build {
 
   provisioner "shell" {
     inline = [
-      "set -e",
+      "set -euxo pipefail", # Better error handling
+      "sudo dnf -y update", # Optional: keep system up to date
       "sudo dnf clean all",
       "sudo dnf makecache",
       "sudo dnf install -y wget tar",
@@ -35,4 +36,5 @@ build {
       "yes | sudo ./yba-ctl preflight"
     ]
   }
+
 }
