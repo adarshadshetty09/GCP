@@ -24,8 +24,8 @@ build {
   sources = ["sources.googlecompute.yba-image"]
 
   provisioner "file" {
-    source      = "/home/adarshadshetty09/yba.lic"                      # Local path
-    destination = "/opt/yba-ctl/yba.lic"         # Remote path required by yba-ctl
+    source      = "/home/adarshadshetty09/yba.lic" # Local path
+    destination = "/tmp/yba-ctl/yba.lic"           # Remote path required by yba-ctl
   }
 
   provisioner "shell" {
@@ -38,7 +38,7 @@ build {
       "tar -xf yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
       "cd yba_installer_full-2024.2.2.2-b2/",
       "sudo mkdir -p /opt/yba-ctl",
-      "sudo mv ~/yba.lic /opt/yba-ctl/yba.lic",
+      "sudo mv /tmp/yba.lic /opt/yba-ctl/yba.lic",
       "sudo chmod 644 /opt/yba-ctl/yba.lic",
       "yes | sudo ./yba-ctl preflight"
     ]
