@@ -21,7 +21,7 @@ source "googlecompute" "yba-image"{
 }
 
 build {
-    source =["source.googlecompute.yba-image"]
+    sources =["sources.googlecompute.yba-image"]
 
     provisioner "shell" {
         inline = [
