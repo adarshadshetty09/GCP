@@ -18,6 +18,8 @@ source "googlecompute" "yba-image" {
   ssh_username = "packer"
 
   tags = ["yba-image"]
+
+  scopes = ["https://www.googleapis.com/auth/cloud-platform"]
 }
 
 build {
