@@ -11,8 +11,8 @@ source "googlecompute" "yba-image" {
   project_id   = "devops-456705"
   source_image = "centos-stream-9-v20250311"
   zone         = "us-central1-a"
-  machine_type = "c4a-standard-4"
-  disk_size    = 240
+  machine_type = "e2-standard-4"
+  disk_size    = 220
   image_name   = "yba-image-{{timestamp}}"
   disk_type    = "pd-ssd"
   ssh_username = "packer"
