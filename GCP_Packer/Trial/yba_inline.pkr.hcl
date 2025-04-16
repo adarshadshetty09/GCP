@@ -23,11 +23,6 @@ source "googlecompute" "yba-image" {
 build {
   sources = ["sources.googlecompute.yba-image"]
 
-  provisioner "file" {
-    source      = "/home/adarshadshetty09/yba.lic" # Local path
-    destination = "/tmp/yba-ctl/yba.lic"           # Remote path required by yba-ctl
-  }
-
   provisioner "shell" {
     inline = [
       "set -euxo pipefail",
