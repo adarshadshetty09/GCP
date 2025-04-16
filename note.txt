@@ -4,3 +4,14 @@ gcloud compute instances create yugabyte-test-instance-test-test \
   --image=yugabytedb-imag-1744294309 \
   --image-project=winter-cocoa-437211-s2 \
   --tags=yugabyte-server
+
+
+  ***************************************************
+
+devops:dopadm:~$sudo systemctl daemon-reexec
+devops:dopadm:~$sudo systemctl daemon-reload
+devops:dopadm:~$sudo systemctl start yugabyte
+devops:dopadm:~$sudo systemctl enable yugabyte
+
+Created symlink /etc/systemd/system/multi-user.target.wants/yugabyte.service → /etc/systemd/system/yugabyte.service.
+devops:dopadm:~$
