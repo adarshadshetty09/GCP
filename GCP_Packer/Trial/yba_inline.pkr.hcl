@@ -11,12 +11,11 @@ source "googlecompute" "yba-image" {
   project_id   = "devops-456705"
   source_image = "centos-stream-9-v20250311"
   zone         = "us-central1-a"
-  machine_type = "e2-medium"
+  machine_type = "c3-standard-4"
   disk_size    = 300
   image_name   = "yba-image-{{timestamp}}"
   disk_type    = "pd-ssd"
   ssh_username = "packer"
-  min_cpu_platform = "4"
 
   tags = ["yba-image"]
 }
