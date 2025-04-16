@@ -23,18 +23,24 @@ source "googlecompute" "yba-image" {
 build {
   sources = ["sources.googlecompute.yba-image"]
 
+  provisioner "file" {
+    source      = "/c/Users/User/Desktop/yba.lic"                      # Local path
+    destination = "/opt/yba-ctl/yba.lic"         # Remote path required by yba-ctl
+  }
+
   provisioner "shell" {
     inline = [
-      "set -euxo pipefail", # Better error handling
-      "sudo dnf -y update", # Optional: keep system up to date
+      "set -euxo pipefail",
       "sudo dnf clean all",
       "sudo dnf makecache",
       "sudo dnf install -y wget tar",
       "wget https://downloads.yugabyte.com/releases/2024.2.2.2/yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
       "tar -xf yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
       "cd yba_installer_full-2024.2.2.2-b2/",
+      "sudo mkdir -p /opt/yba-ctl",
+      "sudo mv ~/yba.lic /opt/yba-ctl/yba.lic",
+      "sudo chmod 644 /opt/yba-ctl/yba.lic",
       "yes | sudo ./yba-ctl preflight"
     ]
   }
-
 }
