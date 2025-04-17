@@ -51,6 +51,6 @@
         mode: '0644'
 
     - name: Run preflight checks
-      ansible.builtin.command: "yes | ./yba-ctl preflight"
+      ansible.builtin.shell: "yes | ./yba-ctl preflight"
       args:
         chdir: "/tmp/{{ yba_dir }}"
