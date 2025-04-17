@@ -3,7 +3,7 @@
 	  {
 		"type": "googlecompute",
 		"project_id": "devops-456705",
-		"zone": "asia-south1-a",
+		"zone": "us-central1-a",
 		"source_image": "centos-stream-9-v20250311",
 		"source_image_project_id": "centos-cloud",
 		"machine_type": "e2-standard-4",
