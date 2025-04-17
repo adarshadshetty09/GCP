@@ -14,39 +14,25 @@
 
   tasks:
 
-    - name: Update Redhat 
-      ansible.builtin.dnf:
-        name: "*"
-        state: latest
-      become: yes
-      register: update_redhat
-
-    - name: Install wget and python3.11
-      ansible.builtin.package: 
+    - name: Install wget, tar, python3.11
+      ansible.builtin.yum: 
         name:
           - wget 
           - python3.11
+          - tar 
         state: present
-      become: yes  
-        
 
-    # - name: Install required packages
-    #   ansible.builtin.dnf:
-    #     name:
-    #       - wget
-    #       - tar
-    #     state: present
+    - name: Download YBA tarball
+      ansible.builtin.get_url:
+        url: "{{ yba_url }}"
+        dest: "/tmp/{{ yba_tar_file }}"
+        mode: '0644'
 
-    # - name: Download YBA tarball
-    #   ansible.builtin.get_url:
-    #     url: "{{ yba_url }}"
-    #     dest: "/tmp/{{ yba_tar_file }}"
-
-    # - name: Extract YBA tarball
-    #   ansible.builtin.unarchive:
-    #     src: "/tmp/{{ yba_tar_file }}"
-    #     dest: /tmp
-    #     remote_src: yes
+    - name: Extract YBA tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ yba_tar_file }}"
+        dest: /tmp
+        remote_src: yes
 
     # - name: Create YBA install directory
     #   ansible.builtin.file:

@@ -644,3 +644,40 @@ PROJECT_NUMBER: 121218740928
 User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
 
 ```
+
+
+
+## Checking the OS Release
+
+```
+adarshadshetty09@yba-instance:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.6 LTS
+Release:        20.04
+Codename:       focal
+adarshadshetty09@yba-instance:~$ cat /etc/os-release 
+NAME="Ubuntu"
+VERSION="20.04.6 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.6 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+adarshadshetty09@yba-instance:~$ hostnamectl
+   Static hostname: yba-instance
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: 95c5cecc3dade2af3e7fbce6d332739f
+           Boot ID: bc09a8203dd347b199c57cf19a99f5de
+    Virtualization: kvm
+  Operating System: Ubuntu 20.04.6 LTS
+            Kernel: Linux 5.15.0-1078-gcp
+      Architecture: x86-64
+adarshadshetty09@yba-instance:~$ 
+```
