@@ -34,26 +34,15 @@
         dest: /tmp
         remote_src: yes
 
-    # - name: Create YBA install directory
-    #   ansible.builtin.file:
-    #     path: "{{ yba_install_dir }}"
-    #     state: directory
-    #     mode: '0755'
+    - name: Fetch the YBA license from the Secrete Manager
+      ansible.builtin.shell: |
+        gcloud secrets versions access latest --secret='yba_lic'
+      register: secrete_value
 
-    # - name: Fetch YBA license from GCP secret manager
-    #   ansible.builtin.command:
-    #     cmd: gcloud secrets versions access latest --secret={{ license_secret_name }}
-    #   register: license_content
+    - name: Check if license was fetched successfully 
+      ansible.builtin.debug: 
+        msg: "{{ secrete_value }}"
+      
 
 
-    # - name: Write license to file
-    #   ansible.builtin.copy:
-    #     content: "{{ license_content.stdout }}"
-    #     dest: "{{ final_license_path }}"
-    #     mode: '0644'
-
-    # - name: Run preflight checks
-    #   ansible.builtin.shell: 
-    #     cmd: "yes | ./yba-ctl preflight"
-    #   args:
-    #     chdir: "/tmp/{{ yba_dir }}"
+    
