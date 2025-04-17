@@ -26,31 +26,32 @@
         url: "{{ yba_url }}"
         dest: "/tmp/{{ yba_tar_file }}"
 
-    - name: Extract YBA tarball
-      ansible.builtin.unarchive:
-        src: "/tmp/{{ yba_tar_file }}"
-        dest: /tmp
-        remote_src: yes
+    # - name: Extract YBA tarball
+    #   ansible.builtin.unarchive:
+    #     src: "/tmp/{{ yba_tar_file }}"
+    #     dest: /tmp
+    #     remote_src: yes
 
-    - name: Create YBA install directory
-      ansible.builtin.file:
-        path: "{{ yba_install_dir }}"
-        state: directory
-        mode: '0755'
+    # - name: Create YBA install directory
+    #   ansible.builtin.file:
+    #     path: "{{ yba_install_dir }}"
+    #     state: directory
+    #     mode: '0755'
 
-    - name: Fetch YBA license from GCP secret manager
-      ansible.builtin.command:
-        cmd: gcloud secrets versions access latest --secret={{ license_secret_name }}
-      register: license_content
+    # - name: Fetch YBA license from GCP secret manager
+    #   ansible.builtin.command:
+    #     cmd: gcloud secrets versions access latest --secret={{ license_secret_name }}
+    #   register: license_content
 
 
-    - name: Write license to file
-      ansible.builtin.copy:
-        content: "{{ license_content.stdout }}"
-        dest: "{{ final_license_path }}"
-        mode: '0644'
+    # - name: Write license to file
+    #   ansible.builtin.copy:
+    #     content: "{{ license_content.stdout }}"
+    #     dest: "{{ final_license_path }}"
+    #     mode: '0644'
 
-    - name: Run preflight checks
-      ansible.builtin.shell: "yes | ./yba-ctl preflight"
-      args:
-        chdir: "/tmp/{{ yba_dir }}"
+    # - name: Run preflight checks
+    #   ansible.builtin.shell: 
+    #     cmd: "yes | ./yba-ctl preflight"
+    #   args:
+    #     chdir: "/tmp/{{ yba_dir }}"
