@@ -1,6 +1,6 @@
 ---
 - name: Install Yugabyte Anywhere
-  hosts: yugabyte_host
+  hosts: all
   become: yes
   vars:
     yba_version: "2024.2.2.2-b2"
