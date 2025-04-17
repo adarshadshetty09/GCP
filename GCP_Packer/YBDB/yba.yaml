@@ -39,9 +39,10 @@
         mode: '0755'
 
     - name: Fetch YBA license from GCP secret manager
-      ansible.builtin.command: >
-        gcloud secrets versions access latest --secret="{{ license_secret_name }}"
+      ansible.builtin.command:
+        cmd: gcloud secrets versions access latest --secret={{ license_secret_name }}
       register: license_content
+
 
     - name: Write license to file
       ansible.builtin.copy:
