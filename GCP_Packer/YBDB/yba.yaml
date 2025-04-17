@@ -32,7 +32,7 @@
     - name: Extract YBA tarball
       ansible.builtin.unarchive:
         src: "/tmp/{{ yba_tar_file }}"
-        dest: "/home/{{ ansible_user }}"
+        dest: "/home/packer"
         remote_src: yes
 
     - name: remove the tar file after the extraction
@@ -68,7 +68,7 @@
     - name: Run yba preflight check 
       ansible.builtin.command: "./yba-ctl preflight"
       args:
-        chdir: "/home{{ ansible_user }}/{{yba_dir}}"
+        chdir: "/home/packer/{{yba_dir}}"
       register: preflight_output
 
     - name: Print the preflight_output
