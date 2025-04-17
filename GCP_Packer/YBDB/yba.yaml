@@ -1,0 +1,55 @@
+---
+- name: Install Yugabyte Anywhere
+  hosts: yugabyte_host
+  become: yes
+  vars:
+    yba_version: "2024.2.2.2-b2"
+    yba_tar_file: "yba_installer_full-{{ yba_version }}-linux-x86_64.tar.gz"
+    yba_url: "https://downloads.yugabyte.com/releases/2024.2.2.2/{{ yba_tar_file }}"
+    yba_dir: "yba_installer_full-{{ yba_version }}"
+    yba_install_dir: "/opt/yba-ctl"
+    license_secret_name: "yba_lic"
+    tmp_license_file: "/tmp/yba.lic"
+    final_license_path: "{{ yba_install_dir }}/yba.lic"
+
+  tasks:
+
+    - name: Install required packages
+      ansible.builtin.dnf:
+        name:
+          - wget
+          - tar
+        state: present
+
+    - name: Download YBA tarball
+      ansible.builtin.get_url:
+        url: "{{ yba_url }}"
+        dest: "/tmp/{{ yba_tar_file }}"
+
+    - name: Extract YBA tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ yba_tar_file }}"
+        dest: /tmp
+        remote_src: yes
+
+    - name: Create YBA install directory
+      ansible.builtin.file:
+        path: "{{ yba_install_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Fetch YBA license from GCP secret manager
+      ansible.builtin.command: >
+        gcloud secrets versions access latest --secret="{{ license_secret_name }}"
+      register: license_content
+
+    - name: Write license to file
+      ansible.builtin.copy:
+        content: "{{ license_content.stdout }}"
+        dest: "{{ final_license_path }}"
+        mode: '0644'
+
+    - name: Run preflight checks
+      ansible.builtin.command: "yes | ./yba-ctl preflight"
+      args:
+        chdir: "/tmp/{{ yba_dir }}"

@@ -17,3 +17,17 @@ devops:dopadm:~$sudo systemctl enable yugabyte
 
 Created symlink /etc/systemd/system/multi-user.target.wants/yugabyte.service → /etc/systemd/system/yugabyte.service.
 devops:dopadm:~$
+
+
+```
+gcloud config set project PROJECT_ID
+```
+
+changing the existing password -: 
+[adarshadshetty09@instance-20250416-103123 ~]$ sudo passwd packer
+Changing password for user packer.
+New password: 
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+[adarshadshetty09@instance-20250416-103123 ~]$ 

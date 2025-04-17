@@ -1,0 +1,33 @@
+{
+	"builders": [
+	  {
+		"type": "googlecompute",
+		"project_id": "devops-456705",
+		"zone": "asia-south1-a",
+		"source_image": "centos-stream-9-v20250311",
+		"source_image_project_id": "centos-cloud",
+		"machine_type": "e2-standard-4",
+		"disk_size": 220,
+		"image_name": "yba-image-{{timestamp}}",
+		"disk_type": "pd-ssd",
+		"ssh_username": "packer",
+		"service_account_email": "test-practice@devops-456705.iam.gserviceaccount.com",
+		"image_encryption_key": {
+            "kmsKeyName": "projects/devops-456705/locations/us-central1/keyRings/packerdevopskeyring/cryptoKeys/packerdevopscryptokey"
+		},
+		"image_storage_locations": ["us-central1"],
+
+		"tags": ["yugabytedb-image"],
+
+        "scopes": [ "https://www.googleapis.com/auth/cloud-platform" ]
+	  }
+	],
+	"provisioners": [
+	  {
+		"type": "ansible",
+		"playbook_file": "yba.yaml",
+		"ansible_env_vars": ["GCP/GCP_Packer/YBDB/yba.yaml"]
+	  }
+	]
+  }
+  

@@ -29,11 +29,13 @@ build {
   provisioner "shell" {
     inline = [
       "sudo dnf install -y wget tar",
+      "sudo mkdir -p /opt/yba-ctl",
       "wget https://downloads.yugabyte.com/releases/2024.2.2.2/yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
       "tar -xf yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
-      "cd yba_installer_full-2024.2.2.2-b2/",
       "rm yba_installer_full-2024.2.2.2-b2-linux-x86_64.tar.gz",
-      "sudo mkdir -p /opt/yba-ctl",
+      "sudo mv yba_installer_full-2024.2.2.2-b2-linux-x86_64 /opt"
+      "sudo cd /opt/yba_installer_full-2024.2.2.2-b2/",
+      
       "gcloud secrets versions access latest --secret='yba_lic' > /tmp/yba.lic", # Fetch the secret to the instance
       "sudo mv /tmp/yba.lic /opt/yba-ctl/yba.lic",
       "sudo chmod 644 /opt/yba-ctl/yba.lic",
@@ -42,4 +44,6 @@ build {
   }
 }
 
-// Working 
+
+
+// NOT WORKING 
