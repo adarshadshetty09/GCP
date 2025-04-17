@@ -11,6 +11,7 @@
     license_secret_name: "yba_lic"
     tmp_license_file: "/tmp/yba.lic"
     final_license_path: "{{ yba_install_dir }}/yba.lic"
+    
 
   tasks:
 
@@ -31,8 +32,13 @@
     - name: Extract YBA tarball
       ansible.builtin.unarchive:
         src: "/tmp/{{ yba_tar_file }}"
-        dest: /tmp
+        dest: "/home{{ ansible_user }}"
         remote_src: yes
+
+    - name: remove the tar file after the extraction
+      ansible.builtin.file: 
+        path: "/tmp/{{ yba_tar_file }}"
+        state: absent 
 
     - name: Fetch the YBA license from the Secrete Manager
       ansible.builtin.shell: |
@@ -59,6 +65,15 @@
       ansible.builtin.debug: 
         msg: "{{ copy_license }}"
 
+    - name: Run yba preflight check 
+      ansible.builtin.command: "./yba-ctl preflight"
+      args:
+        chdir: "/home{{ ansible_user }}/{{yba_dir}}"
+      register: preflight_output
+
+    - name: Print the preflight_output
+      ansible.builtin.debug: 
+        msg: "{{ preflight_output }}"
       
 
 
