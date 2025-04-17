@@ -42,6 +42,23 @@
     - name: Check if license was fetched successfully 
       ansible.builtin.debug: 
         msg: "{{ secrete_value }}"
+
+    - name: Create the directory /opt/yba-ctl if does not exit
+      ansible.builtin.file:
+        path: /opt/yba-ctl
+        state: directory
+        mode: '0755'
+
+    - name: Put the license in /opt/yba-ctl
+      ansible.builtin.copy:
+        dest: /opt/yba-ctl/yba.lic
+        content: "{{ secrete_value.stdout }}"
+      register: copy_license
+
+    - name: Print the copy_license
+      ansible.builtin.debug: 
+        msg: "{{ copy_license }}"
+
       
 
 
