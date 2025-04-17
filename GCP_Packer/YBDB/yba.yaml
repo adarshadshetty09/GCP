@@ -32,7 +32,7 @@
     - name: Extract YBA tarball
       ansible.builtin.unarchive:
         src: "/tmp/{{ yba_tar_file }}"
-        dest: "/home{{ ansible_user }}"
+        dest: "/home/{{ ansible_user }}"
         remote_src: yes
 
     - name: remove the tar file after the extraction
