@@ -1,0 +1,115 @@
+---
+- name: YugabyteDB Installation
+  hosts: all
+  become: yes
+  vars:
+    yugabyte_version: "2.25.0.0"
+    yugabyte_build: "b489"
+    yugabyte_tarball: "yugabyte-{{ yugabyte_version }}-{{ yugabyte_build }}-linux-x86_64.tar.gz"
+    yugabyte_dir: "yugabyte-{{ yugabyte_version }}"
+    yugabyte_user: packer
+    yugabyte_install_path: /home/packer
+    
+  tasks:
+
+    - name: Install wget
+      ansible.builtin.yum:
+        name: wget
+        state: present
+      register: install_wget
+
+    - name: PRINT install_wget
+      ansible.builtin.debug:
+        msg: "{{ install_wget }}"
+
+    - name: Download YugabyteDB tarball
+      ansible.builtin.get_url:
+        url: "https://downloads.yugabyte.com/releases/{{ yugabyte_version }}/{{ yugabyte_tarball }}"
+        dest: "/home/packer/{{ yugabyte_tarball }}"
+        mode: '0644'
+      register: ybdb
+
+    - name: PRINT ybdb 
+      ansible.builtin.debug:
+        msg: "{{ ybdb }}"
+    
+
+    - name: Extract YugabyteDB tarball
+      ansible.builtin.unarchive:
+        src: "/home/packer/{{ yugabyte_tarball }}"
+        dest: "/home/packer/"
+        remote_src: yes
+
+    - name: Run post_install.sh
+      ansible.builtin.command: ./bin/post_install.sh
+      args:
+        chdir: "/home/packer/{{ yugabyte_dir }}"
+      register: post_install
+
+    - name: Print the post_install 
+      ansible.builtin.debug:
+        msg: "{{ post_install }}"
+    
+
+    - name: Change ownership of openssl-config
+      ansible.builtin.file:
+        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+        owner: packer
+        group: packer
+        recurse: yes
+
+    - name: Deploy yugabyte systemd service using template
+      ansible.builtin.template:
+        src: yugabyte.service.j2
+        dest: /etc/systemd/system/yugabyte.service
+        owner: root
+        group: root
+        mode: '0644'
+      register: jinja
+    
+    - name: jinja 
+      ansible.builtin.debug:
+        msg: "{{ jinja }}"
+    
+
+
+    - name: Reload systemd to recognize yugabyte service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+      register: Reload
+    
+    - name: reload 
+      ansible.builtin.debug:
+        msg: "{{ Reload }}"
+    
+
+    - name: Enable yugabyte service on boot
+      ansible.builtin.systemd:
+        name: yugabyte
+        enabled: yes
+      register: enabled
+    
+    - name: jinja 
+      ansible.builtin.debug:
+        msg: "{{ enabled }}"
+    
+
+    - name: Start yugabyte service
+      ansible.builtin.systemd:
+        name: yugabyte
+        state: started
+      register: start 
+
+    - name: start  
+      ansible.builtin.debug:
+        msg: "{{ start }}"
+    
+
+    - name: Check status of yugabyte service
+      ansible.builtin.systemd:
+        name: yugabyte
+      register: yugabyte_status
+
+    - name: Show yugabyte service status
+      ansible.builtin.debug:
+        msg: "{{ yugabyte_status }}"
