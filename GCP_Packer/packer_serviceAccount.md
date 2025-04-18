@@ -645,8 +645,6 @@ User@DESKTOP-KM01E29 MINGW64 ~/Desktop/GCP (main)
 
 ```
 
-
-
 ## Checking the OS Release
 
 ```
@@ -680,4 +678,18 @@ adarshadshetty09@yba-instance:~$ hostnamectl
             Kernel: Linux 5.15.0-1078-gcp
       Architecture: x86-64
 adarshadshetty09@yba-instance:~$ 
+```
+
+
+### Install Ansible Version
+
+```
+ansible --version
+sudo apt update && sudo apt upgrade -y
+sudo apt install software-properties-common -y
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt install ansible -y
+
+
+
 ```

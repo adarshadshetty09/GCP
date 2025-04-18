@@ -25,9 +25,8 @@
 	"provisioners": [
 	  {
 		"type": "ansible",
-		"playbook_file": "ybdb.yaml",
-        "extra_arguments": ["-b" , "vvv"],
-		"ansible_env_vars": ["GCP/GCP_Packer/Trial/ybdb.yaml"]
+		"playbook_file": "GCP/GCP_Packer/Trial/ybdb.yaml",
+        "extra_arguments": ["-b" , "vvv"]
 	  }
 	]
   }
