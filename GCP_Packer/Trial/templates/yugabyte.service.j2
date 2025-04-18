@@ -3,7 +3,7 @@ Description=YugabyteDB Service
 After=network.target
 
 [Service]
-Type=forking
+Type=exec 
 User={{ yugabyte_user }}
 WorkingDirectory=/home/packer/{{ yugabyte_dir }}
 ExecStart=/home/packer/{{ yugabyte_dir }}/bin/yugabyted start
