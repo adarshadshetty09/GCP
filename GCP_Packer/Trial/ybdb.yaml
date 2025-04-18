@@ -39,6 +39,11 @@
         src: "/home/packer/{{ yugabyte_tarball }}"
         dest: "/home/packer/"
         remote_src: yes
+      register: extract
+    
+    - name: Extract ybdb 
+      ansible.builtin.debug:
+        msg: "{{ extract }}"
 
     - name: Run post_install.sh
       ansible.builtin.command: ./bin/post_install.sh
@@ -57,6 +62,11 @@
         owner: packer
         group: packer
         recurse: yes
+      register: chagOwner 
+
+    - name: PRINT chagOwner 
+      ansible.builtin.debug:
+        msg: "{{ chagOwner }}"
 
     - name: Deploy yugabyte systemd service using template
       ansible.builtin.template:
@@ -89,7 +99,7 @@
         enabled: yes
       register: enabled
     
-    - name: jinja 
+    - name: enabled 
       ansible.builtin.debug:
         msg: "{{ enabled }}"
     

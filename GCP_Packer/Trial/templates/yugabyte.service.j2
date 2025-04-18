@@ -5,10 +5,10 @@ After=network.target
 [Service]
 Type=forking
 User={{ yugabyte_user }}
-WorkingDirectory={{ yugabyte_install_path }}/{{ yugabyte_dir }}
-ExecStart={{ yugabyte_install_path }}/{{ yugabyte_dir }}/bin/yugabyted start
-ExecStop={{ yugabyte_install_path }}/{{ yugabyte_dir }}/bin/yugabyted stop
-ExecReload={{ yugabyte_install_path }}/{{ yugabyte_dir }}/bin/yugabyted restart
+WorkingDirectory=/home/packer/{{ yugabyte_dir }}
+ExecStart=/home/packer/{{ yugabyte_dir }}/bin/yugabyted start
+ExecStop=/home/packer/{{ yugabyte_dir }}/bin/yugabyted stop
+ExecReload=/home/packer/{{ yugabyte_dir }}/bin/yugabyted restart
 Restart=on-failure
 LimitNOFILE=65536
 
