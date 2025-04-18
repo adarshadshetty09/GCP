@@ -104,15 +104,15 @@
         msg: "{{ enabled }}"
     
 
-    - name: Start yugabyte service
-      ansible.builtin.systemd:
-        name: yugabyte
-        state: started
-      register: start 
+    # - name: Start yugabyte service
+    #   ansible.builtin.systemd:
+    #     name: yugabyte
+    #     state: started
+    #   register: start 
 
-    - name: start  
-      ansible.builtin.debug:
-        msg: "{{ start }}"
+    # - name: start  
+    #   ansible.builtin.debug:
+    #     msg: "{{ start }}"
     
 
     - name: Check status of yugabyte service
