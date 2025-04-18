@@ -104,15 +104,28 @@
         msg: "{{ enabled }}"
     
 
-    # - name: Start yugabyte service
-    #   ansible.builtin.systemd:
-    #     name: yugabyte
-    #     state: started
-    #   register: start 
+    - name: Start yugabyte service
+      ansible.builtin.systemd:
+        name: yugabyte
+        state: started
+      register: start 
 
-    # - name: start  
-    #   ansible.builtin.debug:
-    #     msg: "{{ start }}"
+    - name: start  
+      ansible.builtin.debug:
+        msg: "{{ start }}"
+
+    - name: Pause for few secs 
+      ansible.builtin.pause:
+        seconds: 30
+
+    - name: Show last lines from the journalctl 
+      ansible.builtin.shell:
+        cmd: journalctl -u yugabyte -a -o cat 
+      register: journalctl_output 
+
+    - name: Print the journalctl_output
+      ansible.builtin.debug: 
+        msg: "{{ journalctl_output.stdout_lines }}"
     
 
     - name: Check status of yugabyte service
