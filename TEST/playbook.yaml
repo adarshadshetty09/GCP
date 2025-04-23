@@ -1,0 +1,151 @@
+---
+- name: Configure YugabyteDB system
+  hosts: cloud
+  become: true
+  vars:
+    yugabyte_version: "2024.2.2.1"
+    yugabyte_user: "yugabyte"
+    yugabyte_home: "/home/yugabyte/yugabyte-{{ yugabyte_version }}"
+    yugabyte_bin: "{{ yugabyte_home }}/bin"
+    yugabyte_data_dir: "/home/yugabyte/var"
+    yugabyte_post_install_script: "{{ yugabyte_bin }}/post_install.sh"
+    yugabyte_service_file: "/etc/systemd/system/yugabyted.service"
+    grub_config_file: "/etc/default/grub"
+    grub_line: 'GRUB_CMDLINE_LINUX="transparent_hugepage=always"'
+
+  tasks:
+    - name: Ensure yugabyte home exists
+      file:
+        path: "{{ yugabyte_home }}"
+        state: directory
+        owner: "{{ yugabyte_user }}"
+        group: "{{ yugabyte_user }}"
+        mode: '0755'
+
+    - name: Ensure Yugabyte data directory exists
+      file:
+        path: "{{ yugabyte_data_dir }}"
+        state: directory
+        owner: "{{ yugabyte_user }}"
+        group: "{{ yugabyte_user }}"
+        mode: '0755'
+
+    - name: Set system ulimits
+      lineinfile:
+        path: /etc/security/limits.conf
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - "* soft nofile 1048576"
+        - "* hard nofile 1048576"
+        - "* soft nproc 12000"
+        - "* hard nproc 12000"
+        - "* soft stack 8192"
+        - "* hard stack 8192"
+        - "* soft memlock 64"
+        - "* hard memlock 64"
+        - "* soft cpu unlimited"
+        - "* hard cpu unlimited"
+        - "* soft fsize unlimited"
+        - "* hard fsize unlimited"
+        - "* soft data unlimited"
+        - "* hard data unlimited"
+        - "* soft rss unlimited"
+        - "* hard rss unlimited"
+        - "* soft vmem unlimited"
+        - "* hard vmem unlimited"
+        - "* soft msgqueue 819200"
+        - "* hard msgqueue 819200"
+        - "* soft locks unlimited"
+        - "* hard locks unlimited"
+        - "* soft core unlimited"
+        - "* hard core unlimited"
+        - "* soft sigpending 119934"
+        - "* hard sigpending 119934"
+      notify: Reboot Required
+
+    - name: Set kernel parameters
+      sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: yes
+      loop:
+        - { key: "vm.swappiness", value: "0" }
+        - { key: "kernel.core_pattern", value: "{{ yugabyte_home }}/cores/core_%p_%t_%E" }
+        - { key: "vm.max_map_count", value: "262144" }
+
+    - name: Set transparent hugepage to always
+      lineinfile:
+        path: "{{ grub_config_file }}"
+        regexp: '^GRUB_CMDLINE_LINUX=".*"'
+        line: "{{ grub_line }}"
+        backrefs: yes
+      notify: Reboot Required
+
+    - name: Deploy yugabyted systemd service
+      template:
+        src: yugabyted.service.j2
+        dest: /etc/systemd/system/yugabyted.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload systemd
+
+    - name: Run post-install script
+      command: "{{ yugabyte_post_install_script }}"
+      args:
+        chdir: "{{ yugabyte_home }}"
+
+    - name: Reload systemd (Reload the systemd manager configuration)
+      command: systemctl daemon-reload
+
+    - name: Restart yugabyted service
+      systemd:
+        name: yugabyted
+        state: restarted
+
+    - name: Enable yugabyted service
+      systemd:
+        name: yugabyted
+        enabled: true
+
+    - name: Start yugabyted service
+      systemd:
+        name: yugabyted
+        state: started
+
+    - name: Check yugabyted systemd status
+      command: systemctl status yugabyted
+      become_user: yugabyte
+      register: yugabyted_systemd_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print yugabyted systemd status
+      debug:
+        var: yugabyted_systemd_status.stdout_lines
+
+    - name: Check yugabyted status via CLI
+      command: "{{ yugabyte_bin }}/yugabyted status"
+      become_user: yugabyte
+      register: yugabyte_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print yugabyted CLI status
+      debug:
+        var: yugabyte_status.stdout
+
+  handlers:
+    - name: Reload systemd
+      command: systemctl daemon-reexec && systemctl daemon-reload
+
+    - name: Reboot Required
+      command: grub2-mkconfig -o /boot/grub2/grub.cfg
+      notify: Reboot system
+
+    - name: Reboot system
+      reboot:
+        msg: "System rebooting to apply kernel and limits changes"
+        reboot_timeout: 300
