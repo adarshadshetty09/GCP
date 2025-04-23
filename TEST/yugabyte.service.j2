@@ -1,16 +1,15 @@
 [Unit]
 Description=YugabyteDB Cluster (yugabyted-managed)
 After=network-online.target
-ConditionPathExists={{ yugabyte_bin }}/post_install.sh
+ConditionPathExists={{ yugabyte_install_path }}/{{ yugabyte_dir }}/post_install.sh
 
 [Service]
 Type=forking
 User={{ yugabyte_user }}
-WorkingDirectory={{ yugabyte_home }}
+WorkingDirectory={{ yugabyte_install_path }}/{{ yugabyte_dir }}
 
-
-ExecStart=/usr/bin/python3 {{ yugabyte_bin }}/yugabyted start 
-ExecStop=/usr/bin/python3 {{ yugabyte_bin }}/yugabyted stop
+ExecStart=/usr/bin/python3 {{ yugabyte_install_path }}/{{ yugabyte_dir }}/bin/yugabyted start
+ExecStop=/usr/bin/python3 {{ yugabyte_install_path }}/{{ yugabyte_dir }}/bin/yugabyted stop
 
 ExecReload=/bin/kill -HUP $MAINPID
 
@@ -29,7 +28,7 @@ NoNewPrivileges=false
 ProtectSystem=default
 ProtectHome=no
 PrivateTmp=true
-ReadWritePaths={{ yugabyte_home }}
+ReadWritePaths={{ yugabyte_install_path }}/{{ yugabyte_dir }}
 
 [Install]
 WantedBy=multi-user.target
