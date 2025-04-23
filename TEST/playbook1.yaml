@@ -127,14 +127,13 @@
     - name: start  
       ansible.builtin.debug:
         msg: "{{ start }}"
+        
 
-    
+    - name: Check status of yugabyte service
+      ansible.builtin.systemd:
+        name: yugabyte
+      register: yugabyte_status
 
-    # - name: Check status of yugabyte service
-    #   ansible.builtin.systemd:
-    #     name: yugabyte
-    #   register: yugabyte_status
-
-    # - name: Show yugabyte service status
-    #   ansible.builtin.debug:
-    #     msg: "{{ yugabyte_status }}"
+    - name: Show yugabyte service status
+      ansible.builtin.debug:
+        msg: "{{ yugabyte_status }}"
