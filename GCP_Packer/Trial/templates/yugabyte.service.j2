@@ -1,16 +1,17 @@
 [Unit]
-Description=YugabyteDB Service
+Description=YugabyteDB Service (Managed by yugabyted)
 After=network.target
 
 [Service]
-Type=exec 
+Type=oneshot
+RemainAfterExit=yes
 User={{ yugabyte_user }}
-WorkingDirectory=/home/packer/{{ yugabyte_dir }}
-ExecStart=/home/packer/{{ yugabyte_dir }}/bin/yugabyted start
-ExecStop=/home/packer/{{ yugabyte_dir }}/bin/yugabyted stop
-ExecReload=/home/packer/{{ yugabyte_dir }}/bin/yugabyted restart
-Restart=on-failure
-LimitNOFILE=65536
+Group={{ yugabyte_group }}
+WorkingDirectory=/home/{{ yugabyte_user }}
+ExecStart=/usr/bin/python3 /home/{{ yugabyte_user }}/yugabyte-2024.2.2.2/bin/yugabyted start
+ExecStop=/usr/bin/python3 /home/{{ yugabyte_user }}/yugabyte-2024.2.2.2/bin/yugabyted stop
+LimitNOFILE=1048576
 
 [Install]
 WantedBy=multi-user.target
+

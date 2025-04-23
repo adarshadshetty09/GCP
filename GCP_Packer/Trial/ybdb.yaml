@@ -8,6 +8,7 @@
     yugabyte_tarball: "yugabyte-{{ yugabyte_version }}-{{ yugabyte_build }}-linux-x86_64.tar.gz"
     yugabyte_dir: "yugabyte-{{ yugabyte_version }}"
     yugabyte_user: packer
+    yugabyte_group: packer
     yugabyte_install_path: /home/packer
     
   tasks:
@@ -29,7 +30,7 @@
         mode: '0644'
       register: ybdb
 
-    - name: PRINT ybdb 
+    - name: Print ybdb 
       ansible.builtin.debug:
         msg: "{{ ybdb }}"
     
@@ -45,6 +46,19 @@
       ansible.builtin.debug:
         msg: "{{ extract }}"
 
+    - name: Change ownership of openssl-config
+      ansible.builtin.file:
+        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+        owner: packer
+        group: packer
+        recurse: yes
+      register: chagOwner 
+
+    - name: Print chagOwner 
+      ansible.builtin.debug:
+        msg: "{{ chagOwner }}"
+
+
     - name: Run post_install.sh
       ansible.builtin.command: ./bin/post_install.sh
       args:
@@ -56,17 +70,6 @@
         msg: "{{ post_install }}"
     
 
-    - name: Change ownership of openssl-config
-      ansible.builtin.file:
-        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
-        owner: packer
-        group: packer
-        recurse: yes
-      register: chagOwner 
-
-    - name: PRINT chagOwner 
-      ansible.builtin.debug:
-        msg: "{{ chagOwner }}"
 
     - name: Deploy yugabyte systemd service using template
       ansible.builtin.template:
@@ -75,13 +78,20 @@
         owner: root
         group: root
         mode: '0644'
-      register: jinja
+      register: yugaService
     
-    - name: jinja 
+    - name: Print yugaService  
       ansible.builtin.debug:
-        msg: "{{ jinja }}"
-    
+        msg: "{{ yugaService }}"
 
+    - name: Reexec systemd (reload the sysytemd manager configuration)
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+      register: reexec_print
+    
+    - name: Print the reexec_print
+      ansible.builtin.debug:
+        msg: "{{ reexec_print }}"
 
     - name: Reload systemd to recognize yugabyte service
       ansible.builtin.systemd:
@@ -117,16 +127,6 @@
     - name: Pause for few secs 
       ansible.builtin.pause:
         seconds: 30
-
-    - name: Show last lines from the journalctl 
-      ansible.builtin.shell:
-        cmd: journalctl -u yugabyte -a -o cat 
-      register: journalctl_output 
-
-    - name: Print the journalctl_output
-      ansible.builtin.debug: 
-        msg: "{{ journalctl_output.stdout_lines }}"
-    
 
     - name: Check status of yugabyte service
       ansible.builtin.systemd:
