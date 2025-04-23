@@ -156,7 +156,7 @@
 
     - name: Enable yuga.service to start at boot
       systemd:
-        name: yuga.service
+        name: yugabyte.service
         enabled: yes
       register: enable_service
     
