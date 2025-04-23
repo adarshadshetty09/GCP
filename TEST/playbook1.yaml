@@ -85,7 +85,7 @@
 
     - name: Deploy yugabyted systemd service
       template:
-        src: template/yugabyte.service.j2
+        src: yugabyte.service.j2
         dest: /etc/systemd/system/yugabyted.service
         owner: root
         group: root
