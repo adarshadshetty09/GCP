@@ -1,7 +1,6 @@
 [Unit]
 Description=YugabyteDB Cluster (yugabyted-managed)
 After=network-online.target
-ConditionPathExists={{ yugabyte_install_path }}/{{ yugabyte_dir }}/post_install.sh
 
 [Service]
 Type=oneshot
