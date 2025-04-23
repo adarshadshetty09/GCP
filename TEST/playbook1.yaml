@@ -71,14 +71,14 @@
     
 
 
-    # - name: Deploy yugabyte systemd service using template
-    #   ansible.builtin.template:
-    #     src: yugabyte.service.j2
-    #     dest: /etc/systemd/system/yugabyte.service
-    #     owner: root
-    #     group: root
-    #     mode: '0644'
-    #   register: yugaService
+    - name: Deploy yugabyte systemd service using template
+      ansible.builtin.template:
+        src: yugabyte.service.j2
+        dest: /etc/systemd/system/yugabyte.service
+        owner: root
+        group: root
+        mode: '0644'
+      register: yugaService
     
     # - name: Print yugaService  
     #   ansible.builtin.debug:
