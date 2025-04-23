@@ -5,9 +5,9 @@
   vars:
     yugabyte_version: "2024.2.2.1"
     yugabyte_user: "packer"
-    yugabyte_home: "/home/yugabyte/yugabyte-{{ yugabyte_version }}"
+    yugabyte_home: "/home/packer/yugabyte-{{ yugabyte_version }}"
     yugabyte_bin: "{{ yugabyte_home }}/bin"
-    yugabyte_data_dir: "/home/yugabyte/var"
+    yugabyte_data_dir: "/home/packer/var"
     yugabyte_post_install_script: "{{ yugabyte_bin }}/post_install.sh"
     yugabyte_service_file: "/etc/systemd/system/yugabyted.service"
     grub_config_file: "/etc/default/grub"
