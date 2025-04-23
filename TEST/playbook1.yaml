@@ -1,6 +1,7 @@
 ---
 - name: YugabyteDB Installation
   hosts: all
+  gather_facts: true
   become: yes
   vars:
     yugabyte_version: "2.25.0.0"
@@ -75,14 +76,14 @@
       ansible.builtin.template:
         src: yugabyte.service.j2
         dest: /etc/systemd/system/yugabyte.service
-        owner: root
-        group: root
+        # owner: root
+        # group: root
         mode: '0644'
       register: yugaService
     
-    # - name: Print yugaService  
-    #   ansible.builtin.debug:
-    #     msg: "{{ yugaService }}"
+    - name: Print yugaService  
+      ansible.builtin.debug:
+        msg: "{{ yugaService }}"
 
     # - name: Reexec systemd (reload the sysytemd manager configuration)
     #   ansible.builtin.systemd_service:
