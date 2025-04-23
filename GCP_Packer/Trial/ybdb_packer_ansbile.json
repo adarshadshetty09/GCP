@@ -3,11 +3,11 @@
 	  {
 		"type": "googlecompute",
 		"project_id": "devops-456705",
-		"zone": "europe-west9-a",
+		"zone": "us-south1-a",
 		"source_image": "centos-stream-9-v20250311",
 		"source_image_project_id": "centos-cloud",
 		"machine_type": "e2-medium",
-		"disk_size": 10,
+		"disk_size": 30,
 		"image_name": "yugabytedb-image-{{timestamp}}",
 		"disk_type": "pd-ssd",
 		"ssh_username": "packer",
