@@ -85,55 +85,102 @@
       ansible.builtin.debug:
         msg: "{{ yugaService }}"
 
-    - name: Reexec systemd (reload the sysytemd manager configuration)
-      command: systemctl daemon-reload
-      register: reexec_print
+    # - name: Reexec systemd (reload the sysytemd manager configuration)
+    #   command: systemctl daemon-reload
+    #   register: reexec_print
     
-    - name: Print the reexec_print
-      ansible.builtin.debug:
-        msg: "{{ reexec_print }}"
+    # - name: Print the reexec_print
+    #   ansible.builtin.debug:
+    #     msg: "{{ reexec_print }}"
 
-    - name: Reload systemd to recognize yugabyte service
-      ansible.builtin.systemd:
-        daemon_reload: yes
-      register: Reload
+    # - name: Reload systemd to recognize yugabyte service
+    #   ansible.builtin.systemd:
+    #     daemon_reload: yes
+    #   register: Reload
     
-    - name: reload 
-      ansible.builtin.debug:
-        msg: "{{ Reload }}"
-    
-
-    - name: Enable yugabyte service on boot
-      ansible.builtin.systemd:
-        name: yugabyte.service
-        enabled: yes
-      register: enabled
-    
-    - name: enabled 
-      ansible.builtin.debug:
-        msg: "{{ enabled }}"
+    # - name: reload 
+    #   ansible.builtin.debug:
+    #     msg: "{{ Reload }}"
     
 
-    - name: Start yugabyte service
-      ansible.builtin.systemd:
-        name: yugabyte
-        state: started
-      register: start 
+    # - name: Enable yugabyte service on boot
+    #   ansible.builtin.systemd:
+    #     name: yugabyte.service
+    #     enabled: yes
+    #   register: enabled
     
-    - name: Pause for few secs 
-      ansible.builtin.pause:
-        seconds: 30
+    # - name: enabled 
+    #   ansible.builtin.debug:
+    #     msg: "{{ enabled }}"
+    
 
-    - name: start  
-      ansible.builtin.debug:
-        msg: "{{ start }}"
+    # - name: Start yugabyte service
+    #   ansible.builtin.systemd:
+    #     name: yugabyte
+    #     state: started
+    #   register: start 
+    
+    # - name: Pause for few secs 
+    #   ansible.builtin.pause:
+    #     seconds: 30
+
+    # - name: start  
+    #   ansible.builtin.debug:
+    #     msg: "{{ start }}"
         
 
-    - name: Check status of yugabyte service
-      ansible.builtin.systemd:
-        name: yugabyte
-      register: yugabyte_status
+    # - name: Check status of yugabyte service
+    #   ansible.builtin.systemd:
+    #     name: yugabyte
+    #   register: yugabyte_status
 
-    - name: Show yugabyte service status
+    # - name: Show yugabyte service status
+    #   ansible.builtin.debug:
+    #     msg: "{{ yugabyte_status }}"
+
+    - name: Run systemctl daemon-reexec
+      command: systemctl daemon-reexec
+      register: daemon-reexec
+
+    - name: daemon-reexec
       ansible.builtin.debug:
-        msg: "{{ yugabyte_status }}"
+        msg: "{{ daemon-reexec }}"
+
+    - name: Reload systemd manager configuration
+      command: systemctl daemon-reload
+      register: daemon-reload
+
+    - name: daemon-reload
+      ansible.builtin.debug:
+        msg: "{{ daemon-reload }}"
+
+    - name: Enable yuga.service to start at boot
+      systemd:
+        name: yuga.service
+        enabled: yes
+      register: enable_service
+    
+    - name: Enable service
+      ansible.builtin.debug:
+        msg: "{{ enable_service }}"
+
+
+    - name: Start yuga.service
+      systemd:
+        name: yuga.service
+        state: started
+      register: start_service
+
+    - name: start service
+      ansible.builtin.debug:
+        msg: "{{ start_service }}"
+    
+
+    - name: Check status of yuga.service
+      command: systemctl status yuga.service
+      register: service_status
+      # ignore_errors: yes
+
+    - name: Display service status output
+      debug:
+        var: service_status.stdout_lines
