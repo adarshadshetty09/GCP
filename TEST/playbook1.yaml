@@ -167,7 +167,7 @@
 
     - name: Start yuga.service
       systemd:
-        name: yuga.service
+        name: yugabyte.service
         state: started
       register: start_service
 
@@ -177,7 +177,7 @@
     
 
     - name: Check status of yuga.service
-      command: systemctl status yuga.service
+      command: systemctl status yugabyte.service
       register: service_status
       # ignore_errors: yes
 
