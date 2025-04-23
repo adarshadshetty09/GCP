@@ -84,14 +84,14 @@
       ansible.builtin.debug:
         msg: "{{ yugaService }}"
 
-    - name: Reexec systemd (reload the sysytemd manager configuration)
-      ansible.builtin.systemd_service:
-        daemon_reload: true
-      register: reexec_print
+    # - name: Reexec systemd (reload the sysytemd manager configuration)
+    #   ansible.builtin.systemd_service:
+    #     daemon_reload: true
+    #   register: reexec_print
     
-    - name: Print the reexec_print
-      ansible.builtin.debug:
-        msg: "{{ reexec_print }}"
+    # - name: Print the reexec_print
+    #   ansible.builtin.debug:
+    #     msg: "{{ reexec_print }}"
 
     - name: Reload systemd to recognize yugabyte service
       ansible.builtin.systemd:
