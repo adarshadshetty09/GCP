@@ -26,7 +26,9 @@
 	  {
 		"type": "ansible",
 		"playbook_file": "playbook1.yaml",
-        "extra_arguments": ["--become", "--become-method=sudo", "-v"]
+        "extra_arguments": ["--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3"]
+		
 	  }
 	]
   }
