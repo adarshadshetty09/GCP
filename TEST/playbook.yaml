@@ -4,7 +4,7 @@
   become: true
   vars:
     yugabyte_version: "2024.2.2.1"
-    yugabyte_user: "yugabyte"
+    yugabyte_user: "packer"
     yugabyte_home: "/home/yugabyte/yugabyte-{{ yugabyte_version }}"
     yugabyte_bin: "{{ yugabyte_home }}/bin"
     yugabyte_data_dir: "/home/yugabyte/var"
