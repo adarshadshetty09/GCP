@@ -93,25 +93,25 @@
       ansible.builtin.debug:
         msg: "{{ reexec_print }}"
 
-    # - name: Reload systemd to recognize yugabyte service
-    #   ansible.builtin.systemd:
-    #     daemon_reload: yes
-    #   register: Reload
+    - name: Reload systemd to recognize yugabyte service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+      register: Reload
     
-    # - name: reload 
-    #   ansible.builtin.debug:
-    #     msg: "{{ Reload }}"
+    - name: reload 
+      ansible.builtin.debug:
+        msg: "{{ Reload }}"
     
 
-    # - name: Enable yugabyte service on boot
-    #   ansible.builtin.systemd:
-    #     name: yugabyte
-    #     enabled: yes
-    #   register: enabled
+    - name: Enable yugabyte service on boot
+      ansible.builtin.systemd:
+        name: yugabyte.service
+        enabled: yes
+      register: enabled
     
-    # - name: enabled 
-    #   ansible.builtin.debug:
-    #     msg: "{{ enabled }}"
+    - name: enabled 
+      ansible.builtin.debug:
+        msg: "{{ enabled }}"
     
 
     # - name: Start yugabyte service
