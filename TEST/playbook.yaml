@@ -1,6 +1,6 @@
 ---
 - name: Configure YugabyteDB system
-  hosts: cloud
+  hosts: all
   become: true
   vars:
     yugabyte_version: "2024.2.2.1"
