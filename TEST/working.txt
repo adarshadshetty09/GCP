@@ -1,0 +1,820 @@
+[1;32mgooglecompute: output will be in this color.[0m
+
+[1;32m==> googlecompute: Checking image does not exist...[0m
+[1;32m==> googlecompute: Creating temporary RSA SSH key for instance...[0m
+[1;32m==> googlecompute: no persistent disk to create[0m
+[1;32m==> googlecompute: Using image: centos-stream-9-v20250311[0m
+[1;32m==> googlecompute: Creating instance...[0m
+[0;32m    googlecompute: Loading zone: us-south1-a[0m
+[0;32m    googlecompute: Loading machine type: e2-medium[0m
+[0;32m    googlecompute: Requesting instance creation...[0m
+[0;32m    googlecompute: Waiting for creation operation to complete...[0m
+[0;32m    googlecompute: Instance has been created![0m
+[1;32m==> googlecompute: Waiting for the instance to become running...[0m
+[0;32m    googlecompute: IP: 34.174.230.165[0m
+[1;32m==> googlecompute: Using SSH communicator to connect: 34.174.230.165[0m
+[1;32m==> googlecompute: Waiting for SSH to become available...[0m
+[1;32m==> googlecompute: Connected to SSH![0m
+[1;32m==> googlecompute: Provisioning with Ansible...[0m
+[0;32m    googlecompute: Setting up proxy adapter for Ansible....[0m
+[1;32m==> googlecompute: Executing Ansible: ansible-playbook -e *****_build_name="googlecompute" -e *****_builder_type=googlecompute --ssh-extra-args '-o IdentitiesOnly=yes' --become --become-method=sudo -v -e ansible_ssh_private_key_file=/tmp/ansible-key910541113 -i /tmp/*****-provisioner-ansible3151553402 /home/adarshadshetty09/GCP/TEST/playbook1.yaml[0m
+[0;32m    googlecompute: Using /etc/ansible/ansible.cfg as config file[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: PLAY [YugabyteDB Installation] *************************************************[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Gathering Facts] *********************************************************[0m
+[0;32m    googlecompute: ok: [default][0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Install wget] ************************************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "msg": "", "rc": 0, "results": ["Installed: wget-1.21.1-8.el9.x86_64"]}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [print install_wget] ******************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "msg": "",[0m
+[0;32m    googlecompute:         "rc": 0,[0m
+[0;32m    googlecompute:         "results": [[0m
+[0;32m    googlecompute:             "Installed: wget-1.21.1-8.el9.x86_64"[0m
+[0;32m    googlecompute:         ][0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Download YugabyteDB tarball] *********************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "checksum_dest": null, "checksum_src": "3b308128778fbce8d2e81f77da724bed9ad48abf", "dest": "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz", "elapsed": 5, "gid": 0, "group": "root", "md5sum": "03b61502e80339f8208c669b69b7f277", "mode": "0644", "msg": "OK (435533510 bytes)", "owner": "root", "secontext": "unconfined_u:object_r:user_home_t:s0", "size": 435533510, "src": "/home/packer/~adarshadshetty09/.ansible/tmp/ansible-tmp-1745435122.4171147-35218-56293608034178/tmpl8mvd5mx", "state": "file", "status_code": 200, "uid": 0, "url": "https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print ybdb] **************************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "checksum_dest": null,[0m
+[0;32m    googlecompute:         "checksum_src": "3b308128778fbce8d2e81f77da724bed9ad48abf",[0m
+[0;32m    googlecompute:         "dest": "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz",[0m
+[0;32m    googlecompute:         "elapsed": 5,[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "gid": 0,[0m
+[0;32m    googlecompute:         "group": "root",[0m
+[0;32m    googlecompute:         "md5sum": "03b61502e80339f8208c669b69b7f277",[0m
+[0;32m    googlecompute:         "mode": "0644",[0m
+[0;32m    googlecompute:         "msg": "OK (435533510 bytes)",[0m
+[0;32m    googlecompute:         "owner": "root",[0m
+[0;32m    googlecompute:         "secontext": "unconfined_u:object_r:user_home_t:s0",[0m
+[0;32m    googlecompute:         "size": 435533510,[0m
+[0;32m    googlecompute:         "src": "/home/packer/~adarshadshetty09/.ansible/tmp/ansible-tmp-1745435122.4171147-35218-56293608034178/tmpl8mvd5mx",[0m
+[0;32m    googlecompute:         "state": "file",[0m
+[0;32m    googlecompute:         "status_code": 200,[0m
+[0;32m    googlecompute:         "uid": 0,[0m
+[0;32m    googlecompute:         "url": "https://downloads.yugabyte.com/releases/2.25.0.0/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Extract YugabyteDB tarball] **********************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "dest": "/home/packer/", "extract_results": {"cmd": ["/bin/gtar", "--extract", "-C", "/home/packer/", "-z", "-f", "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"], "err": "", "out": "", "rc": 0}, "gid": 1001, "group": "packer", "handler": "TgzArchive", "mode": "0700", "owner": "packer", "secontext": "unconfined_u:object_r:user_home_dir_t:s0", "size": 174, "src": "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz", "state": "directory", "uid": 1000}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Extract ybdb] ************************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "dest": "/home/packer/",[0m
+[0;32m    googlecompute:         "extract_results": {[0m
+[0;32m    googlecompute:             "cmd": [[0m
+[0;32m    googlecompute:                 "/bin/gtar",[0m
+[0;32m    googlecompute:                 "--extract",[0m
+[0;32m    googlecompute:                 "-C",[0m
+[0;32m    googlecompute:                 "/home/packer/",[0m
+[0;32m    googlecompute:                 "-z",[0m
+[0;32m    googlecompute:                 "-f",[0m
+[0;32m    googlecompute:                 "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz"[0m
+[0;32m    googlecompute:             ],[0m
+[0;32m    googlecompute:             "err": "",[0m
+[0;32m    googlecompute:             "out": "",[0m
+[0;32m    googlecompute:             "rc": 0[0m
+[0;32m    googlecompute:         },[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "gid": 1001,[0m
+[0;32m    googlecompute:         "group": "packer",[0m
+[0;32m    googlecompute:         "handler": "TgzArchive",[0m
+[0;32m    googlecompute:         "mode": "0700",[0m
+[0;32m    googlecompute:         "owner": "packer",[0m
+[0;32m    googlecompute:         "secontext": "unconfined_u:object_r:user_home_dir_t:s0",[0m
+[0;32m    googlecompute:         "size": 174,[0m
+[0;32m    googlecompute:         "src": "/home/packer/yugabyte-2.25.0.0-b489-linux-x86_64.tar.gz",[0m
+[0;32m    googlecompute:         "state": "directory",[0m
+[0;32m    googlecompute:         "uid": 1000[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Change ownership of openssl-config] **************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "gid": 1001, "group": "packer", "mode": "0755", "owner": "packer", "path": "/home/packer/yugabyte-2.25.0.0/openssl-config", "secontext": "unconfined_u:object_r:user_home_t:s0", "size": 6, "state": "directory", "uid": 1000}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print chagOwner] *********************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "diff": {[0m
+[0;32m    googlecompute:             "after": {[0m
+[0;32m    googlecompute:                 "group": 1001,[0m
+[0;32m    googlecompute:                 "owner": 1000,[0m
+[0;32m    googlecompute:                 "path": "/home/packer/yugabyte-2.25.0.0/openssl-config",[0m
+[0;32m    googlecompute:                 "state": "directory"[0m
+[0;32m    googlecompute:             },[0m
+[0;32m    googlecompute:             "before": {[0m
+[0;32m    googlecompute:                 "group": 0,[0m
+[0;32m    googlecompute:                 "owner": 0,[0m
+[0;32m    googlecompute:                 "path": "/home/packer/yugabyte-2.25.0.0/openssl-config",[0m
+[0;32m    googlecompute:                 "state": "absent"[0m
+[0;32m    googlecompute:             }[0m
+[0;32m    googlecompute:         },[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "gid": 1001,[0m
+[0;32m    googlecompute:         "group": "packer",[0m
+[0;32m    googlecompute:         "mode": "0755",[0m
+[0;32m    googlecompute:         "owner": "packer",[0m
+[0;32m    googlecompute:         "path": "/home/packer/yugabyte-2.25.0.0/openssl-config",[0m
+[0;32m    googlecompute:         "secontext": "unconfined_u:object_r:user_home_t:s0",[0m
+[0;32m    googlecompute:         "size": 6,[0m
+[0;32m    googlecompute:         "state": "directory",[0m
+[0;32m    googlecompute:         "uid": 1000[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Run post_install.sh] *****************************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "cmd": ["./bin/post_install.sh"], "delta": "0:00:00.083245", "end": "2025-04-23 19:06:54.987335", "msg": "", "rc": 0, "start": "2025-04-23 19:06:54.904090", "stderr": "HMAC : (Module_Integrity) : Pass\nSHA1 : (KAT_Digest) : Pass\nSHA2 : (KAT_Digest) : Pass\nSHA3 : (KAT_Digest) : Pass\nTDES : (KAT_Cipher) : Pass\nAES_GCM : (KAT_Cipher) : Pass\nAES_ECB_Decrypt : (KAT_Cipher) : Pass\nRSA : (KAT_Signature) : RNG : (Continuous_RNG_Test) : Pass\nPass\nECDSA : (PCT_Signature) : Pass\nECDSA : (PCT_Signature) : Pass\nDSA : (PCT_Signature) : Pass\nTLS13_KDF_EXTRACT : (KAT_KDF) : Pass\nTLS13_KDF_EXPAND : (KAT_KDF) : Pass\nTLS12_PRF : (KAT_KDF) : Pass\nPBKDF2 : (KAT_KDF) : Pass\nSSHKDF : (KAT_KDF) : Pass\nKBKDF : (KAT_KDF) : Pass\nHKDF : (KAT_KDF) : Pass\nSSKDF : (KAT_KDF) : Pass\nX963KDF : (KAT_KDF) : Pass\nX942KDF : (KAT_KDF) : Pass\nHASH : (DRBG) : Pass\nCTR : (DRBG) : Pass\nHMAC : (DRBG) : Pass\nDH : (KAT_KA) : Pass\nECDH : (KAT_KA) : Pass\nRSA_Encrypt : (KAT_AsymmetricCipher) : Pass\nRSA_Decrypt : (KAT_AsymmetricCipher) : Pass\nRSA_Decrypt : (KAT_AsymmetricCipher) : Pass\nINSTALL PASSED", "stderr_lines": ["HMAC : (Module_Integrity) : Pass", "SHA1 : (KAT_Digest) : Pass", "SHA2 : (KAT_Digest) : Pass", "SHA3 : (KAT_Digest) : Pass", "TDES : (KAT_Cipher) : Pass", "AES_GCM : (KAT_Cipher) : Pass", "AES_ECB_Decrypt : (KAT_Cipher) : Pass", "RSA : (KAT_Signature) : RNG : (Continuous_RNG_Test) : Pass", "Pass", "ECDSA : (PCT_Signature) : Pass", "ECDSA : (PCT_Signature) : Pass", "DSA : (PCT_Signature) : Pass", "TLS13_KDF_EXTRACT : (KAT_KDF) : Pass", "TLS13_KDF_EXPAND : (KAT_KDF) : Pass", "TLS12_PRF : (KAT_KDF) : Pass", "PBKDF2 : (KAT_KDF) : Pass", "SSHKDF : (KAT_KDF) : Pass", "KBKDF : (KAT_KDF) : Pass", "HKDF : (KAT_KDF) : Pass", "SSKDF : (KAT_KDF) : Pass", "X963KDF : (KAT_KDF) : Pass", "X942KDF : (KAT_KDF) : Pass", "HASH : (DRBG) : Pass", "CTR : (DRBG) : Pass", "HMAC : (DRBG) : Pass", "DH : (KAT_KA) : Pass", "ECDH : (KAT_KA) : Pass", "RSA_Encrypt : (KAT_AsymmetricCipher) : Pass", "RSA_Decrypt : (KAT_AsymmetricCipher) : Pass", "RSA_Decrypt : (KAT_AsymmetricCipher) : Pass", "INSTALL PASSED"], "stdout": "OpenSSL binary: ./bin/../bin/../bin/openssl\nFIPS module: ./bin/../bin/../lib/ossl-modules/fips.so", "stdout_lines": ["OpenSSL binary: ./bin/../bin/../bin/openssl", "FIPS module: ./bin/../bin/../lib/ossl-modules/fips.so"]}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print the post_install] **************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "cmd": [[0m
+[0;32m    googlecompute:             "./bin/post_install.sh"[0m
+[0;32m    googlecompute:         ],[0m
+[0;32m    googlecompute:         "delta": "0:00:00.083245",[0m
+[0;32m    googlecompute:         "end": "2025-04-23 19:06:54.987335",[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "msg": "",[0m
+[0;32m    googlecompute:         "rc": 0,[0m
+[0;32m    googlecompute:         "start": "2025-04-23 19:06:54.904090",[0m
+[0;32m    googlecompute:         "stderr": "HMAC : (Module_Integrity) : Pass\nSHA1 : (KAT_Digest) : Pass\nSHA2 : (KAT_Digest) : Pass\nSHA3 : (KAT_Digest) : Pass\nTDES : (KAT_Cipher) : Pass\nAES_GCM : (KAT_Cipher) : Pass\nAES_ECB_Decrypt : (KAT_Cipher) : Pass\nRSA : (KAT_Signature) : RNG : (Continuous_RNG_Test) : Pass\nPass\nECDSA : (PCT_Signature) : Pass\nECDSA : (PCT_Signature) : Pass\nDSA : (PCT_Signature) : Pass\nTLS13_KDF_EXTRACT : (KAT_KDF) : Pass\nTLS13_KDF_EXPAND : (KAT_KDF) : Pass\nTLS12_PRF : (KAT_KDF) : Pass\nPBKDF2 : (KAT_KDF) : Pass\nSSHKDF : (KAT_KDF) : Pass\nKBKDF : (KAT_KDF) : Pass\nHKDF : (KAT_KDF) : Pass\nSSKDF : (KAT_KDF) : Pass\nX963KDF : (KAT_KDF) : Pass\nX942KDF : (KAT_KDF) : Pass\nHASH : (DRBG) : Pass\nCTR : (DRBG) : Pass\nHMAC : (DRBG) : Pass\nDH : (KAT_KA) : Pass\nECDH : (KAT_KA) : Pass\nRSA_Encrypt : (KAT_AsymmetricCipher) : Pass\nRSA_Decrypt : (KAT_AsymmetricCipher) : Pass\nRSA_Decrypt : (KAT_AsymmetricCipher) : Pass\nINSTALL PASSED",[0m
+[0;32m    googlecompute:         "stderr_lines": [[0m
+[0;32m    googlecompute:             "HMAC : (Module_Integrity) : Pass",[0m
+[0;32m    googlecompute:             "SHA1 : (KAT_Digest) : Pass",[0m
+[0;32m    googlecompute:             "SHA2 : (KAT_Digest) : Pass",[0m
+[0;32m    googlecompute:             "SHA3 : (KAT_Digest) : Pass",[0m
+[0;32m    googlecompute:             "TDES : (KAT_Cipher) : Pass",[0m
+[0;32m    googlecompute:             "AES_GCM : (KAT_Cipher) : Pass",[0m
+[0;32m    googlecompute:             "AES_ECB_Decrypt : (KAT_Cipher) : Pass",[0m
+[0;32m    googlecompute:             "RSA : (KAT_Signature) : RNG : (Continuous_RNG_Test) : Pass",[0m
+[0;32m    googlecompute:             "Pass",[0m
+[0;32m    googlecompute:             "ECDSA : (PCT_Signature) : Pass",[0m
+[0;32m    googlecompute:             "ECDSA : (PCT_Signature) : Pass",[0m
+[0;32m    googlecompute:             "DSA : (PCT_Signature) : Pass",[0m
+[0;32m    googlecompute:             "TLS13_KDF_EXTRACT : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "TLS13_KDF_EXPAND : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "TLS12_PRF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "PBKDF2 : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "SSHKDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "KBKDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "HKDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "SSKDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "X963KDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "X942KDF : (KAT_KDF) : Pass",[0m
+[0;32m    googlecompute:             "HASH : (DRBG) : Pass",[0m
+[0;32m    googlecompute:             "CTR : (DRBG) : Pass",[0m
+[0;32m    googlecompute:             "HMAC : (DRBG) : Pass",[0m
+[0;32m    googlecompute:             "DH : (KAT_KA) : Pass",[0m
+[0;32m    googlecompute:             "ECDH : (KAT_KA) : Pass",[0m
+[0;32m    googlecompute:             "RSA_Encrypt : (KAT_AsymmetricCipher) : Pass",[0m
+[0;32m    googlecompute:             "RSA_Decrypt : (KAT_AsymmetricCipher) : Pass",[0m
+[0;32m    googlecompute:             "RSA_Decrypt : (KAT_AsymmetricCipher) : Pass",[0m
+[0;32m    googlecompute:             "INSTALL PASSED"[0m
+[0;32m    googlecompute:         ],[0m
+[0;32m    googlecompute:         "stdout": "OpenSSL binary: ./bin/../bin/../bin/openssl\nFIPS module: ./bin/../bin/../lib/ossl-modules/fips.so",[0m
+[0;32m    googlecompute:         "stdout_lines": [[0m
+[0;32m    googlecompute:             "OpenSSL binary: ./bin/../bin/../bin/openssl",[0m
+[0;32m    googlecompute:             "FIPS module: ./bin/../bin/../lib/ossl-modules/fips.so"[0m
+[0;32m    googlecompute:         ][0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Deploy yugabyte systemd service using template] **************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "checksum": "d075738719dfea719d9e6047a687655851c083da", "dest": "/etc/systemd/system/yugabyte.service", "gid": 0, "group": "root", "md5sum": "4579a44749ea39a240269fa56272b22e", "mode": "0644", "owner": "root", "secontext": "system_u:object_r:systemd_unit_file_t:s0", "size": 383, "src": "~adarshadshetty09/.ansible/tmp/ansible-tmp-1745435215.6465662-35268-156515156772779/source", "state": "file", "uid": 0}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Print yugaService] *******************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "checksum": "d075738719dfea719d9e6047a687655851c083da",[0m
+[0;32m    googlecompute:         "dest": "/etc/systemd/system/yugabyte.service",[0m
+[0;32m    googlecompute:         "diff": [],[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "gid": 0,[0m
+[0;32m    googlecompute:         "group": "root",[0m
+[0;32m    googlecompute:         "md5sum": "4579a44749ea39a240269fa56272b22e",[0m
+[0;32m    googlecompute:         "mode": "0644",[0m
+[0;32m    googlecompute:         "owner": "root",[0m
+[0;32m    googlecompute:         "secontext": "system_u:object_r:systemd_unit_file_t:s0",[0m
+[0;32m    googlecompute:         "size": 383,[0m
+[0;32m    googlecompute:         "src": "~adarshadshetty09/.ansible/tmp/ansible-tmp-1745435215.6465662-35268-156515156772779/source",[0m
+[0;32m    googlecompute:         "state": "file",[0m
+[0;32m    googlecompute:         "uid": 0[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Run systemctl daemon_reexec] *********************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "cmd": ["systemctl", "daemon-reexec"], "delta": "0:00:00.989955", "end": "2025-04-23 19:07:01.694678", "msg": "", "rc": 0, "start": "2025-04-23 19:07:00.704723", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [daemon-reexec] ***********************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "cmd": [[0m
+[0;32m    googlecompute:             "systemctl",[0m
+[0;32m    googlecompute:             "daemon-reexec"[0m
+[0;32m    googlecompute:         ],[0m
+[0;32m    googlecompute:         "delta": "0:00:00.989955",[0m
+[0;32m    googlecompute:         "end": "2025-04-23 19:07:01.694678",[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "msg": "",[0m
+[0;32m    googlecompute:         "rc": 0,[0m
+[0;32m    googlecompute:         "start": "2025-04-23 19:07:00.704723",[0m
+[0;32m    googlecompute:         "stderr": "",[0m
+[0;32m    googlecompute:         "stderr_lines": [],[0m
+[0;32m    googlecompute:         "stdout": "",[0m
+[0;32m    googlecompute:         "stdout_lines": [][0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Reload systemd manager configuration] ************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "cmd": ["systemctl", "daemon-reload"], "delta": "0:00:00.751888", "end": "2025-04-23 19:07:04.435903", "msg": "", "rc": 0, "start": "2025-04-23 19:07:03.684015", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [daemon-reload] ***********************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "cmd": [[0m
+[0;32m    googlecompute:             "systemctl",[0m
+[0;32m    googlecompute:             "daemon-reload"[0m
+[0;32m    googlecompute:         ],[0m
+[0;32m    googlecompute:         "delta": "0:00:00.751888",[0m
+[0;32m    googlecompute:         "end": "2025-04-23 19:07:04.435903",[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "msg": "",[0m
+[0;32m    googlecompute:         "rc": 0,[0m
+[0;32m    googlecompute:         "start": "2025-04-23 19:07:03.684015",[0m
+[0;32m    googlecompute:         "stderr": "",[0m
+[0;32m    googlecompute:         "stderr_lines": [],[0m
+[0;32m    googlecompute:         "stdout": "",[0m
+[0;32m    googlecompute:         "stdout_lines": [][0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Enable yuga.service to start at boot] ************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "enabled": true, "name": "yugabyte.service", "status": {"AccessSELinuxContext": "system_u:object_r:systemd_unit_file_t:s0", "ActiveEnterTimestampMonotonic": "0", "ActiveExitTimestampMonotonic": "0", "ActiveState": "inactive", "After": "sysinit.target -.mount systemd-journald.socket basic.target system.slice network-online.target", "AllowIsolate": "no", "AssertResult": "no", "AssertTimestampMonotonic": "0", "Before": "shutdown.target", "BlockIOAccounting": "no", "BlockIOWeight": "[not set]", "CPUAccounting": "yes", "CPUAffinityFromNUMA": "no", "CPUQuotaPerSecUSec": "infinity", "CPUQuotaPeriodUSec": "infinity", "CPUSchedulingPolicy": "0", "CPUSchedulingPriority": "0", "CPUSchedulingResetOnFork": "no", "CPUShares": "[not set]", "CPUUsageNSec": "[not set]", "CPUWeight": "[not set]", "CacheDirectoryMode": "0755", "CanFreeze": "yes", "CanIsolate": "no", "CanReload": "no", "CanStart": "yes", "CanStop": "yes", "CapabilityBoundingSet": "cap_chown cap_dac_override cap_dac_read_search cap_fowner cap_fsetid cap_kill cap_setgid cap_setuid cap_setpcap cap_linux_immutable cap_net_bind_service cap_net_broadcast cap_net_admin cap_net_raw cap_ipc_lock cap_ipc_owner cap_sys_module cap_sys_rawio cap_sys_chroot cap_sys_ptrace cap_sys_pacct cap_sys_admin cap_sys_boot cap_sys_nice cap_sys_resource cap_sys_time cap_sys_tty_config cap_mknod cap_lease cap_audit_write cap_audit_control cap_setfcap cap_mac_override cap_mac_admin cap_syslog cap_wake_alarm cap_block_suspend cap_audit_read cap_perfmon cap_bpf cap_checkpoint_restore", "CleanResult": "success", "CollectMode": "inactive", "ConditionResult": "no", "ConditionTimestampMonotonic": "0", "ConfigurationDirectoryMode": "0755", "Conflicts": "shutdown.target", "ControlGroupId": "0", "ControlPID": "0", "CoredumpFilter": "0x33", "DefaultDependencies": "yes", "DefaultMemoryLow": "0", "DefaultMemoryMin": "0", "Delegate": "no", "Description": "YugabyteDB Cluster (yugabyted-managed)", "DevicePolicy": "auto", "DynamicUser": "no", "ExecMainCode": "0", "ExecMainExitTimestampMonotonic": "0", "ExecMainPID": "0", "ExecMainStartTimestampMonotonic": "0", "ExecMainStatus": "0", "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStartEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStop": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStopEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExitType": "main", "FailureAction": "none", "FileDescriptorStoreMax": "0", "FinalKillSignal": "9", "FragmentPath": "/etc/systemd/system/yugabyte.service", "FreezerState": "running", "GID": "[not set]", "GuessMainPID": "yes", "IOAccounting": "no", "IOReadBytes": "18446744073709551615", "IOReadOperations": "18446744073709551615", "IOSchedulingClass": "2", "IOSchedulingPriority": "4", "IOWeight": "[not set]", "IOWriteBytes": "18446744073709551615", "IOWriteOperations": "18446744073709551615", "IPAccounting": "no", "IPEgressBytes": "[no data]", "IPEgressPackets": "[no data]", "IPIngressBytes": "[no data]", "IPIngressPackets": "[no data]", "Id": "yugabyte.service", "IgnoreOnIsolate": "no", "IgnoreSIGPIPE": "yes", "InactiveEnterTimestampMonotonic": "0", "InactiveExitTimestampMonotonic": "0", "JobRunningTimeoutUSec": "infinity", "JobTimeoutAction": "none", "JobTimeoutUSec": "infinity", "KeyringMode": "private", "KillMode": "control-group", "KillSignal": "15", "LimitAS": "infinity", "LimitASSoft": "infinity", "LimitCORE": "infinity", "LimitCORESoft": "infinity", "LimitCPU": "infinity", "LimitCPUSoft": "infinity", "LimitDATA": "infinity", "LimitDATASoft": "infinity", "LimitFSIZE": "infinity", "LimitFSIZESoft": "infinity", "LimitLOCKS": "infinity", "LimitLOCKSSoft": "infinity", "LimitMEMLOCK": "8388608", "LimitMEMLOCKSoft": "8388608", "LimitMSGQUEUE": "819200", "LimitMSGQUEUESoft": "819200", "LimitNICE": "0", "LimitNICESoft": "0", "LimitNOFILE": "524288", "LimitNOFILESoft": "1024", "LimitNPROC": "14436", "LimitNPROCSoft": "14436", "LimitRSS": "infinity", "LimitRSSSoft": "infinity", "LimitRTPRIO": "0", "LimitRTPRIOSoft": "0", "LimitRTTIME": "infinity", "LimitRTTIMESoft": "infinity", "LimitSIGPENDING": "14436", "LimitSIGPENDINGSoft": "14436", "LimitSTACK": "infinity", "LimitSTACKSoft": "8388608", "LoadState": "loaded", "LockPersonality": "no", "LogLevelMax": "-1", "LogRateLimitBurst": "0", "LogRateLimitIntervalUSec": "0", "LogsDirectoryMode": "0755", "MainPID": "0", "ManagedOOMMemoryPressure": "auto", "ManagedOOMMemoryPressureLimit": "0", "ManagedOOMPreference": "none", "ManagedOOMSwap": "auto", "MemoryAccounting": "yes", "MemoryAvailable": "infinity", "MemoryCurrent": "[not set]", "MemoryDenyWriteExecute": "no", "MemoryHigh": "infinity", "MemoryLimit": "infinity", "MemoryLow": "0", "MemoryMax": "infinity", "MemoryMin": "0", "MemorySwapMax": "infinity", "MountAPIVFS": "no", "NFileDescriptorStore": "0", "NRestarts": "0", "NUMAPolicy": "n/a", "Names": "yugabyte.service", "NeedDaemonReload": "no", "Nice": "0", "NoNewPrivileges": "no", "NonBlocking": "no", "NotifyAccess": "none", "OOMPolicy": "stop", "OOMScoreAdjust": "0", "OnFailureJobMode": "replace", "OnSuccessJobMode": "fail", "Perpetual": "no", "PrivateDevices": "no", "PrivateIPC": "no", "PrivateMounts": "no", "PrivateNetwork": "no", "PrivateTmp": "no", "PrivateUsers": "no", "ProcSubset": "all", "ProtectClock": "no", "ProtectControlGroups": "no", "ProtectHome": "no", "ProtectHostname": "no", "ProtectKernelLogs": "no", "ProtectKernelModules": "no", "ProtectKernelTunables": "no", "ProtectProc": "default", "ProtectSystem": "no", "RefuseManualStart": "no", "RefuseManualStop": "no", "ReloadResult": "success", "ReloadSignal": "1", "RemainAfterExit": "yes", "RemoveIPC": "no", "Requires": "-.mount sysinit.target system.slice", "RequiresMountsFor": "/home/packer/yugabyte-2.25.0.0", "Restart": "no", "RestartKillSignal": "15", "RestartUSec": "100ms", "RestrictNamespaces": "no", "RestrictRealtime": "no", "RestrictSUIDSGID": "no", "Result": "success", "RootDirectoryStartOnly": "no", "RuntimeDirectoryMode": "0755", "RuntimeDirectoryPreserve": "no", "RuntimeMaxUSec": "infinity", "RuntimeRandomizedExtraUSec": "0", "SameProcessGroup": "no", "SecureBits": "0", "SendSIGHUP": "no", "SendSIGKILL": "yes", "Slice": "system.slice", "StandardError": "inherit", "StandardInput": "null", "StandardOutput": "journal", "StartLimitAction": "none", "StartLimitBurst": "5", "StartLimitIntervalUSec": "10s", "StartupBlockIOWeight": "[not set]", "StartupCPUShares": "[not set]", "StartupCPUWeight": "[not set]", "StartupIOWeight": "[not set]", "StateChangeTimestampMonotonic": "0", "StateDirectoryMode": "0755", "StatusErrno": "0", "StopWhenUnneeded": "no", "SubState": "dead", "SuccessAction": "none", "SyslogFacility": "3", "SyslogLevel": "6", "SyslogLevelPrefix": "yes", "SyslogPriority": "30", "SystemCallErrorNumber": "2147483646", "TTYReset": "no", "TTYVHangup": "no", "TTYVTDisallocate": "no", "TasksAccounting": "yes", "TasksCurrent": "[not set]", "TasksMax": "23097", "TimeoutAbortUSec": "1min 30s", "TimeoutCleanUSec": "infinity", "TimeoutStartFailureMode": "terminate", "TimeoutStartUSec": "infinity", "TimeoutStopFailureMode": "terminate", "TimeoutStopUSec": "1min 30s", "TimerSlackNSec": "50000", "Transient": "no", "Type": "oneshot", "UID": "[not set]", "UMask": "0022", "UnitFilePreset": "disabled", "UnitFileState": "disabled", "User": "packer", "UtmpMode": "init", "WatchdogSignal": "6", "WatchdogTimestampMonotonic": "0", "WatchdogUSec": "infinity", "WorkingDirectory": "/home/packer/yugabyte-2.25.0.0"}}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Enable service] **********************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "enabled": true,[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "name": "yugabyte.service",[0m
+[0;32m    googlecompute:         "status": {[0m
+[0;32m    googlecompute:             "AccessSELinuxContext": "system_u:object_r:systemd_unit_file_t:s0",[0m
+[0;32m    googlecompute:             "ActiveEnterTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ActiveExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ActiveState": "inactive",[0m
+[0;32m    googlecompute:             "After": "sysinit.target -.mount systemd-journald.socket basic.target system.slice network-online.target",[0m
+[0;32m    googlecompute:             "AllowIsolate": "no",[0m
+[0;32m    googlecompute:             "AssertResult": "no",[0m
+[0;32m    googlecompute:             "AssertTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "Before": "shutdown.target",[0m
+[0;32m    googlecompute:             "BlockIOAccounting": "no",[0m
+[0;32m    googlecompute:             "BlockIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "CPUAccounting": "yes",[0m
+[0;32m    googlecompute:             "CPUAffinityFromNUMA": "no",[0m
+[0;32m    googlecompute:             "CPUQuotaPerSecUSec": "infinity",[0m
+[0;32m    googlecompute:             "CPUQuotaPeriodUSec": "infinity",[0m
+[0;32m    googlecompute:             "CPUSchedulingPolicy": "0",[0m
+[0;32m    googlecompute:             "CPUSchedulingPriority": "0",[0m
+[0;32m    googlecompute:             "CPUSchedulingResetOnFork": "no",[0m
+[0;32m    googlecompute:             "CPUShares": "[not set]",[0m
+[0;32m    googlecompute:             "CPUUsageNSec": "[not set]",[0m
+[0;32m    googlecompute:             "CPUWeight": "[not set]",[0m
+[0;32m    googlecompute:             "CacheDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "CanFreeze": "yes",[0m
+[0;32m    googlecompute:             "CanIsolate": "no",[0m
+[0;32m    googlecompute:             "CanReload": "no",[0m
+[0;32m    googlecompute:             "CanStart": "yes",[0m
+[0;32m    googlecompute:             "CanStop": "yes",[0m
+[0;32m    googlecompute:             "CapabilityBoundingSet": "cap_chown cap_dac_override cap_dac_read_search cap_fowner cap_fsetid cap_kill cap_setgid cap_setuid cap_setpcap cap_linux_immutable cap_net_bind_service cap_net_broadcast cap_net_admin cap_net_raw cap_ipc_lock cap_ipc_owner cap_sys_module cap_sys_rawio cap_sys_chroot cap_sys_ptrace cap_sys_pacct cap_sys_admin cap_sys_boot cap_sys_nice cap_sys_resource cap_sys_time cap_sys_tty_config cap_mknod cap_lease cap_audit_write cap_audit_control cap_setfcap cap_mac_override cap_mac_admin cap_syslog cap_wake_alarm cap_block_suspend cap_audit_read cap_perfmon cap_bpf cap_checkpoint_restore",[0m
+[0;32m    googlecompute:             "CleanResult": "success",[0m
+[0;32m    googlecompute:             "CollectMode": "inactive",[0m
+[0;32m    googlecompute:             "ConditionResult": "no",[0m
+[0;32m    googlecompute:             "ConditionTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ConfigurationDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "Conflicts": "shutdown.target",[0m
+[0;32m    googlecompute:             "ControlGroupId": "0",[0m
+[0;32m    googlecompute:             "ControlPID": "0",[0m
+[0;32m    googlecompute:             "CoredumpFilter": "0x33",[0m
+[0;32m    googlecompute:             "DefaultDependencies": "yes",[0m
+[0;32m    googlecompute:             "DefaultMemoryLow": "0",[0m
+[0;32m    googlecompute:             "DefaultMemoryMin": "0",[0m
+[0;32m    googlecompute:             "Delegate": "no",[0m
+[0;32m    googlecompute:             "Description": "YugabyteDB Cluster (yugabyted-managed)",[0m
+[0;32m    googlecompute:             "DevicePolicy": "auto",[0m
+[0;32m    googlecompute:             "DynamicUser": "no",[0m
+[0;32m    googlecompute:             "ExecMainCode": "0",[0m
+[0;32m    googlecompute:             "ExecMainExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ExecMainPID": "0",[0m
+[0;32m    googlecompute:             "ExecMainStartTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ExecMainStatus": "0",[0m
+[0;32m    googlecompute:             "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStartEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStop": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStopEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExitType": "main",[0m
+[0;32m    googlecompute:             "FailureAction": "none",[0m
+[0;32m    googlecompute:             "FileDescriptorStoreMax": "0",[0m
+[0;32m    googlecompute:             "FinalKillSignal": "9",[0m
+[0;32m    googlecompute:             "FragmentPath": "/etc/systemd/system/yugabyte.service",[0m
+[0;32m    googlecompute:             "FreezerState": "running",[0m
+[0;32m    googlecompute:             "GID": "[not set]",[0m
+[0;32m    googlecompute:             "GuessMainPID": "yes",[0m
+[0;32m    googlecompute:             "IOAccounting": "no",[0m
+[0;32m    googlecompute:             "IOReadBytes": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOReadOperations": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOSchedulingClass": "2",[0m
+[0;32m    googlecompute:             "IOSchedulingPriority": "4",[0m
+[0;32m    googlecompute:             "IOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "IOWriteBytes": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOWriteOperations": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IPAccounting": "no",[0m
+[0;32m    googlecompute:             "IPEgressBytes": "[no data]",[0m
+[0;32m    googlecompute:             "IPEgressPackets": "[no data]",[0m
+[0;32m    googlecompute:             "IPIngressBytes": "[no data]",[0m
+[0;32m    googlecompute:             "IPIngressPackets": "[no data]",[0m
+[0;32m    googlecompute:             "Id": "yugabyte.service",[0m
+[0;32m    googlecompute:             "IgnoreOnIsolate": "no",[0m
+[0;32m    googlecompute:             "IgnoreSIGPIPE": "yes",[0m
+[0;32m    googlecompute:             "InactiveEnterTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "InactiveExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "JobRunningTimeoutUSec": "infinity",[0m
+[0;32m    googlecompute:             "JobTimeoutAction": "none",[0m
+[0;32m    googlecompute:             "JobTimeoutUSec": "infinity",[0m
+[0;32m    googlecompute:             "KeyringMode": "private",[0m
+[0;32m    googlecompute:             "KillMode": "control-group",[0m
+[0;32m    googlecompute:             "KillSignal": "15",[0m
+[0;32m    googlecompute:             "LimitAS": "infinity",[0m
+[0;32m    googlecompute:             "LimitASSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitCORE": "infinity",[0m
+[0;32m    googlecompute:             "LimitCORESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitCPU": "infinity",[0m
+[0;32m    googlecompute:             "LimitCPUSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitDATA": "infinity",[0m
+[0;32m    googlecompute:             "LimitDATASoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitFSIZE": "infinity",[0m
+[0;32m    googlecompute:             "LimitFSIZESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitLOCKS": "infinity",[0m
+[0;32m    googlecompute:             "LimitLOCKSSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitMEMLOCK": "8388608",[0m
+[0;32m    googlecompute:             "LimitMEMLOCKSoft": "8388608",[0m
+[0;32m    googlecompute:             "LimitMSGQUEUE": "819200",[0m
+[0;32m    googlecompute:             "LimitMSGQUEUESoft": "819200",[0m
+[0;32m    googlecompute:             "LimitNICE": "0",[0m
+[0;32m    googlecompute:             "LimitNICESoft": "0",[0m
+[0;32m    googlecompute:             "LimitNOFILE": "524288",[0m
+[0;32m    googlecompute:             "LimitNOFILESoft": "1024",[0m
+[0;32m    googlecompute:             "LimitNPROC": "14436",[0m
+[0;32m    googlecompute:             "LimitNPROCSoft": "14436",[0m
+[0;32m    googlecompute:             "LimitRSS": "infinity",[0m
+[0;32m    googlecompute:             "LimitRSSSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitRTPRIO": "0",[0m
+[0;32m    googlecompute:             "LimitRTPRIOSoft": "0",[0m
+[0;32m    googlecompute:             "LimitRTTIME": "infinity",[0m
+[0;32m    googlecompute:             "LimitRTTIMESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitSIGPENDING": "14436",[0m
+[0;32m    googlecompute:             "LimitSIGPENDINGSoft": "14436",[0m
+[0;32m    googlecompute:             "LimitSTACK": "infinity",[0m
+[0;32m    googlecompute:             "LimitSTACKSoft": "8388608",[0m
+[0;32m    googlecompute:             "LoadState": "loaded",[0m
+[0;32m    googlecompute:             "LockPersonality": "no",[0m
+[0;32m    googlecompute:             "LogLevelMax": "-1",[0m
+[0;32m    googlecompute:             "LogRateLimitBurst": "0",[0m
+[0;32m    googlecompute:             "LogRateLimitIntervalUSec": "0",[0m
+[0;32m    googlecompute:             "LogsDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "MainPID": "0",[0m
+[0;32m    googlecompute:             "ManagedOOMMemoryPressure": "auto",[0m
+[0;32m    googlecompute:             "ManagedOOMMemoryPressureLimit": "0",[0m
+[0;32m    googlecompute:             "ManagedOOMPreference": "none",[0m
+[0;32m    googlecompute:             "ManagedOOMSwap": "auto",[0m
+[0;32m    googlecompute:             "MemoryAccounting": "yes",[0m
+[0;32m    googlecompute:             "MemoryAvailable": "infinity",[0m
+[0;32m    googlecompute:             "MemoryCurrent": "[not set]",[0m
+[0;32m    googlecompute:             "MemoryDenyWriteExecute": "no",[0m
+[0;32m    googlecompute:             "MemoryHigh": "infinity",[0m
+[0;32m    googlecompute:             "MemoryLimit": "infinity",[0m
+[0;32m    googlecompute:             "MemoryLow": "0",[0m
+[0;32m    googlecompute:             "MemoryMax": "infinity",[0m
+[0;32m    googlecompute:             "MemoryMin": "0",[0m
+[0;32m    googlecompute:             "MemorySwapMax": "infinity",[0m
+[0;32m    googlecompute:             "MountAPIVFS": "no",[0m
+[0;32m    googlecompute:             "NFileDescriptorStore": "0",[0m
+[0;32m    googlecompute:             "NRestarts": "0",[0m
+[0;32m    googlecompute:             "NUMAPolicy": "n/a",[0m
+[0;32m    googlecompute:             "Names": "yugabyte.service",[0m
+[0;32m    googlecompute:             "NeedDaemonReload": "no",[0m
+[0;32m    googlecompute:             "Nice": "0",[0m
+[0;32m    googlecompute:             "NoNewPrivileges": "no",[0m
+[0;32m    googlecompute:             "NonBlocking": "no",[0m
+[0;32m    googlecompute:             "NotifyAccess": "none",[0m
+[0;32m    googlecompute:             "OOMPolicy": "stop",[0m
+[0;32m    googlecompute:             "OOMScoreAdjust": "0",[0m
+[0;32m    googlecompute:             "OnFailureJobMode": "replace",[0m
+[0;32m    googlecompute:             "OnSuccessJobMode": "fail",[0m
+[0;32m    googlecompute:             "Perpetual": "no",[0m
+[0;32m    googlecompute:             "PrivateDevices": "no",[0m
+[0;32m    googlecompute:             "PrivateIPC": "no",[0m
+[0;32m    googlecompute:             "PrivateMounts": "no",[0m
+[0;32m    googlecompute:             "PrivateNetwork": "no",[0m
+[0;32m    googlecompute:             "PrivateTmp": "no",[0m
+[0;32m    googlecompute:             "PrivateUsers": "no",[0m
+[0;32m    googlecompute:             "ProcSubset": "all",[0m
+[0;32m    googlecompute:             "ProtectClock": "no",[0m
+[0;32m    googlecompute:             "ProtectControlGroups": "no",[0m
+[0;32m    googlecompute:             "ProtectHome": "no",[0m
+[0;32m    googlecompute:             "ProtectHostname": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelLogs": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelModules": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelTunables": "no",[0m
+[0;32m    googlecompute:             "ProtectProc": "default",[0m
+[0;32m    googlecompute:             "ProtectSystem": "no",[0m
+[0;32m    googlecompute:             "RefuseManualStart": "no",[0m
+[0;32m    googlecompute:             "RefuseManualStop": "no",[0m
+[0;32m    googlecompute:             "ReloadResult": "success",[0m
+[0;32m    googlecompute:             "ReloadSignal": "1",[0m
+[0;32m    googlecompute:             "RemainAfterExit": "yes",[0m
+[0;32m    googlecompute:             "RemoveIPC": "no",[0m
+[0;32m    googlecompute:             "Requires": "-.mount sysinit.target system.slice",[0m
+[0;32m    googlecompute:             "RequiresMountsFor": "/home/packer/yugabyte-2.25.0.0",[0m
+[0;32m    googlecompute:             "Restart": "no",[0m
+[0;32m    googlecompute:             "RestartKillSignal": "15",[0m
+[0;32m    googlecompute:             "RestartUSec": "100ms",[0m
+[0;32m    googlecompute:             "RestrictNamespaces": "no",[0m
+[0;32m    googlecompute:             "RestrictRealtime": "no",[0m
+[0;32m    googlecompute:             "RestrictSUIDSGID": "no",[0m
+[0;32m    googlecompute:             "Result": "success",[0m
+[0;32m    googlecompute:             "RootDirectoryStartOnly": "no",[0m
+[0;32m    googlecompute:             "RuntimeDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "RuntimeDirectoryPreserve": "no",[0m
+[0;32m    googlecompute:             "RuntimeMaxUSec": "infinity",[0m
+[0;32m    googlecompute:             "RuntimeRandomizedExtraUSec": "0",[0m
+[0;32m    googlecompute:             "SameProcessGroup": "no",[0m
+[0;32m    googlecompute:             "SecureBits": "0",[0m
+[0;32m    googlecompute:             "SendSIGHUP": "no",[0m
+[0;32m    googlecompute:             "SendSIGKILL": "yes",[0m
+[0;32m    googlecompute:             "Slice": "system.slice",[0m
+[0;32m    googlecompute:             "StandardError": "inherit",[0m
+[0;32m    googlecompute:             "StandardInput": "null",[0m
+[0;32m    googlecompute:             "StandardOutput": "journal",[0m
+[0;32m    googlecompute:             "StartLimitAction": "none",[0m
+[0;32m    googlecompute:             "StartLimitBurst": "5",[0m
+[0;32m    googlecompute:             "StartLimitIntervalUSec": "10s",[0m
+[0;32m    googlecompute:             "StartupBlockIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StartupCPUShares": "[not set]",[0m
+[0;32m    googlecompute:             "StartupCPUWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StartupIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StateChangeTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "StateDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "StatusErrno": "0",[0m
+[0;32m    googlecompute:             "StopWhenUnneeded": "no",[0m
+[0;32m    googlecompute:             "SubState": "dead",[0m
+[0;32m    googlecompute:             "SuccessAction": "none",[0m
+[0;32m    googlecompute:             "SyslogFacility": "3",[0m
+[0;32m    googlecompute:             "SyslogLevel": "6",[0m
+[0;32m    googlecompute:             "SyslogLevelPrefix": "yes",[0m
+[0;32m    googlecompute:             "SyslogPriority": "30",[0m
+[0;32m    googlecompute:             "SystemCallErrorNumber": "2147483646",[0m
+[0;32m    googlecompute:             "TTYReset": "no",[0m
+[0;32m    googlecompute:             "TTYVHangup": "no",[0m
+[0;32m    googlecompute:             "TTYVTDisallocate": "no",[0m
+[0;32m    googlecompute:             "TasksAccounting": "yes",[0m
+[0;32m    googlecompute:             "TasksCurrent": "[not set]",[0m
+[0;32m    googlecompute:             "TasksMax": "23097",[0m
+[0;32m    googlecompute:             "TimeoutAbortUSec": "1min 30s",[0m
+[0;32m    googlecompute:             "TimeoutCleanUSec": "infinity",[0m
+[0;32m    googlecompute:             "TimeoutStartFailureMode": "terminate",[0m
+[0;32m    googlecompute:             "TimeoutStartUSec": "infinity",[0m
+[0;32m    googlecompute:             "TimeoutStopFailureMode": "terminate",[0m
+[0;32m    googlecompute:             "TimeoutStopUSec": "1min 30s",[0m
+[0;32m    googlecompute:             "TimerSlackNSec": "50000",[0m
+[0;32m    googlecompute:             "Transient": "no",[0m
+[0;32m    googlecompute:             "Type": "oneshot",[0m
+[0;32m    googlecompute:             "UID": "[not set]",[0m
+[0;32m    googlecompute:             "UMask": "0022",[0m
+[0;32m    googlecompute:             "UnitFilePreset": "disabled",[0m
+[0;32m    googlecompute:             "UnitFileState": "disabled",[0m
+[0;32m    googlecompute:             "User": "packer",[0m
+[0;32m    googlecompute:             "UtmpMode": "init",[0m
+[0;32m    googlecompute:             "WatchdogSignal": "6",[0m
+[0;32m    googlecompute:             "WatchdogTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "WatchdogUSec": "infinity",[0m
+[0;32m    googlecompute:             "WorkingDirectory": "/home/packer/yugabyte-2.25.0.0"[0m
+[0;32m    googlecompute:         }[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Start yuga.service] ******************************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "name": "yugabyte.service", "state": "started", "status": {"AccessSELinuxContext": "system_u:object_r:systemd_unit_file_t:s0", "ActiveEnterTimestampMonotonic": "0", "ActiveExitTimestampMonotonic": "0", "ActiveState": "inactive", "After": "-.mount network-online.target basic.target sysinit.target systemd-journald.socket system.slice", "AllowIsolate": "no", "AssertResult": "no", "AssertTimestampMonotonic": "0", "Before": "multi-user.target shutdown.target", "BlockIOAccounting": "no", "BlockIOWeight": "[not set]", "CPUAccounting": "yes", "CPUAffinityFromNUMA": "no", "CPUQuotaPerSecUSec": "infinity", "CPUQuotaPeriodUSec": "infinity", "CPUSchedulingPolicy": "0", "CPUSchedulingPriority": "0", "CPUSchedulingResetOnFork": "no", "CPUShares": "[not set]", "CPUUsageNSec": "[not set]", "CPUWeight": "[not set]", "CacheDirectoryMode": "0755", "CanFreeze": "yes", "CanIsolate": "no", "CanReload": "no", "CanStart": "yes", "CanStop": "yes", "CapabilityBoundingSet": "cap_chown cap_dac_override cap_dac_read_search cap_fowner cap_fsetid cap_kill cap_setgid cap_setuid cap_setpcap cap_linux_immutable cap_net_bind_service cap_net_broadcast cap_net_admin cap_net_raw cap_ipc_lock cap_ipc_owner cap_sys_module cap_sys_rawio cap_sys_chroot cap_sys_ptrace cap_sys_pacct cap_sys_admin cap_sys_boot cap_sys_nice cap_sys_resource cap_sys_time cap_sys_tty_config cap_mknod cap_lease cap_audit_write cap_audit_control cap_setfcap cap_mac_override cap_mac_admin cap_syslog cap_wake_alarm cap_block_suspend cap_audit_read cap_perfmon cap_bpf cap_checkpoint_restore", "CleanResult": "success", "CollectMode": "inactive", "ConditionResult": "no", "ConditionTimestampMonotonic": "0", "ConfigurationDirectoryMode": "0755", "Conflicts": "shutdown.target", "ControlGroupId": "0", "ControlPID": "0", "CoredumpFilter": "0x33", "DefaultDependencies": "yes", "DefaultMemoryLow": "0", "DefaultMemoryMin": "0", "Delegate": "no", "Description": "YugabyteDB Cluster (yugabyted-managed)", "DevicePolicy": "auto", "DynamicUser": "no", "ExecMainCode": "0", "ExecMainExitTimestampMonotonic": "0", "ExecMainPID": "0", "ExecMainStartTimestampMonotonic": "0", "ExecMainStatus": "0", "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStartEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStop": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExecStopEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }", "ExitType": "main", "FailureAction": "none", "FileDescriptorStoreMax": "0", "FinalKillSignal": "9", "FragmentPath": "/etc/systemd/system/yugabyte.service", "FreezerState": "running", "GID": "[not set]", "GuessMainPID": "yes", "IOAccounting": "no", "IOReadBytes": "18446744073709551615", "IOReadOperations": "18446744073709551615", "IOSchedulingClass": "2", "IOSchedulingPriority": "4", "IOWeight": "[not set]", "IOWriteBytes": "18446744073709551615", "IOWriteOperations": "18446744073709551615", "IPAccounting": "no", "IPEgressBytes": "[no data]", "IPEgressPackets": "[no data]", "IPIngressBytes": "[no data]", "IPIngressPackets": "[no data]", "Id": "yugabyte.service", "IgnoreOnIsolate": "no", "IgnoreSIGPIPE": "yes", "InactiveEnterTimestampMonotonic": "0", "InactiveExitTimestampMonotonic": "0", "JobRunningTimeoutUSec": "infinity", "JobTimeoutAction": "none", "JobTimeoutUSec": "infinity", "KeyringMode": "private", "KillMode": "control-group", "KillSignal": "15", "LimitAS": "infinity", "LimitASSoft": "infinity", "LimitCORE": "infinity", "LimitCORESoft": "infinity", "LimitCPU": "infinity", "LimitCPUSoft": "infinity", "LimitDATA": "infinity", "LimitDATASoft": "infinity", "LimitFSIZE": "infinity", "LimitFSIZESoft": "infinity", "LimitLOCKS": "infinity", "LimitLOCKSSoft": "infinity", "LimitMEMLOCK": "8388608", "LimitMEMLOCKSoft": "8388608", "LimitMSGQUEUE": "819200", "LimitMSGQUEUESoft": "819200", "LimitNICE": "0", "LimitNICESoft": "0", "LimitNOFILE": "524288", "LimitNOFILESoft": "1024", "LimitNPROC": "14436", "LimitNPROCSoft": "14436", "LimitRSS": "infinity", "LimitRSSSoft": "infinity", "LimitRTPRIO": "0", "LimitRTPRIOSoft": "0", "LimitRTTIME": "infinity", "LimitRTTIMESoft": "infinity", "LimitSIGPENDING": "14436", "LimitSIGPENDINGSoft": "14436", "LimitSTACK": "infinity", "LimitSTACKSoft": "8388608", "LoadState": "loaded", "LockPersonality": "no", "LogLevelMax": "-1", "LogRateLimitBurst": "0", "LogRateLimitIntervalUSec": "0", "LogsDirectoryMode": "0755", "MainPID": "0", "ManagedOOMMemoryPressure": "auto", "ManagedOOMMemoryPressureLimit": "0", "ManagedOOMPreference": "none", "ManagedOOMSwap": "auto", "MemoryAccounting": "yes", "MemoryAvailable": "infinity", "MemoryCurrent": "[not set]", "MemoryDenyWriteExecute": "no", "MemoryHigh": "infinity", "MemoryLimit": "infinity", "MemoryLow": "0", "MemoryMax": "infinity", "MemoryMin": "0", "MemorySwapMax": "infinity", "MountAPIVFS": "no", "NFileDescriptorStore": "0", "NRestarts": "0", "NUMAPolicy": "n/a", "Names": "yugabyte.service", "NeedDaemonReload": "no", "Nice": "0", "NoNewPrivileges": "no", "NonBlocking": "no", "NotifyAccess": "none", "OOMPolicy": "stop", "OOMScoreAdjust": "0", "OnFailureJobMode": "replace", "OnSuccessJobMode": "fail", "Perpetual": "no", "PrivateDevices": "no", "PrivateIPC": "no", "PrivateMounts": "no", "PrivateNetwork": "no", "PrivateTmp": "no", "PrivateUsers": "no", "ProcSubset": "all", "ProtectClock": "no", "ProtectControlGroups": "no", "ProtectHome": "no", "ProtectHostname": "no", "ProtectKernelLogs": "no", "ProtectKernelModules": "no", "ProtectKernelTunables": "no", "ProtectProc": "default", "ProtectSystem": "no", "RefuseManualStart": "no", "RefuseManualStop": "no", "ReloadResult": "success", "ReloadSignal": "1", "RemainAfterExit": "yes", "RemoveIPC": "no", "Requires": "-.mount sysinit.target system.slice", "RequiresMountsFor": "/home/packer/yugabyte-2.25.0.0", "Restart": "no", "RestartKillSignal": "15", "RestartUSec": "100ms", "RestrictNamespaces": "no", "RestrictRealtime": "no", "RestrictSUIDSGID": "no", "Result": "success", "RootDirectoryStartOnly": "no", "RuntimeDirectoryMode": "0755", "RuntimeDirectoryPreserve": "no", "RuntimeMaxUSec": "infinity", "RuntimeRandomizedExtraUSec": "0", "SameProcessGroup": "no", "SecureBits": "0", "SendSIGHUP": "no", "SendSIGKILL": "yes", "Slice": "system.slice", "StandardError": "inherit", "StandardInput": "null", "StandardOutput": "journal", "StartLimitAction": "none", "StartLimitBurst": "5", "StartLimitIntervalUSec": "10s", "StartupBlockIOWeight": "[not set]", "StartupCPUShares": "[not set]", "StartupCPUWeight": "[not set]", "StartupIOWeight": "[not set]", "StateChangeTimestampMonotonic": "0", "StateDirectoryMode": "0755", "StatusErrno": "0", "StopWhenUnneeded": "no", "SubState": "dead", "SuccessAction": "none", "SyslogFacility": "3", "SyslogLevel": "6", "SyslogLevelPrefix": "yes", "SyslogPriority": "30", "SystemCallErrorNumber": "2147483646", "TTYReset": "no", "TTYVHangup": "no", "TTYVTDisallocate": "no", "TasksAccounting": "yes", "TasksCurrent": "[not set]", "TasksMax": "23097", "TimeoutAbortUSec": "1min 30s", "TimeoutCleanUSec": "infinity", "TimeoutStartFailureMode": "terminate", "TimeoutStartUSec": "infinity", "TimeoutStopFailureMode": "terminate", "TimeoutStopUSec": "1min 30s", "TimerSlackNSec": "50000", "Transient": "no", "Type": "oneshot", "UID": "[not set]", "UMask": "0022", "UnitFilePreset": "disabled", "UnitFileState": "enabled", "User": "packer", "UtmpMode": "init", "WantedBy": "multi-user.target", "WatchdogSignal": "6", "WatchdogTimestampMonotonic": "0", "WatchdogUSec": "infinity", "WorkingDirectory": "/home/packer/yugabyte-2.25.0.0"}}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [start service] ***********************************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "msg": {[0m
+[0;32m    googlecompute:         "changed": true,[0m
+[0;32m    googlecompute:         "failed": false,[0m
+[0;32m    googlecompute:         "name": "yugabyte.service",[0m
+[0;32m    googlecompute:         "state": "started",[0m
+[0;32m    googlecompute:         "status": {[0m
+[0;32m    googlecompute:             "AccessSELinuxContext": "system_u:object_r:systemd_unit_file_t:s0",[0m
+[0;32m    googlecompute:             "ActiveEnterTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ActiveExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ActiveState": "inactive",[0m
+[0;32m    googlecompute:             "After": "-.mount network-online.target basic.target sysinit.target systemd-journald.socket system.slice",[0m
+[0;32m    googlecompute:             "AllowIsolate": "no",[0m
+[0;32m    googlecompute:             "AssertResult": "no",[0m
+[0;32m    googlecompute:             "AssertTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "Before": "multi-user.target shutdown.target",[0m
+[0;32m    googlecompute:             "BlockIOAccounting": "no",[0m
+[0;32m    googlecompute:             "BlockIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "CPUAccounting": "yes",[0m
+[0;32m    googlecompute:             "CPUAffinityFromNUMA": "no",[0m
+[0;32m    googlecompute:             "CPUQuotaPerSecUSec": "infinity",[0m
+[0;32m    googlecompute:             "CPUQuotaPeriodUSec": "infinity",[0m
+[0;32m    googlecompute:             "CPUSchedulingPolicy": "0",[0m
+[0;32m    googlecompute:             "CPUSchedulingPriority": "0",[0m
+[0;32m    googlecompute:             "CPUSchedulingResetOnFork": "no",[0m
+[0;32m    googlecompute:             "CPUShares": "[not set]",[0m
+[0;32m    googlecompute:             "CPUUsageNSec": "[not set]",[0m
+[0;32m    googlecompute:             "CPUWeight": "[not set]",[0m
+[0;32m    googlecompute:             "CacheDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "CanFreeze": "yes",[0m
+[0;32m    googlecompute:             "CanIsolate": "no",[0m
+[0;32m    googlecompute:             "CanReload": "no",[0m
+[0;32m    googlecompute:             "CanStart": "yes",[0m
+[0;32m    googlecompute:             "CanStop": "yes",[0m
+[0;32m    googlecompute:             "CapabilityBoundingSet": "cap_chown cap_dac_override cap_dac_read_search cap_fowner cap_fsetid cap_kill cap_setgid cap_setuid cap_setpcap cap_linux_immutable cap_net_bind_service cap_net_broadcast cap_net_admin cap_net_raw cap_ipc_lock cap_ipc_owner cap_sys_module cap_sys_rawio cap_sys_chroot cap_sys_ptrace cap_sys_pacct cap_sys_admin cap_sys_boot cap_sys_nice cap_sys_resource cap_sys_time cap_sys_tty_config cap_mknod cap_lease cap_audit_write cap_audit_control cap_setfcap cap_mac_override cap_mac_admin cap_syslog cap_wake_alarm cap_block_suspend cap_audit_read cap_perfmon cap_bpf cap_checkpoint_restore",[0m
+[0;32m    googlecompute:             "CleanResult": "success",[0m
+[0;32m    googlecompute:             "CollectMode": "inactive",[0m
+[0;32m    googlecompute:             "ConditionResult": "no",[0m
+[0;32m    googlecompute:             "ConditionTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ConfigurationDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "Conflicts": "shutdown.target",[0m
+[0;32m    googlecompute:             "ControlGroupId": "0",[0m
+[0;32m    googlecompute:             "ControlPID": "0",[0m
+[0;32m    googlecompute:             "CoredumpFilter": "0x33",[0m
+[0;32m    googlecompute:             "DefaultDependencies": "yes",[0m
+[0;32m    googlecompute:             "DefaultMemoryLow": "0",[0m
+[0;32m    googlecompute:             "DefaultMemoryMin": "0",[0m
+[0;32m    googlecompute:             "Delegate": "no",[0m
+[0;32m    googlecompute:             "Description": "YugabyteDB Cluster (yugabyted-managed)",[0m
+[0;32m    googlecompute:             "DevicePolicy": "auto",[0m
+[0;32m    googlecompute:             "DynamicUser": "no",[0m
+[0;32m    googlecompute:             "ExecMainCode": "0",[0m
+[0;32m    googlecompute:             "ExecMainExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ExecMainPID": "0",[0m
+[0;32m    googlecompute:             "ExecMainStartTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "ExecMainStatus": "0",[0m
+[0;32m    googlecompute:             "ExecStart": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStartEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStop": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExecStopEx": "{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted stop ; flags= ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",[0m
+[0;32m    googlecompute:             "ExitType": "main",[0m
+[0;32m    googlecompute:             "FailureAction": "none",[0m
+[0;32m    googlecompute:             "FileDescriptorStoreMax": "0",[0m
+[0;32m    googlecompute:             "FinalKillSignal": "9",[0m
+[0;32m    googlecompute:             "FragmentPath": "/etc/systemd/system/yugabyte.service",[0m
+[0;32m    googlecompute:             "FreezerState": "running",[0m
+[0;32m    googlecompute:             "GID": "[not set]",[0m
+[0;32m    googlecompute:             "GuessMainPID": "yes",[0m
+[0;32m    googlecompute:             "IOAccounting": "no",[0m
+[0;32m    googlecompute:             "IOReadBytes": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOReadOperations": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOSchedulingClass": "2",[0m
+[0;32m    googlecompute:             "IOSchedulingPriority": "4",[0m
+[0;32m    googlecompute:             "IOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "IOWriteBytes": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IOWriteOperations": "18446744073709551615",[0m
+[0;32m    googlecompute:             "IPAccounting": "no",[0m
+[0;32m    googlecompute:             "IPEgressBytes": "[no data]",[0m
+[0;32m    googlecompute:             "IPEgressPackets": "[no data]",[0m
+[0;32m    googlecompute:             "IPIngressBytes": "[no data]",[0m
+[0;32m    googlecompute:             "IPIngressPackets": "[no data]",[0m
+[0;32m    googlecompute:             "Id": "yugabyte.service",[0m
+[0;32m    googlecompute:             "IgnoreOnIsolate": "no",[0m
+[0;32m    googlecompute:             "IgnoreSIGPIPE": "yes",[0m
+[0;32m    googlecompute:             "InactiveEnterTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "InactiveExitTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "JobRunningTimeoutUSec": "infinity",[0m
+[0;32m    googlecompute:             "JobTimeoutAction": "none",[0m
+[0;32m    googlecompute:             "JobTimeoutUSec": "infinity",[0m
+[0;32m    googlecompute:             "KeyringMode": "private",[0m
+[0;32m    googlecompute:             "KillMode": "control-group",[0m
+[0;32m    googlecompute:             "KillSignal": "15",[0m
+[0;32m    googlecompute:             "LimitAS": "infinity",[0m
+[0;32m    googlecompute:             "LimitASSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitCORE": "infinity",[0m
+[0;32m    googlecompute:             "LimitCORESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitCPU": "infinity",[0m
+[0;32m    googlecompute:             "LimitCPUSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitDATA": "infinity",[0m
+[0;32m    googlecompute:             "LimitDATASoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitFSIZE": "infinity",[0m
+[0;32m    googlecompute:             "LimitFSIZESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitLOCKS": "infinity",[0m
+[0;32m    googlecompute:             "LimitLOCKSSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitMEMLOCK": "8388608",[0m
+[0;32m    googlecompute:             "LimitMEMLOCKSoft": "8388608",[0m
+[0;32m    googlecompute:             "LimitMSGQUEUE": "819200",[0m
+[0;32m    googlecompute:             "LimitMSGQUEUESoft": "819200",[0m
+[0;32m    googlecompute:             "LimitNICE": "0",[0m
+[0;32m    googlecompute:             "LimitNICESoft": "0",[0m
+[0;32m    googlecompute:             "LimitNOFILE": "524288",[0m
+[0;32m    googlecompute:             "LimitNOFILESoft": "1024",[0m
+[0;32m    googlecompute:             "LimitNPROC": "14436",[0m
+[0;32m    googlecompute:             "LimitNPROCSoft": "14436",[0m
+[0;32m    googlecompute:             "LimitRSS": "infinity",[0m
+[0;32m    googlecompute:             "LimitRSSSoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitRTPRIO": "0",[0m
+[0;32m    googlecompute:             "LimitRTPRIOSoft": "0",[0m
+[0;32m    googlecompute:             "LimitRTTIME": "infinity",[0m
+[0;32m    googlecompute:             "LimitRTTIMESoft": "infinity",[0m
+[0;32m    googlecompute:             "LimitSIGPENDING": "14436",[0m
+[0;32m    googlecompute:             "LimitSIGPENDINGSoft": "14436",[0m
+[0;32m    googlecompute:             "LimitSTACK": "infinity",[0m
+[0;32m    googlecompute:             "LimitSTACKSoft": "8388608",[0m
+[0;32m    googlecompute:             "LoadState": "loaded",[0m
+[0;32m    googlecompute:             "LockPersonality": "no",[0m
+[0;32m    googlecompute:             "LogLevelMax": "-1",[0m
+[0;32m    googlecompute:             "LogRateLimitBurst": "0",[0m
+[0;32m    googlecompute:             "LogRateLimitIntervalUSec": "0",[0m
+[0;32m    googlecompute:             "LogsDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "MainPID": "0",[0m
+[0;32m    googlecompute:             "ManagedOOMMemoryPressure": "auto",[0m
+[0;32m    googlecompute:             "ManagedOOMMemoryPressureLimit": "0",[0m
+[0;32m    googlecompute:             "ManagedOOMPreference": "none",[0m
+[0;32m    googlecompute:             "ManagedOOMSwap": "auto",[0m
+[0;32m    googlecompute:             "MemoryAccounting": "yes",[0m
+[0;32m    googlecompute:             "MemoryAvailable": "infinity",[0m
+[0;32m    googlecompute:             "MemoryCurrent": "[not set]",[0m
+[0;32m    googlecompute:             "MemoryDenyWriteExecute": "no",[0m
+[0;32m    googlecompute:             "MemoryHigh": "infinity",[0m
+[0;32m    googlecompute:             "MemoryLimit": "infinity",[0m
+[0;32m    googlecompute:             "MemoryLow": "0",[0m
+[0;32m    googlecompute:             "MemoryMax": "infinity",[0m
+[0;32m    googlecompute:             "MemoryMin": "0",[0m
+[0;32m    googlecompute:             "MemorySwapMax": "infinity",[0m
+[0;32m    googlecompute:             "MountAPIVFS": "no",[0m
+[0;32m    googlecompute:             "NFileDescriptorStore": "0",[0m
+[0;32m    googlecompute:             "NRestarts": "0",[0m
+[0;32m    googlecompute:             "NUMAPolicy": "n/a",[0m
+[0;32m    googlecompute:             "Names": "yugabyte.service",[0m
+[0;32m    googlecompute:             "NeedDaemonReload": "no",[0m
+[0;32m    googlecompute:             "Nice": "0",[0m
+[0;32m    googlecompute:             "NoNewPrivileges": "no",[0m
+[0;32m    googlecompute:             "NonBlocking": "no",[0m
+[0;32m    googlecompute:             "NotifyAccess": "none",[0m
+[0;32m    googlecompute:             "OOMPolicy": "stop",[0m
+[0;32m    googlecompute:             "OOMScoreAdjust": "0",[0m
+[0;32m    googlecompute:             "OnFailureJobMode": "replace",[0m
+[0;32m    googlecompute:             "OnSuccessJobMode": "fail",[0m
+[0;32m    googlecompute:             "Perpetual": "no",[0m
+[0;32m    googlecompute:             "PrivateDevices": "no",[0m
+[0;32m    googlecompute:             "PrivateIPC": "no",[0m
+[0;32m    googlecompute:             "PrivateMounts": "no",[0m
+[0;32m    googlecompute:             "PrivateNetwork": "no",[0m
+[0;32m    googlecompute:             "PrivateTmp": "no",[0m
+[0;32m    googlecompute:             "PrivateUsers": "no",[0m
+[0;32m    googlecompute:             "ProcSubset": "all",[0m
+[0;32m    googlecompute:             "ProtectClock": "no",[0m
+[0;32m    googlecompute:             "ProtectControlGroups": "no",[0m
+[0;32m    googlecompute:             "ProtectHome": "no",[0m
+[0;32m    googlecompute:             "ProtectHostname": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelLogs": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelModules": "no",[0m
+[0;32m    googlecompute:             "ProtectKernelTunables": "no",[0m
+[0;32m    googlecompute:             "ProtectProc": "default",[0m
+[0;32m    googlecompute:             "ProtectSystem": "no",[0m
+[0;32m    googlecompute:             "RefuseManualStart": "no",[0m
+[0;32m    googlecompute:             "RefuseManualStop": "no",[0m
+[0;32m    googlecompute:             "ReloadResult": "success",[0m
+[0;32m    googlecompute:             "ReloadSignal": "1",[0m
+[0;32m    googlecompute:             "RemainAfterExit": "yes",[0m
+[0;32m    googlecompute:             "RemoveIPC": "no",[0m
+[0;32m    googlecompute:             "Requires": "-.mount sysinit.target system.slice",[0m
+[0;32m    googlecompute:             "RequiresMountsFor": "/home/packer/yugabyte-2.25.0.0",[0m
+[0;32m    googlecompute:             "Restart": "no",[0m
+[0;32m    googlecompute:             "RestartKillSignal": "15",[0m
+[0;32m    googlecompute:             "RestartUSec": "100ms",[0m
+[0;32m    googlecompute:             "RestrictNamespaces": "no",[0m
+[0;32m    googlecompute:             "RestrictRealtime": "no",[0m
+[0;32m    googlecompute:             "RestrictSUIDSGID": "no",[0m
+[0;32m    googlecompute:             "Result": "success",[0m
+[0;32m    googlecompute:             "RootDirectoryStartOnly": "no",[0m
+[0;32m    googlecompute:             "RuntimeDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "RuntimeDirectoryPreserve": "no",[0m
+[0;32m    googlecompute:             "RuntimeMaxUSec": "infinity",[0m
+[0;32m    googlecompute:             "RuntimeRandomizedExtraUSec": "0",[0m
+[0;32m    googlecompute:             "SameProcessGroup": "no",[0m
+[0;32m    googlecompute:             "SecureBits": "0",[0m
+[0;32m    googlecompute:             "SendSIGHUP": "no",[0m
+[0;32m    googlecompute:             "SendSIGKILL": "yes",[0m
+[0;32m    googlecompute:             "Slice": "system.slice",[0m
+[0;32m    googlecompute:             "StandardError": "inherit",[0m
+[0;32m    googlecompute:             "StandardInput": "null",[0m
+[0;32m    googlecompute:             "StandardOutput": "journal",[0m
+[0;32m    googlecompute:             "StartLimitAction": "none",[0m
+[0;32m    googlecompute:             "StartLimitBurst": "5",[0m
+[0;32m    googlecompute:             "StartLimitIntervalUSec": "10s",[0m
+[0;32m    googlecompute:             "StartupBlockIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StartupCPUShares": "[not set]",[0m
+[0;32m    googlecompute:             "StartupCPUWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StartupIOWeight": "[not set]",[0m
+[0;32m    googlecompute:             "StateChangeTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "StateDirectoryMode": "0755",[0m
+[0;32m    googlecompute:             "StatusErrno": "0",[0m
+[0;32m    googlecompute:             "StopWhenUnneeded": "no",[0m
+[0;32m    googlecompute:             "SubState": "dead",[0m
+[0;32m    googlecompute:             "SuccessAction": "none",[0m
+[0;32m    googlecompute:             "SyslogFacility": "3",[0m
+[0;32m    googlecompute:             "SyslogLevel": "6",[0m
+[0;32m    googlecompute:             "SyslogLevelPrefix": "yes",[0m
+[0;32m    googlecompute:             "SyslogPriority": "30",[0m
+[0;32m    googlecompute:             "SystemCallErrorNumber": "2147483646",[0m
+[0;32m    googlecompute:             "TTYReset": "no",[0m
+[0;32m    googlecompute:             "TTYVHangup": "no",[0m
+[0;32m    googlecompute:             "TTYVTDisallocate": "no",[0m
+[0;32m    googlecompute:             "TasksAccounting": "yes",[0m
+[0;32m    googlecompute:             "TasksCurrent": "[not set]",[0m
+[0;32m    googlecompute:             "TasksMax": "23097",[0m
+[0;32m    googlecompute:             "TimeoutAbortUSec": "1min 30s",[0m
+[0;32m    googlecompute:             "TimeoutCleanUSec": "infinity",[0m
+[0;32m    googlecompute:             "TimeoutStartFailureMode": "terminate",[0m
+[0;32m    googlecompute:             "TimeoutStartUSec": "infinity",[0m
+[0;32m    googlecompute:             "TimeoutStopFailureMode": "terminate",[0m
+[0;32m    googlecompute:             "TimeoutStopUSec": "1min 30s",[0m
+[0;32m    googlecompute:             "TimerSlackNSec": "50000",[0m
+[0;32m    googlecompute:             "Transient": "no",[0m
+[0;32m    googlecompute:             "Type": "oneshot",[0m
+[0;32m    googlecompute:             "UID": "[not set]",[0m
+[0;32m    googlecompute:             "UMask": "0022",[0m
+[0;32m    googlecompute:             "UnitFilePreset": "disabled",[0m
+[0;32m    googlecompute:             "UnitFileState": "enabled",[0m
+[0;32m    googlecompute:             "User": "packer",[0m
+[0;32m    googlecompute:             "UtmpMode": "init",[0m
+[0;32m    googlecompute:             "WantedBy": "multi-user.target",[0m
+[0;32m    googlecompute:             "WatchdogSignal": "6",[0m
+[0;32m    googlecompute:             "WatchdogTimestampMonotonic": "0",[0m
+[0;32m    googlecompute:             "WatchdogUSec": "infinity",[0m
+[0;32m    googlecompute:             "WorkingDirectory": "/home/packer/yugabyte-2.25.0.0"[0m
+[0;32m    googlecompute:         }[0m
+[0;32m    googlecompute:     }[0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Check status of yuga.service] ********************************************[0m
+[0;32m    googlecompute: changed: [default] => {"changed": true, "cmd": ["systemctl", "status", "yugabyte.service"], "delta": "0:00:00.015753", "end": "2025-04-23 19:17:12.927419", "msg": "", "rc": 0, "start": "2025-04-23 19:17:12.911666", "stderr": "", "stderr_lines": [], "stdout": "● yugabyte.service - YugabyteDB Cluster (yugabyted-managed)\n     Loaded: loaded (/etc/systemd/system/yugabyte.service; enabled; preset: disabled)\n     Active: active (exited) since Wed 2025-04-23 19:17:11 UTC; 1s ago\n    Process: 71715 ExecStart=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start (code=exited, status=0/SUCCESS)\n   Main PID: 71715 (code=exited, status=0/SUCCESS)\n        CPU: 972ms\n\nApr 23 19:07:10 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Starting YugabyteDB Cluster (yugabyted-managed)...\nApr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: Starting yugabyted...\nApr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [39B blob data]\nApr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71992]: Starting yugabyted...\nApr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [117B blob data]\nApr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Starting yugabyted...\nApr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Timed out trying to start yugabyted daemon.\nApr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Finished YugabyteDB Cluster (yugabyted-managed).", "stdout_lines": ["● yugabyte.service - YugabyteDB Cluster (yugabyted-managed)", "     Loaded: loaded (/etc/systemd/system/yugabyte.service; enabled; preset: disabled)", "     Active: active (exited) since Wed 2025-04-23 19:17:11 UTC; 1s ago", "    Process: 71715 ExecStart=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start (code=exited, status=0/SUCCESS)", "   Main PID: 71715 (code=exited, status=0/SUCCESS)", "        CPU: 972ms", "", "Apr 23 19:07:10 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Starting YugabyteDB Cluster (yugabyted-managed)...", "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: Starting yugabyted...", "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [39B blob data]", "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71992]: Starting yugabyted...", "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [117B blob data]", "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Starting yugabyted...", "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Timed out trying to start yugabyted daemon.", "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Finished YugabyteDB Cluster (yugabyted-managed)."]}[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: TASK [Display service status output] *******************************************[0m
+[0;32m    googlecompute: ok: [default] => {[0m
+[0;32m    googlecompute:     "service_status.stdout_lines": [[0m
+[0;32m    googlecompute:         "● yugabyte.service - YugabyteDB Cluster (yugabyted-managed)",[0m
+[0;32m    googlecompute:         "     Loaded: loaded (/etc/systemd/system/yugabyte.service; enabled; preset: disabled)",[0m
+[0;32m    googlecompute:         "     Active: active (exited) since Wed 2025-04-23 19:17:11 UTC; 1s ago",[0m
+[0;32m    googlecompute:         "    Process: 71715 ExecStart=/usr/bin/python3 /home/packer/yugabyte-2.25.0.0/bin/yugabyted start (code=exited, status=0/SUCCESS)",[0m
+[0;32m    googlecompute:         "   Main PID: 71715 (code=exited, status=0/SUCCESS)",[0m
+[0;32m    googlecompute:         "        CPU: 972ms",[0m
+[0;32m    googlecompute:         "",[0m
+[0;32m    googlecompute:         "Apr 23 19:07:10 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Starting YugabyteDB Cluster (yugabyted-managed)...",[0m
+[0;32m    googlecompute:         "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: Starting yugabyted...",[0m
+[0;32m    googlecompute:         "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [39B blob data]",[0m
+[0;32m    googlecompute:         "Apr 23 19:07:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71992]: Starting yugabyted...",[0m
+[0;32m    googlecompute:         "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71994]: [117B blob data]",[0m
+[0;32m    googlecompute:         "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Starting yugabyted...",[0m
+[0;32m    googlecompute:         "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af python3[71715]: Timed out trying to start yugabyted daemon.",[0m
+[0;32m    googlecompute:         "Apr 23 19:17:11 packer-68093978-7697-98d8-2287-af1ca449d5af systemd[1]: Finished YugabyteDB Cluster (yugabyted-managed)."[0m
+[0;32m    googlecompute:     ][0m
+[0;32m    googlecompute: }[0m
+[0;32m    googlecompute:[0m
+[0;32m    googlecompute: PLAY RECAP *********************************************************************[0m
+[0;32m    googlecompute: default                    : ok=23   changed=11   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0[0m
+[0;32m    googlecompute:[0m
+[1;32m==> googlecompute: Deleting instance...[0m
+[0;32m    googlecompute: Instance has been deleted![0m
+[1;32m==> googlecompute: Creating image...[0m
+[1;32m==> googlecompute: Deleting disk...[0m
+[0;32m    googlecompute: Disk has been deleted![0m
+[1;32mBuild 'googlecompute' finished after 16 minutes 19 seconds.[0m
+
+==> Wait completed after 16 minutes 19 seconds
+
+==> Builds finished. The artifacts of successful builds are:
+--> googlecompute: A disk image was created in the 'devops-456705' project: yugabytedb-image-1745435000
