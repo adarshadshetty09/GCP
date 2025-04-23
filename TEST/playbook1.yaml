@@ -138,21 +138,21 @@
     #   ansible.builtin.debug:
     #     msg: "{{ yugabyte_status }}"
 
-    - name: Run systemctl daemon-reexec
+    - name: Run systemctl daemon_reexec
       command: systemctl daemon-reexec
-      register: daemon-reexec
+      register: daemon_reexec
 
     - name: daemon-reexec
       ansible.builtin.debug:
-        msg: "{{ daemon-reexec }}"
+        msg: "{{ daemon_reexec }}"
 
     - name: Reload systemd manager configuration
       command: systemctl daemon-reload
-      register: daemon-reload
+      register: daemon_reload
 
     - name: daemon-reload
       ansible.builtin.debug:
-        msg: "{{ daemon-reload }}"
+        msg: "{{ daemon_reload }}"
 
     - name: Enable yuga.service to start at boot
       systemd:
