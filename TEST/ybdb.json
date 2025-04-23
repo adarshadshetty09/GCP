@@ -25,7 +25,7 @@
 	"provisioners": [
 	  {
 		"type": "ansible",
-		"playbook_file": "ybdb.yaml",
+		"playbook_file": "playbook.yaml",
         "extra_arguments": ["--become", "--become-method=sudo", "-v"]
 	  }
 	]
