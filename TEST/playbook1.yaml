@@ -44,7 +44,7 @@
 
     - name: Change ownership of openssl-config
       ansible.builtin.file:
-        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+        path: "/home/packer/yugabyte-2024.2.2.2/openssl-config"
         owner: packer
         group: packer
         recurse: yes
