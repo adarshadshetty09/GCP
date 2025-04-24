@@ -4,13 +4,8 @@
   gather_facts: true
   become: yes
   vars:
-    yugabyte_version: "2.25.0.0"
-    yugabyte_build: "b489"
-    yugabyte_tarball: "yugabyte-{{ yugabyte_version }}-{{ yugabyte_build }}-linux-x86_64.tar.gz"
-    yugabyte_dir: "yugabyte-{{ yugabyte_version }}"
     yugabyte_user: packer
     yugabyte_group: packer
-    yugabyte_install_path: /home/packer
     
   tasks:
 
@@ -26,8 +21,8 @@
 
     - name: Download YugabyteDB tarball
       ansible.builtin.get_url:
-        url: "https://downloads.yugabyte.com/releases/{{ yugabyte_version }}/{{ yugabyte_tarball }}"
-        dest: "/home/packer/{{ yugabyte_tarball }}"
+        url: "https://software.yugabyte.com/releases/2024.2.2.2/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
+        dest: "/home/packer/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
         mode: '0644'
       register: ybdb
 
@@ -38,7 +33,7 @@
 
     - name: Extract YugabyteDB tarball
       ansible.builtin.unarchive:
-        src: "/home/packer/{{ yugabyte_tarball }}"
+        src: "/home/packer/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
         dest: "/home/packer/"
         remote_src: yes
       register: extract
@@ -47,23 +42,23 @@
       ansible.builtin.debug:
         msg: "{{ extract }}"
 
-    - name: Change ownership of openssl-config
-      ansible.builtin.file:
-        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
-        owner: packer
-        group: packer
-        recurse: yes
-      register: chagOwner 
+    # - name: Change ownership of openssl-config
+    #   ansible.builtin.file:
+    #     path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+    #     owner: packer
+    #     group: packer
+    #     recurse: yes
+    #   register: chagOwner 
 
-    - name: Print chagOwner 
-      ansible.builtin.debug:
-        msg: "{{ chagOwner }}"
+    # - name: Print chagOwner 
+    #   ansible.builtin.debug:
+    #     msg: "{{ chagOwner }}"
 
 
     - name: Run post_install.sh
       ansible.builtin.command: ./bin/post_install.sh
       args:
-        chdir: "/home/packer/{{ yugabyte_dir }}"
+        chdir: "/home/packer/yugabyte-2024.2.2.2"
       register: post_install
 
     - name: Print the post_install 
