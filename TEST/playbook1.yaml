@@ -6,7 +6,7 @@
   vars:
     yugabyte_user: packer
     yugabyte_group: packer
-    
+
   tasks:
 
     - name: Install wget
@@ -42,17 +42,17 @@
       ansible.builtin.debug:
         msg: "{{ extract }}"
 
-    # - name: Change ownership of openssl-config
-    #   ansible.builtin.file:
-    #     path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
-    #     owner: packer
-    #     group: packer
-    #     recurse: yes
-    #   register: chagOwner 
+    - name: Change ownership of openssl-config
+      ansible.builtin.file:
+        path: "/home/packer/{{ yugabyte_dir }}/openssl-config"
+        owner: packer
+        group: packer
+        recurse: yes
+      register: chagOwner 
 
-    # - name: Print chagOwner 
-    #   ansible.builtin.debug:
-    #     msg: "{{ chagOwner }}"
+    - name: Print chagOwner 
+      ansible.builtin.debug:
+        msg: "{{ chagOwner }}"
 
 
     - name: Run post_install.sh
@@ -71,8 +71,8 @@
       ansible.builtin.template:
         src: yugabyte.service.j2
         dest: /etc/systemd/system/yugabyte.service
-        # owner: root
-        # group: root
+        owner: root
+        group: root
         mode: '0644'
       register: yugaService
     
