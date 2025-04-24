@@ -42,17 +42,30 @@
       ansible.builtin.debug:
         msg: "{{ extract }}"
 
-    - name: Change ownership of openssl-config
+    - name: Change ownership of entire YugabyteDB directory
       ansible.builtin.file:
-        path: "/home/packer/yugabyte-2024.2.2.2/openssl-config"
+        path: "/home/packer/yugabyte-2024.2.2.2"
         owner: packer
         group: packer
         recurse: yes
-      register: chagOwner 
+      register: chown_yugabyte_dir
 
-    - name: Print chagOwner 
+    - name: Print directory ownership change result
       ansible.builtin.debug:
-        msg: "{{ chagOwner }}"
+        msg: "{{ chown_yugabyte_dir }}"
+
+
+    # - name: Change ownership of openssl-config
+    #   ansible.builtin.file:
+    #     path: "/home/packer/yugabyte-2024.2.2.2/openssl-config"
+    #     owner: packer
+    #     group: packer
+    #     recurse: yes
+    #   register: chagOwner 
+
+    # - name: Print chagOwner 
+    #   ansible.builtin.debug:
+    #     msg: "{{ chagOwner }}"
 
 
     - name: Run post_install.sh
