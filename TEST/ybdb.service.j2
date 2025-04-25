@@ -10,10 +10,11 @@ WorkingDirectory=/home/packer
  
  
 ExecStart=/usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted start
-ExecStop=/usr/bin/python3 /usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted stop
+ExecStop=/usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted stop
 
  
 ExecReload=/bin/kill -HUP $MAINPID
+
  
 RemainAfterExit=yes
  
