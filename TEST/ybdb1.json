@@ -1,0 +1,36 @@
+{
+	"builders": [
+	  {
+		"type": "googlecompute",
+		"project_id": "devops-456705",
+		"zone": "us-south1-a",
+		"source_image": "centos-stream-9-v20250311",
+		"source_image_project_id": "centos-cloud",
+		"machine_type": "e2-medium",
+		"disk_size": 30,
+		"image_name": "yugabytedb-image-{{timestamp}}",
+		"disk_type": "pd-ssd",
+		"ssh_username": "packer",
+		"ssh_password": "packer",
+		"service_account_email": "test-practice@devops-456705.iam.gserviceaccount.com",
+		"image_encryption_key": {
+            "kmsKeyName": "projects/devops-456705/locations/us-central1/keyRings/packerdevopskeyring/cryptoKeys/packerdevopscryptokey"
+		},
+		"image_storage_locations": ["us-central1"],
+		"tags": [
+		  "yugabytedb-image"
+		]
+	  }
+	],
+	"provisioners": [
+        {
+            "type":"shell"
+        },
+	  {
+		"type": "ansible",
+		"playbook_file": "playbook1.yaml",
+       "extra_arguments": ["--become", "--become-method=sudo", "-v"]	
+	  }
+	]
+  }
+  

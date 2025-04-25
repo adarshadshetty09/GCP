@@ -1,0 +1,182 @@
+---
+- name: Complete setup for YugabyteDB with systemd service
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Enable and start sshd service
+      ansible.builtin.systemd:
+        name: sshd
+        enabled: yes
+        state: started
+
+    - name: Enable and start chronyd service
+      ansible.builtin.systemd:
+        name: chronyd
+        enabled: yes
+        state: started
+
+    - name: Create yugabyte user with home directory
+      ansible.builtin.user:
+        name: packer
+        state: present
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Set password for yugabyte user
+      ansible.builtin.shell: echo "packer:packer" | chpasswd
+
+    - name: Add yugabyte to sudoers without password
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/packer
+        content: "yugabyte ALL=(ALL) NOPASSWD: ALL\n"
+        owner: root
+        group: root
+        mode: '0440'
+
+    - name: Add yugabyte user to wheel group
+      ansible.builtin.user:
+        name: packer
+        groups: wheel
+        append: yes
+
+    - name: Create .ssh directory for yugabyte
+      ansible.builtin.file:
+        path: /home/packer/.ssh
+        state: directory
+        owner: packer
+        group: packer
+        mode: '0700'
+
+    - name: Create symlink for sftp-server if not present
+      ansible.builtin.file:
+        src: /usr/libexec/openssh/sftp-server
+        dest: /usr/lib/sftp-server
+        state: link
+        force: yes
+        owner: root
+        group: root
+      ignore_errors: yes
+
+    - name: Sleep for 15 seconds (if needed for service stabilization)
+      ansible.builtin.pause:
+        seconds: 15
+
+    - name: Install wget
+      ansible.builtin.yum:
+        name: wget
+        state: present
+      register: install_wget
+
+    - name: Print install_wget
+      ansible.builtin.debug:
+        msg: "{{ install_wget }}"
+
+    - name: Download YugabyteDB tarball
+      ansible.builtin.get_url:
+        url: "https://software.yugabyte.com/releases/2024.2.2.2/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
+        dest: "/home/packer/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
+        mode: '0644'
+      register: ybdb
+
+    - name: Print ybdb
+      ansible.builtin.debug:
+        msg: "{{ ybdb }}"
+
+    - name: Extract YugabyteDB tarball
+      ansible.builtin.unarchive:
+        src: "/home/packer/yugabyte-2024.2.2.2-b2-linux-x86_64.tar.gz"
+        dest: "/home/packer/"
+        remote_src: yes
+      register: extract
+
+    - name: Print extract info
+      ansible.builtin.debug:
+        msg: "{{ extract }}"
+
+    - name: Change ownership of entire YugabyteDB directory
+      ansible.builtin.file:
+        path: "/home/packer/yugabyte-2024.2.2.2"
+        owner: packer
+        group: packer
+        recurse: yes
+      register: chown_yugabyte_dir
+
+    - name: Print directory ownership change result
+      ansible.builtin.debug:
+        msg: "{{ chown_yugabyte_dir }}"
+
+    - name: Run post_install.sh
+      ansible.builtin.command: ./bin/post_install.sh
+      args:
+        chdir: "/home/packer/yugabyte-2024.2.2.2"
+      register: post_install
+
+    - name: Print the post_install result
+      ansible.builtin.debug:
+        msg: "{{ post_install }}"
+
+    - name: Deploy yugabyte systemd service using template
+      ansible.builtin.template:
+        src: yugabyte.service.j2
+        dest: /etc/systemd/system/yugabyte.service
+        owner: root
+        group: root
+        mode: '0644'
+      register: yugaService
+
+    - name: Print yugaService
+      ansible.builtin.debug:
+        msg: "{{ yugaService }}"
+
+    - name: Run systemctl daemon-reexec
+      ansible.builtin.command: systemctl daemon-reexec
+      register: daemon_reexec
+
+    - name: Debug daemon-reexec
+      ansible.builtin.debug:
+        msg: "{{ daemon_reexec }}"
+
+    - name: Reload systemd manager configuration
+      ansible.builtin.command: systemctl daemon-reload
+      register: daemon_reload
+
+    - name: Debug daemon-reload
+      ansible.builtin.debug:
+        msg: "{{ daemon_reload }}"
+
+    - name: Enable yugabyte.service to start at boot
+      ansible.builtin.systemd:
+        name: yugabyte.service
+        enabled: yes
+      register: enable_service
+
+    - name: Debug enable service
+      ansible.builtin.debug:
+        msg: "{{ enable_service }}"
+
+    - name: Start yugabyte.service
+      ansible.builtin.systemd:
+        name: yugabyte.service
+        state: started
+      register: start_service
+
+    - name: Debug start service
+      ansible.builtin.debug:
+        msg: "{{ start_service }}"
+
+    - name: Check status of yugabyte.service
+      ansible.builtin.command: systemctl status yugabyte.service
+      register: service_status
+
+    - name: Display service status output
+      ansible.builtin.debug:
+        var: service_status.stdout_lines
+
+    - name: Manually check YugabyteDB status
+      ansible.builtin.command: /home/packer/yugabyte-2024.2.2.2/bin/yugabyted status
+      register: manual_status
+
+    - name: Print YugabyteDB status
+      ansible.builtin.debug:
+        msg: "{{ manual_status.stdout_lines }}"
