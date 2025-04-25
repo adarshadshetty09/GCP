@@ -70,7 +70,7 @@
 
     - name: Print install_wget
       ansible.builtin.debug:
-        msg: "{{ install_wget }}"
+        msg: "{{ install_wget.stdout_lines }}"
 
     - name: Download YugabyteDB tarball
       ansible.builtin.get_url:
@@ -81,7 +81,7 @@
 
     - name: Print ybdb
       ansible.builtin.debug:
-        msg: "{{ ybdb }}"
+        msg: "{{ ybdb.stdout_lines }}"
 
     - name: Extract YugabyteDB tarball
       ansible.builtin.unarchive:
@@ -92,7 +92,7 @@
 
     - name: Print extract info
       ansible.builtin.debug:
-        msg: "{{ extract }}"
+        msg: "{{ extract.stdout_lines }}"
 
     - name: Change ownership of entire YugabyteDB directory
       ansible.builtin.file:
@@ -104,7 +104,7 @@
 
     - name: Print directory ownership change result
       ansible.builtin.debug:
-        msg: "{{ chown_yugabyte_dir }}"
+        msg: "{{ chown_yugabyte_dir.stdout_lines }}"
 
     - name: Run post_install.sh
       ansible.builtin.command: ./bin/post_install.sh
@@ -114,7 +114,7 @@
 
     - name: Print the post_install result
       ansible.builtin.debug:
-        msg: "{{ post_install }}"
+        msg: "{{ post_install.stdout_lines }}"
 
     - name: Deploy yugabyte systemd service using template
       ansible.builtin.template:
@@ -127,7 +127,7 @@
 
     - name: Print yugaService
       ansible.builtin.debug:
-        msg: "{{ yugaService }}"
+        msg: "{{ yugaService.stdout_lines }}"
 
     - name: Run systemctl daemon-reexec
       ansible.builtin.command: systemctl daemon-reexec
@@ -135,7 +135,7 @@
 
     - name: Debug daemon-reexec
       ansible.builtin.debug:
-        msg: "{{ daemon_reexec }}"
+        msg: "{{ daemon_reexec.stdout_lines }}"
 
     - name: Reload systemd manager configuration
       ansible.builtin.command: systemctl daemon-reload
@@ -143,7 +143,7 @@
 
     - name: Debug daemon-reload
       ansible.builtin.debug:
-        msg: "{{ daemon_reload }}"
+        msg: "{{ daemon_reload.stdout_lines }}"
 
     - name: Enable yugabyte.service to start at boot
       ansible.builtin.systemd:
@@ -153,7 +153,7 @@
 
     - name: Debug enable service
       ansible.builtin.debug:
-        msg: "{{ enable_service }}"
+        msg: "{{ enable_service.stdout_lines }}"
 
     - name: Start yugabyte.service
       ansible.builtin.systemd:
@@ -163,7 +163,7 @@
 
     - name: Debug start service
       ansible.builtin.debug:
-        msg: "{{ start_service }}"
+        msg: "{{ start_service.stdout_lines }}"
 
     - name: Check status of yugabyte.service
       ansible.builtin.command: systemctl status yugabyte.service
