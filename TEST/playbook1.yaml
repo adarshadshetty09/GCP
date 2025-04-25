@@ -55,19 +55,6 @@
         msg: "{{ chown_yugabyte_dir }}"
 
 
-    # - name: Change ownership of openssl-config
-    #   ansible.builtin.file:
-    #     path: "/home/packer/yugabyte-2024.2.2.2/openssl-config"
-    #     owner: packer
-    #     group: packer
-    #     recurse: yes
-    #   register: chagOwner 
-
-    # - name: Print chagOwner 
-    #   ansible.builtin.debug:
-    #     msg: "{{ chagOwner }}"
-
-
     - name: Run post_install.sh
       ansible.builtin.command: ./bin/post_install.sh
       args:
@@ -93,58 +80,6 @@
       ansible.builtin.debug:
         msg: "{{ yugaService }}"
 
-    # - name: Reexec systemd (reload the sysytemd manager configuration)
-    #   command: systemctl daemon-reload
-    #   register: reexec_print
-    
-    # - name: Print the reexec_print
-    #   ansible.builtin.debug:
-    #     msg: "{{ reexec_print }}"
-
-    # - name: Reload systemd to recognize yugabyte service
-    #   ansible.builtin.systemd:
-    #     daemon_reload: yes
-    #   register: Reload
-    
-    # - name: reload 
-    #   ansible.builtin.debug:
-    #     msg: "{{ Reload }}"
-    
-
-    # - name: Enable yugabyte service on boot
-    #   ansible.builtin.systemd:
-    #     name: yugabyte.service
-    #     enabled: yes
-    #   register: enabled
-    
-    # - name: enabled 
-    #   ansible.builtin.debug:
-    #     msg: "{{ enabled }}"
-    
-
-    # - name: Start yugabyte service
-    #   ansible.builtin.systemd:
-    #     name: yugabyte
-    #     state: started
-    #   register: start 
-    
-    # - name: Pause for few secs 
-    #   ansible.builtin.pause:
-    #     seconds: 30
-
-    # - name: start  
-    #   ansible.builtin.debug:
-    #     msg: "{{ start }}"
-        
-
-    # - name: Check status of yugabyte service
-    #   ansible.builtin.systemd:
-    #     name: yugabyte
-    #   register: yugabyte_status
-
-    # - name: Show yugabyte service status
-    #   ansible.builtin.debug:
-    #     msg: "{{ yugabyte_status }}"
 
     - name: Run systemctl daemon_reexec
       command: systemctl daemon-reexec
@@ -192,6 +127,16 @@
     - name: Display service status output
       debug:
         var: service_status.stdout_lines
+
+    - name: Manually check the yugbaytedb 
+      command: /home/packer/yugabyte-2024.2.2.2/bin/yugabyted status 
+      register: manual_status
+    
+    - name: print the manual_status
+      ansible.builtin.debug:
+        msg: "{{ manual_status.stdout_lines }}"
+
+        
 
 
 
