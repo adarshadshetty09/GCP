@@ -1,17 +1,38 @@
 [Unit]
 Description=YugabyteDB Cluster (yugabyted-managed)
 After=network-online.target
-
+ 
+ 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+Type=forking
 User=packer
-Group=packer
 WorkingDirectory=/home/packer
-
+ 
+ 
 ExecStart=/usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted start
-ExecStop=/usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted stop
-LimitNOFILE=1048576
+ExecStop=/usr/bin/python3 /usr/bin/python3 /home/packer/yugabyte-2024.2.2.2/bin/yugabyted stop
 
+ 
+ExecReload=/bin/kill -HUP $MAINPID
+ 
+RemainAfterExit=yes
+ 
+Restart=on-failure
+RestartSec=5s
+ 
+LimitNOFILE=1048576
+LimitNPROC=64000
+LimitCORE=infinity
+ 
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=yugabyted
+ 
+NoNewPrivileges=false
+ProtectSystem=default
+ProtectHome=no
+PrivateTmp=true
+ReadWritePaths=/home/packer
+ 
 [Install]
 WantedBy=multi-user.target
