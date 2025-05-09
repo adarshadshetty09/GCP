@@ -24,7 +24,7 @@ variable "uniform_bucket_level_access" {
 variable "labels" {
   description = "Labels to assign to the bucket"
   type        = map(string)
-  default     = {
+  default = {
     env = "staging"
   }
 }
@@ -58,6 +58,6 @@ variable "retention_policy" {
 
 variable "kms_key_name" {
   description = "The Cloud KMS key to use for bucket encryption"
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
