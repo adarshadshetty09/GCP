@@ -19,10 +19,10 @@ resource "google_storage_bucket" "bucket" {
     }
   }
 
-  dynamic "encryption" {
-    for_each = var.kms_key_name != null && var.kms_key_name != "" ? [1] : []
-    content {
-      default_kms_key_name = var.kms_key_name
-    }
-  }
+  # dynamic "encryption" {
+  #   for_each = var.kms_key_name != null && var.kms_key_name != "" ? [1] : []
+  #   content {
+  #     default_kms_key_name = var.kms_key_name
+  #   }
+  # }
 }
