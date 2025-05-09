@@ -29,7 +29,7 @@
     - name: Add yugabyte to sudoers without password
       ansible.builtin.copy:
         dest: /etc/sudoers.d/packer
-        content: "yugabyte ALL=(ALL) NOPASSWD: ALL\n"
+        content: "packer ALL=(ALL) NOPASSWD: ALL\n"
         owner: root
         group: root
         mode: '0440'
@@ -116,6 +116,13 @@
       ansible.builtin.debug:
         msg: "{{ post_install.stdout_lines }}"
 
+    - name: Change ownership of openssl-config directory to packer:packer
+      ansible.builtin.file:
+      path: /path/to/openssl-config
+      owner: packer
+      group: packer
+
+
     - name: Deploy yugabyte systemd service using template
       ansible.builtin.template:
         src: yugabyte.service.j2
@@ -180,3 +187,4 @@
     - name: Print YugabyteDB status
       ansible.builtin.debug:
         msg: "{{ manual_status.stdout_lines }}"
+
