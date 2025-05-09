@@ -6,7 +6,7 @@ variable "project_id" {
 variable "location" {
   description = "Bucket location"
   type        = string
-  default     = "US"
+  default     = "us-central1"
 }
 
 variable "storage_class" {
