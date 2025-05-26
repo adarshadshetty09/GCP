@@ -13,4 +13,14 @@
     - name: print the wget 
       ansible.builtin.debug:
         msg: "{{ wget }}"
+
+    - name: Upgrade all packages
+      ansible.builtin.dnf: 
+        name: "*"
+        state: latest
+      register: update
+    
+    - name: print the update 
+      ansible.builtin.debug: 
+        msg: "{{update}}"
     
