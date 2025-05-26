@@ -48,6 +48,7 @@
       ansible.builtin.dnf: 
         name: 'https://downloads.yugabyte.com/repos/reporpms/yb-yum-repo-1.1-0.noarch.rpm'
         state: present
+        disable_gpg_check: true
       register: yum_repo
 
     - name: Print yum_repo
