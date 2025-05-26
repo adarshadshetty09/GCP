@@ -66,5 +66,16 @@
       ansible.builtin.debug:
         msg: "{{ epel_release  }}"
 
+    - name: Install mysql-community-release repository using the following command
+      ansible.builtin.dnf: 
+        name: 'https://dev.mysql.com/get/mysql84-community-release-el9-1.noarch.rpm'
+        state: present
+        disable_gpg_check: true
+      register: mysql-community-release
+
+    - name: Print mysql-community-release
+      ansible.builtin.debug:
+        msg: "{{ mysql-community-release }}"
+
 
     
