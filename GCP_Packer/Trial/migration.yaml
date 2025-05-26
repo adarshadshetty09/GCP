@@ -71,11 +71,11 @@
         name: 'https://dev.mysql.com/get/mysql84-community-release-el9-1.noarch.rpm'
         state: present
         disable_gpg_check: true
-      register: mysql-community-release
+      register: mysql_community_release
 
     - name: Print mysql-community-release
       ansible.builtin.debug:
-        msg: "{{ mysql-community-release }}"
+        msg: "{{ mysql_community_release }}"
 
 
     
