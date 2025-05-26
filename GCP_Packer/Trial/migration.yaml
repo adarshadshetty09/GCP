@@ -1,0 +1,5 @@
+---
+- name: Install the YB-Voyager on Centos 
+  hosts: local
+  become: yes
+  
