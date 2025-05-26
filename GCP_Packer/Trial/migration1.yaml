@@ -1,0 +1,69 @@
+---
+- name: Setup YB Voyager and database clients
+  hosts: your_target_host_group
+  become: yes
+  tasks:
+
+    - name: Step 1 - Update all packages
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+        update_cache: yes
+
+    - name: Step 2 - Install Yugabyte repo
+      ansible.builtin.dnf:
+        name: https://downloads.yugabyte.com/repos/reporpms/yb-yum-repo-1.1-0.noarch.rpm
+        state: present
+
+    - name: Step 3 - Install EPEL release
+      ansible.builtin.dnf:
+        name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+        state: present
+
+    - name: Step 4 - Install MySQL community repo
+      ansible.builtin.dnf:
+        name: https://dev.mysql.com/get/mysql84-community-release-el9-1.noarch.rpm
+        state: present
+
+    - name: Step 5 - Install PostgreSQL repo with repos disabled
+      ansible.builtin.command:
+        cmd: >
+          dnf --disablerepo=* install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      args:
+        warn: false
+
+    - name: Step 6 - Disable built-in PostgreSQL module
+      ansible.builtin.command: dnf -qy module disable postgresql
+
+    - name: Step 7 - Install perl-open
+      ansible.builtin.dnf:
+        name: perl-open
+        state: present
+
+    - name: Step 8 - Install Oracle Instant Client packages
+      ansible.builtin.dnf:
+        name:
+          - "https://download.oracle.com/otn_software/linux/instantclient/215000/oracle-instantclient-tools-21.5.0.0.0-1.x86_64.rpm"
+          - "https://download.oracle.com/otn_software/linux/instantclient/215000/oracle-instantclient-basic-21.5.0.0.0-1.x86_64.rpm"
+          - "https://download.oracle.com/otn_software/linux/instantclient/215000/oracle-instantclient-devel-21.5.0.0.0-1.x86_64.rpm"
+          - "https://download.oracle.com/otn_software/linux/instantclient/215000/oracle-instantclient-jdbc-21.5.0.0.0-1.x86_64.rpm"
+          - "https://download.oracle.com/otn_software/linux/instantclient/215000/oracle-instantclient-sqlplus-21.5.0.0.0-1.x86_64.rpm"
+        state: present
+
+    - name: Step 9 - Update packages again
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+
+    - name: Step 10 - Install yb-voyager
+      ansible.builtin.dnf:
+        name: yb-voyager
+        state: present
+
+    - name: Step 11 - Verify yb-voyager version
+      ansible.builtin.command: yb-voyager version
+      register: voyager_version
+
+    - name: Print yb-voyager version
+      ansible.builtin.debug:
+        var: voyager_version.stdout
