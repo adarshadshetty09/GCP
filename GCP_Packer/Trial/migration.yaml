@@ -46,7 +46,7 @@
     
     - name: Install the yugabyte yum repository using the following command
       ansible.builtin.dnf: 
-        name: https://downloads.yugabyte.com/repos/reporpms/yb-yum-repo-1.1-0.noarch.rpm -y
+        name: 'https://downloads.yugabyte.com/repos/reporpms/yb-yum-repo-1.1-0.noarch.rpm -y'
         state: present
       register: yum_repo
 
