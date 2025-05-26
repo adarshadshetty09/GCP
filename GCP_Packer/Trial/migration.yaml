@@ -23,4 +23,14 @@
     - name: print the update 
       ansible.builtin.debug: 
         msg: "{{update}}"
+
+    - name: Install the java-17 version 
+      ansible.builtin.dnf: 
+        name: java >= 17
+        state: present
+      register: java
+
+    - name: print the java 
+      ansible.builtin.debug: 
+        msg: "{{ java }}"
     
