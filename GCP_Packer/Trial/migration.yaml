@@ -33,4 +33,14 @@
     - name: print the java 
       ansible.builtin.debug: 
         msg: "{{ java }}"
+
+    - name: Upgrade All packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+      register: update_1
+
+    - name: Print the update_1
+      ansible.builtin.debug:
+        msg: "{{ update_1 }}"
     
