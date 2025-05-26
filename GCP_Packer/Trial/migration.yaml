@@ -44,3 +44,15 @@
       ansible.builtin.debug:
         msg: "{{ update_1 }}"
     
+    - name: Install the yugabyte yum repository using the following command
+      ansible.builin.dnf: 
+        name: https://downloads.yugabyte.com/repos/reporpms/yb-yum-repo-1.1-0.noarch.rpm -y
+        state: present
+      register: yum_repo
+
+    - name: Print yum_repo
+      ansible.builin.debug:
+        msg: "{{ yum_repo }}"
+
+
+    
