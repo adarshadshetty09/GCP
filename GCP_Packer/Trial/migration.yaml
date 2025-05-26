@@ -3,3 +3,14 @@
   hosts: local
   become: yes
   
+  tasks:
+    - name: Install the wget 
+      ansible.builtin.dnf: 
+        name: wget 
+        state: latest
+      register: wget 
+
+    - name: print the wget 
+      ansible.builtin.debug:
+        msg: "{{ wget }}"
+    
