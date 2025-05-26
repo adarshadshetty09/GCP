@@ -1,6 +1,6 @@
 ---
 - name: Setup YB Voyager and database clients
-  hosts: your_target_host_group
+  hosts: localhost
   become: yes
   tasks:
 
