@@ -1,0 +1,81 @@
+---
+- name: Install YugabyteDB Anywhere
+  hosts: default
+  become: true
+  gather_facts: false
+ 
+  tasks:
+ 
+    - name: Create YBA install directory
+      file:
+        path: "/opt/yba_installer"
+        state: directory
+ 
+    - name: Download YBA installer
+      get_url:
+        url: "https://downloads.yugabyte.com/releases/2024.2.3.2/yba_installer_full-2024.2.3.2-b6-linux-x86_64.tar.gz"
+        dest: "/tmp/yba_installer_full.tar.gz"
+        mode: '0644'
+ 
+    - name: Extract YBA installer
+      unarchive:
+        src: "/tmp/yba_installer_full.tar.gz"
+        dest: "/opt/yba_installer"
+        remote_src: yes
+ 
+    - name: Ensure /opt/yba-ctl directory exists
+      file:
+        path: /opt/yba-ctl
+        state: directory
+        mode: '0755'
+ 
+    - name: Fetch license from GCP Secret Manager using gcloud
+      become: false
+      delegate_to: localhost
+      run_once: true
+      shell: |
+        gcloud secrets versions access latest --secret='yba-lic' --project=spheric-mesh-465208-h9
+      register: secret_output
+      changed_when: false
+ 
+    - name: Save license to temp file
+      become: false
+      delegate_to: localhost
+      run_once: true
+      copy:
+        content: "{{ secret_output.stdout }}"
+        dest: "/tmp/yba.lic"
+ 
+    - name: Copy license to remote node
+      copy:
+        src: "/tmp/yba.lic"
+        dest: "/opt/yba-ctl/yba.lic"
+        mode: '0644'
+ 
+    - name: Check if YBA is already installed
+      stat:
+        path: /opt/yba-ctl/yba-ctl.yml
+      register: yba_installed
+ 
+    - name: Run preflight
+      when: not yba_installed.stat.exists
+      command: ./yba-ctl preflight -f
+      args:
+        chdir: "/opt/yba_installer/yba_installer_full-2024.2.3.2-b6"
+ 
+    - name: Install YBA
+      when: not yba_installed.stat.exists
+      command: ./yba-ctl install -f
+      args:
+        chdir: "/opt/yba_installer/yba_installer_full-2024.2.3.2-b6"
+ 
+    - name: Show YBA status
+      command: ./yba-ctl status
+      args:
+        chdir: "/opt/yba_installer/yba_installer_full-2024.2.3.2-b6"
+      register: yba_status
+      changed_when: false
+ 
+    - name: Print YBA status
+      debug:
+        msg: "{{ yba_status.stdout_lines }}"

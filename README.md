@@ -269,3 +269,19 @@ $ ssh -i ~/.ssh/gcp-lesson-120 my-username@35.184.16.91
 
 
 #### [How can you configure the boot disk for your VM instance in Compute Engine? - EITCA Academy](https://eitca.org/cloud-computing/eitc-cl-gcp-google-cloud-platform/getting-started-with-gcp/compute-engine/examination-review-compute-engine/how-can-you-configure-the-boot-disk-for-your-vm-instance-in-compute-engine/)
+
+
+===============================================================================================================================
+gcloud auth application-default login
+
+```
+devops:dopadm:~/.config/gcloud$ls
+access_tokens.db  application_default_credentials.json  configurations  default_configs.db  legacy_credentials
+active_config     config_sentinel                       credentials.db  gce                 logs
+devops:dopadm:~/.config/gcloud$pwd
+/home/dopadm/.config/gcloud
+devops:dopadm:~/.config/gcloud$
+
+```
+
+https://developer.hashicorp.com/packer/integrations/hashicorp/googlecompute
