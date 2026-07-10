@@ -1596,3 +1596,5 @@ Every resource in GCP must belong to a project.
 
 These notes provide a solid foundation for understanding GCP and prepare you for hands-on topics such as Compute Engine, VPC Networking, IAM, Cloud Storage, Terraform, and Kubernetes.
 
+
+
