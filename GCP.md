@@ -3739,19 +3739,744 @@ This exercise demonstrates the core IAM concept:
 Practicing these scenarios in your own GCP account will make IAM concepts much easier to understand and prepare you well for interviews.
 
 
+# GCP IAM Primitive Roles (Owner, Editor, Viewer) – Complete Hands-on Lab
+
+This lab simulates how a company manages access for different employees.
+
+---
+
+# Company Scenario
+
+Assume your company is **ABC Technologies**.
+
+You have created one GCP project.
+
+```
+Project Name
+
+abc-dev-project
+```
+
+Three employees joined the company.
+
+| Employee | Role in Company     |
+| -------- | ------------------- |
+| Adarsha  | Cloud Administrator |
+| Rahul    | DevOps Engineer     |
+| Anjali   | Auditor             |
+
+Now the manager asks:
+
+* Adarsha should have complete control.
+* Rahul should create and manage infrastructure.
+* Anjali should only view resources.
+
+This is where IAM comes into the picture.
+
+---
+
+# Step 1: Create Project
+
+Login
+
+```
+https://console.cloud.google.com
+```
+
+Click
+
+```
+Project Dropdown
+
+↓
+
+New Project
+```
+
+Enter
+
+```
+Project Name
+
+abc-dev-project
+```
+
+Click
+
+```
+Create
+```
+
+Wait until the project is created.
+
+---
+
+# Step 2: Open IAM
+
+Go to
+
+```
+Navigation Menu
+
+↓
+
+IAM & Admin
+
+↓
+
+IAM
+```
+
+You will see something similar to
+
+```
+Principal                    Role
+
+your-email@gmail.com         Owner
+```
+
+Since you created the project, Google automatically assigns you the **Owner** role.
+
+---
+
+# What does Owner mean?
+
+Owner means
+
+```
+I own this project.
+
+I can
+
+Create VM
+
+Delete VM
+
+Create Storage
+
+Delete Storage
+
+Create Database
+
+Delete Database
+
+Manage Billing
+
+Manage IAM
+
+Delete Project
+
+Enable APIs
+
+Disable APIs
+
+Everything
+```
+
+---
+
+# Hands-on 1: Add Owner
+
+Click
+
+```
+Grant Access
+```
+
+Enter
+
+```
+adarsha@gmail.com
+```
+
+Choose
+
+```
+Basic
+
+↓
+
+Owner
+```
+
+Click
+
+```
+Save
+```
+
+Now Adarsha becomes an Owner.
+
+---
+
+# Login as Adarsha
+
+Adarsha logs into GCP.
+
+He can
+
+✅ Create VM
+
+✅ Delete VM
+
+✅ Create Storage
+
+✅ Delete Storage
+
+✅ Create Database
+
+✅ Add Users
+
+✅ Remove Users
+
+✅ Enable Billing
+
+✅ Disable Billing
+
+✅ Delete Project
+
+Everything works.
+
+---
+
+## Verify Owner Access
+
+Try these actions:
+
+### Compute Engine
+
+```
+Create VM
+
+Delete VM
+
+Stop VM
+
+Start VM
+```
+
+Works ✅
+
+---
+
+### Cloud Storage
+
+```
+Create Bucket
+
+Delete Bucket
+
+Upload Files
+
+Delete Files
+```
+
+Works ✅
+
+---
+
+### IAM
+
+Go to
+
+```
+IAM
+
+↓
+
+Grant Access
+```
+
+Can add another user.
+
+Works ✅
+
+---
+
+### Billing
+
+Go to
+
+```
+Billing
+```
+
+Can modify billing account.
+
+Works ✅
+
+---
+
+### Delete Project
+
+Go to
+
+```
+Project Settings
+
+↓
+
+Shutdown Project
+```
+
+Possible.
+
+Works ✅
+
+---
+
+# Summary of Owner
+
+```
+Owner
+
+↓
+
+Everything
+
+↓
+
+Including IAM
+
+↓
+
+Including Billing
+```
+
+This role should be given only to trusted administrators.
+
+---
+
+# Hands-on 2: Editor Role
+
+Suppose Rahul joins the DevOps team.
+
+He deploys applications daily.
+
+He needs
+
+* Create VM
+* Delete VM
+* Create Bucket
+* Create Database
+
+But
+
+He should NOT manage users.
+
+---
+
+Click
+
+```
+Grant Access
+```
+
+Enter
+
+```
+rahul@gmail.com
+```
+
+Choose
+
+```
+Basic
+
+↓
+
+Editor
+```
+
+Click
+
+```
+Save
+```
+
+---
+
+# Login as Rahul
+
+Rahul logs into the project.
+
+---
+
+### Test 1
+
+Create VM
+
+```
+Compute Engine
+
+↓
+
+Create Instance
+```
+
+Works ✅
+
+---
+
+### Test 2
+
+Delete VM
+
+Works ✅
+
+---
+
+### Test 3
+
+Create Storage Bucket
+
+Works ✅
+
+---
+
+### Test 4
+
+Delete Bucket
+
+Works ✅
+
+---
+
+### Test 5
+
+Create Cloud SQL
+
+Works ✅
+
+---
+
+### Test 6
+
+Enable APIs
+
+Usually works if permitted within the project context.
+
+---
+
+### Test 7
+
+Open IAM
+
+Try
+
+```
+Grant Access
+```
+
+Result
+
+❌ Permission Denied
+
+Editor cannot change IAM policies.
+
+---
+
+### Test 8
+
+Try removing Adarsha
+
+```
+IAM
+
+↓
+
+Delete User
+```
+
+Result
+
+❌ Permission Denied
+
+---
+
+### Test 9
+
+Billing
+
+Open
+
+```
+Billing
+```
+
+Cannot perform billing administration.
+
+---
+
+# Summary of Editor
+
+Editor can
+
+```
+Create VM
+
+Delete VM
+
+Storage
+
+Database
+
+Load Balancer
+
+Cloud SQL
+
+Networking
+```
+
+Editor cannot
+
+```
+Manage IAM
+
+Billing Administration
+```
+
+---
+
+# Hands-on 3: Viewer Role
+
+Anjali is an Auditor.
+
+She only checks resources.
+
+She should never modify anything.
+
+---
+
+Grant
+
+```
+Viewer
+```
+
+to
+
+```
+anjali@gmail.com
+```
+
+---
+
+Login as Anjali.
+
+---
+
+### Test 1
+
+Open Compute Engine.
+
+VM list is visible.
+
+Works ✅
+
+---
+
+### Test 2
+
+Click
+
+```
+Create VM
+```
+
+Result
+
+```
+Permission Denied
+```
+
+---
+
+### Test 3
+
+Delete VM
+
+```
+Permission Denied
+```
+
+---
+
+### Test 4
+
+Cloud Storage
+
+View bucket
+
+Works ✅
+
+---
+
+Delete bucket
+
+```
+Permission Denied
+```
+
+---
+
+### Test 5
+
+Cloud SQL
+
+View instance
+
+Works ✅
+
+---
+
+Delete instance
+
+```
+Permission Denied
+```
+
+---
+
+### Test 6
+
+IAM
+
+View users
+
+Works ✅
+
+---
+
+Grant Access
+
+```
+Permission Denied
+```
+
+---
+
+### Test 7
+
+Billing
+
+Can view billing information if granted separate billing viewer permissions, but cannot modify billing using the Viewer project role alone.
+
+---
+
+# Summary of Viewer
+
+Viewer can
+
+```
+View VM
+
+View Storage
+
+View SQL
+
+View Network
+
+View Logs
+
+View Monitoring
+
+View IAM
+```
+
+Viewer cannot
+
+```
+Create
+
+Delete
+
+Modify
+
+Update
+```
+
+---
+
+# Real Company Example
+
+Suppose your company has
+
+```
+abc.com
+```
+
+Employees
+
+```
+CEO
+
+Cloud Admin
+
+DevOps
+
+Developer
+
+Tester
+
+Auditor
+
+Intern
+```
+
+Roles might be assigned like this:
+
+| Employee      | Role                                                                               |
+| ------------- | ---------------------------------------------------------------------------------- |
+| Cloud Admin   | Owner                                                                              |
+| Senior DevOps | Editor (or preferably specific predefined roles like Compute Admin, Storage Admin) |
+| Developer     | Editor (or predefined service roles depending on responsibility)                   |
+| Tester        | Viewer                                                                             |
+| Auditor       | Viewer                                                                             |
+| Intern        | Viewer                                                                             |
+
+> **Best Practice:** In production, avoid using **Owner** and **Editor** unless absolutely necessary. Prefer **predefined roles** (for example, `roles/compute.admin` or `roles/storage.admin`) because they follow the **principle of least privilege**.
+
+---
+
+# Comparison Table
+
+| Feature                | Owner | Editor | Viewer |
+| ---------------------- | :---: | :----: | :----: |
+| View Resources         |   ✅   |    ✅   |    ✅   |
+| Create VM              |   ✅   |    ✅   |    ❌   |
+| Delete VM              |   ✅   |    ✅   |    ❌   |
+| Create Bucket          |   ✅   |    ✅   |    ❌   |
+| Delete Bucket          |   ✅   |    ✅   |    ❌   |
+| Create Cloud SQL       |   ✅   |    ✅   |    ❌   |
+| Delete Cloud SQL       |   ✅   |    ✅   |    ❌   |
+| Manage IAM             |   ✅   |    ❌   |    ❌   |
+| Grant Access           |   ✅   |    ❌   |    ❌   |
+| Remove Users           |   ✅   |    ❌   |    ❌   |
+| Billing Administration |   ✅*  |    ❌   |    ❌   |
+| Delete Project         |   ✅   |    ❌   |    ❌   |
+
+*Billing actions may also require permissions on the billing account itself.
+
+---
+
+# Interview Questions
+
+### 1. What is the difference between Owner and Editor?
+
+* **Owner** can manage resources **and** IAM policies (and has broad administrative capabilities).
+* **Editor** can manage most resources but **cannot** manage IAM policies or perform billing administration.
+
+---
+
+### 2. Why is Viewer used?
+
+Viewer provides **read-only access**, making it suitable for auditors, managers, or support teams who only need to inspect resources.
+
+---
+
+### 3. Why are Primitive Roles not recommended in production?
+
+Primitive roles are very broad. They often grant more permissions than users need, increasing security risk. Production environments should generally use **predefined** or **custom** roles that provide only the required permissions.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-console.cloud.google.com    ====> GCP 
