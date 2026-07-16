@@ -1,3 +1,7 @@
+```
+https://github.com/devopswithcloud/GoogleCloudPlatform/tree/master/V2
+```
+
 # GCP Cloud Engineer – Detailed Notes (Company Scenario to Real-World Job)
 
 ---
@@ -4480,3 +4484,1901 @@ Viewer provides **read-only access**, making it suitable for auditors, managers,
 Primitive roles are very broad. They often grant more permissions than users need, increasing security risk. Production environments should generally use **predefined** or **custom** roles that provide only the required permissions.
 
 
+
+
+===============================================================
+
+IAM Policy Role Binding 
+
+SDK - Automate  the creation of GCP Resources
+
+You can connect to gcloud shell and perform / or / you can download the GCP SDK in you local 
+
+steps (Details)
+
+
+gcloud compute instances list 
+
+to switch between the project
+
+gcloud config set project 'projectID'
+
+
+gcloud config list (it will give current details)(To varify in which project we are)
+
+
+
+This screenshot is about **GCP IAM Role Management using `gcloud` commands**. Since you're learning GCP DevOps, this is a very important topic for interviews and real-world projects.
+
+The scenarios covered are:
+
+1. **Create a Custom IAM Role using a YAML file**
+2. Verify the created role using `gcloud` and the Google Cloud Console.
+3. Create a Custom IAM Role directly from the command line.
+4. Add permissions to an existing custom role.
+5. Remove permissions from an existing custom role.
+6. Verify the updated role.
+
+The first command shown is:
+
+```bash
+PROJECT_ID=$(gcloud config get-value project)
+```
+
+### What does this command do?
+
+It stores your currently selected GCP project ID into a shell variable.
+
+Suppose your active project is:
+
+```
+my-dev-project-123
+```
+
+Then after running:
+
+```bash
+PROJECT_ID=$(gcloud config get-value project)
+```
+
+the variable contains:
+
+```bash
+echo $PROJECT_ID
+```
+
+Output:
+
+```text
+my-dev-project-123
+```
+
+Instead of typing the project ID repeatedly, you can simply use:
+
+```bash
+--project=$PROJECT_ID
+```
+
+---
+
+## Why do we need a Custom IAM Role?
+
+Google provides predefined roles such as:
+
+* Viewer
+* Editor
+* Owner
+
+But sometimes these roles provide **too many permissions**.
+
+Example:
+
+Suppose your company has a junior DevOps engineer.
+
+They should only be able to:
+
+* View Compute Engine VMs
+* Start VMs
+* Stop VMs
+
+They **should not** be able to:
+
+* Delete VMs
+* Create networks
+* Delete disks
+
+In this case, you create a **Custom IAM Role** containing only the required permissions.
+
+This follows the **Principle of Least Privilege**, which is a common interview topic.
+
+---
+
+## What we'll do in a hands-on demo
+
+We'll build this from scratch:
+
+```
+Project
+│
+├── Custom Role
+│      ├── compute.instances.get
+│      ├── compute.instances.list
+│      ├── compute.instances.start
+│      └── compute.instances.stop
+│
+└── User
+        │
+        └── Assigned this custom role
+```
+
+The user will be able to:
+
+✅ View VMs
+
+✅ Start VMs
+
+✅ Stop VMs
+
+❌ Delete VMs
+
+---
+
+Since you've been asking for **real DevOps hands-on practice** rather than just theory, we can do a complete lab next where we:
+
+1. Create a new GCP project.
+2. Create a custom IAM role using a YAML file.
+3. Assign it to a test user.
+4. Verify permissions from the Console and `gcloud`.
+5. Modify the role by adding and removing permissions.
+6. Compare it with predefined roles like Viewer, Editor, and Owner.
+
+This is the same workflow you'll encounter in enterprise GCP environments.
+
+
+
+to get the project is (Current shell active)
+gcloud config get-value project
+
+PROJECT_ID=$(gcloud config get-value project)
+echo $PROJECT_ID    usefull when you do the automation
+
+Now how to create the Custom Role 
+      1. Yaml File
+      2. gcloud Arguments
+
+gcloud compute instance --arguments
+
+arguments are passed with '--'  like --zone --limit --cpu
+don't try to remember just go with document
+
+
+Excellent! This is **Step 2: Creating a Custom IAM Role using a YAML file**. Let's understand every line as if you're working in a real company.
+
+---
+
+# Step 2: Create the YAML file
+
+Create a file named:
+
+```bash
+iam-roles.yaml
+```
+
+Inside it, write:
+
+```yaml
+title: "i27customrole1"
+description: "Custom Role to create Instances"
+stage: "GA"
+
+includedPermissions:
+  - compute.instances.create
+  - compute.acceleratorTypes.list
+  - compute.disks.create
+  - compute.disks.list
+  - compute.instances.list
+  - compute.instances.setServiceAccount
+  - compute.machineTypes.list
+  - compute.networks.get
+  - compute.networks.list
+  - compute.projects.get
+  - compute.regions.list
+  - compute.subnetworks.get
+  - compute.subnetworks.list
+  - compute.subnetworks.use
+  - compute.subnetworks.useExternalIp
+  - compute.zones.list
+```
+
+---
+
+# Why do we create a YAML file?
+
+Think of the YAML file as a **blueprint**.
+
+Instead of typing 20–30 permissions on the command line every time, we define them once in a YAML file.
+
+Later, GCP reads this file and creates the custom role.
+
+Just like Terraform uses `.tf` files, IAM uses YAML for defining custom roles.
+
+---
+
+# Understanding each field
+
+## 1. title
+
+```yaml
+title: "i27customrole1"
+```
+
+This is the **display name** shown in the Google Cloud Console.
+
+For example:
+
+```
+IAM
+↓
+
+Custom Roles
+
+i27customrole1
+```
+
+It should be meaningful.
+
+Example:
+
+```
+VM Creator
+Database Operator
+ReadOnlyStorage
+DevOpsAdmin
+```
+
+---
+
+## 2. description
+
+```yaml
+description: "Custom Role to create Instances"
+```
+
+This tells other administrators what the role is for.
+
+Example:
+
+```
+Allows creating Compute Engine VM instances.
+```
+
+In large companies with hundreds of custom roles, the description helps identify the role's purpose.
+
+---
+
+## 3. stage
+
+```yaml
+stage: "GA"
+```
+
+`GA` stands for **General Availability**, meaning the role is ready for production use.
+
+Other stages include:
+
+| Stage    | Meaning                        |
+| -------- | ------------------------------ |
+| ALPHA    | Early testing                  |
+| BETA     | Testing before production      |
+| GA       | Stable and production-ready    |
+| DISABLED | Role exists but cannot be used |
+
+Most production environments use **GA**.
+
+---
+
+# 4. includedPermissions
+
+This is the most important section.
+
+Every permission begins with a service name, such as:
+
+```
+compute
+storage
+bigquery
+cloudsql
+pubsub
+```
+
+Followed by the specific action.
+
+Example:
+
+```
+compute.instances.create
+```
+
+Break it down:
+
+```
+compute
+   ↓
+Compute Engine
+
+instances
+   ↓
+Virtual Machine
+
+create
+   ↓
+Create VM
+```
+
+So it means:
+
+> Allow the user to create Compute Engine VM instances.
+
+---
+
+## Another example
+
+```yaml
+compute.disks.create
+```
+
+Breakdown:
+
+```
+compute
+↓
+
+disks
+↓
+
+create
+```
+
+Meaning:
+
+> Allow creating persistent disks.
+
+---
+
+## Another
+
+```yaml
+compute.instances.list
+```
+
+Meaning:
+
+> View the list of VM instances.
+
+---
+
+## Another
+
+```yaml
+compute.networks.get
+```
+
+Meaning:
+
+> View details of VPC networks.
+
+---
+
+## Another
+
+```yaml
+compute.subnetworks.use
+```
+
+Meaning:
+
+> Allow attaching a VM to a subnet.
+
+Without this permission, VM creation will fail because a VM must connect to a network.
+
+---
+
+## Another
+
+```yaml
+compute.subnetworks.useExternalIp
+```
+
+Meaning:
+
+> Allow assigning an external (public) IP address to a VM.
+
+Without this permission, users could create VMs but would not be able to assign public IPs.
+
+---
+
+## Another
+
+```yaml
+compute.machineTypes.list
+```
+
+Allows viewing available machine types, such as:
+
+* e2-micro
+* e2-small
+* n2-standard-2
+* c3-standard-4
+
+This is needed when selecting a machine type during VM creation.
+
+---
+
+## Another
+
+```yaml
+compute.zones.list
+```
+
+Allows listing available zones, for example:
+
+```
+asia-south1-a
+asia-south1-b
+us-central1-a
+```
+
+---
+
+# Real-world workflow
+
+Imagine your company hires a new DevOps engineer.
+
+The engineer needs to:
+
+* Create VMs
+* Create disks
+* Attach networks
+* View machine types
+* View regions
+
+But should **not** be able to:
+
+* Delete VMs
+* Delete disks
+* Delete VPCs
+* Delete projects
+
+You create a custom role containing only the required permissions:
+
+```
+Developer
+        │
+        ▼
+Custom Role
+        │
+        ├── Create VM ✔
+        ├── Create Disk ✔
+        ├── View Network ✔
+        ├── View Regions ✔
+        └── Delete VM ✘
+```
+
+This follows the **Principle of Least Privilege**, a key security practice.
+
+---
+
+### Next Step
+
+After creating `iam-roles.yaml`, the next step is to run a `gcloud` command that reads this file and creates the custom IAM role in your GCP project. We can go through that command line by line and verify the role afterward.
+
+
+
+
+mkdir 1808
+cd 1808
+vi iam-roles.yaml 
+
+edit iam-roles.yaml   it same like vscode it will open
+
+
+vi iam-roles.yaml 
+
+```
+title: "i27customrole1"
+description: "Custom Role to create Instances"
+stage: "GA"
+includedPermissions:
+  - compute.instances.create 
+  - compute.acceleratorTypes.list
+  - compute.disks.create
+  - compute.disks.list
+  - compute.instances.create
+  - compute.instances.list
+  - compute.instances.setServiceAccount
+  - compute.machineTypes.list
+  - compute.networks.get
+  - compute.networks.list
+  - compute.projects.get
+  - compute.regions.list
+  - compute.subnetworks.get
+  - compute.subnetworks.list
+  - compute.subnetworks.use
+  - compute.subnetworks.useExternalIp
+  - compute.zones.list
+
+```
+
+pass the yaml file via gcloud cmd , to apply the chages 
+
+gcloud iam  roles create 127customerole1 --file=iam-roles.yaml 
+
+you will find a error 
+
+gcloud iam  roles create 127customerole1 --file=iam-roles.yaml --project <projectID>
+
+it will execute 
+
+How to fetch the roles the details 
+gcloud iam roles describe 127customerole1 --project <projectID>
+
+eTag == default by the Google
+
+Other than the yaml file,The simplest file is.
+
+# Available stages for roles:
+# ALPHA: Role is in early testing phase, may change.
+# BETA: Role is more stable but still subject to changes.
+# GA (General Availability): Role is fully available and stable for use.
+
+gcloud iam roles create i27customrole4 \
+  --project $PROJECT_ID \
+  --permissions=compute.instances.create,compute.acceleratorTypes.list,compute.disks.create \
+  --title="i27customrole2" \
+  --description="Custom Role 2 from arguments" \
+  --stage="GA"
+
+
+How to edit and add the permission to the custome role 
+via update command 
+
+gcloud iam role update  (give example for this)
+
+gcloud iam roles update i27customrole4     --project $PROJECT_ID     --add-permissions="compute.networks.get"
+
+To proficient in Gcloud Terraform you must be effiencient the console.
+
+IAM  Role Binding ??
+Bind one or more principle(identity/member) to an individual iam role.
+
+
+Role Binding 
+  Role
+     Storage.admin 
+     Principle 
+        siva@gmail.como
+        support@gmail.com 
+        mona@gmail.com
+
+   Role 
+     Compute.admin 
+     principle 
+        siva@gmail.como
+        support@gmail.com 
+        mona@gmail.com@g
+
+overall this is called role biniding 
+
+
+Overview of IAM Policies in GCP
+In Google Cloud Platform (GCP), policies are a set of rules that define who can access which resources and what actions they can perform on those resources. Policies are critical for managing and securing access to cloud resources.
+
+Key Components of a GCP Policy:
+Members: The identities (users, groups, service accounts, etc.) that request access to resources.
+
+Examples: user:example@gmail.com, serviceAccount:my-sa@my-project.iam.gserviceaccount.com, group:devops@example.com
+Roles: Define a set of permissions that determine what actions a member can perform on a resource.
+
+Examples: roles/viewer (read-only access), roles/editor (read/write access), roles/owner (full control)
+Permissions: Each role consists of a set of permissions, which are fine-grained actions that can be performed on specific resources (like viewing, creating, or deleting resources).
+
+Resources: The GCP entities to which the policies apply, such as projects, compute instances, storage buckets, etc.
+
+Bindings: A policy is made up of one or more bindings, each binding connects a member to a role for a specific resource
+
+
+#### Step 0: Get the Dynamic Project ID
+#Retrieve the active project ID dynamically from your gcloud configuration:
+PROJECT_ID=$(gcloud config get-value project)
+
+#### Step 1: User Tries to Access GCS without Appropriate Permissions
+
+- **User**: `support@gcpbatch22.in`
+- **Project**: A GCP project with the ID `your-project-id`
+- **Resource**: A Google Cloud Storage (GCS) bucket in the project.
+- **Pre-access**: Make sure `support` has Compute Admin Access only and no other access.
+
+**support**, who is part of the GCP project `your-project-id`, logs into the GCP Console using his account (`support@gcpbatch22.in`) and tries to access a GCS bucket in the project. However, support cannot access the bucket because he hasn’t been assigned any roles that permit GCS access.
+
+#### Step 2: No Access to GCS
+
+support is unable to access the GCS bucket because, by default, he only has the roles and permissions explicitly granted to him. In this case, support needs a specific role, such as `roles/storage.objectViewer` or `roles/storage.admin`, to interact with GCS.
+
+#### Step 3: Investigating the Issue
+
+To understand why support cannot access the GCS bucket, we need to check the current IAM policies associated with the project. This will allow us to see which roles are assigned to support.
+
+##### Command to List IAM Policies:
+
+```bash
+gcloud projects get-iam-policy $PROJECT_ID
+
+
+Create a bucket and login via support gmail and now see he is able to see the bucket that we created 
+
+
+How to implement the Policy 
+  we need the policy 
+
+
+gcloud projects get-iam-policy $PROJECT_ID 
+gcloud projects get-iam-policy $PROJECT_ID --format json 
+
+you will get the bindings. I gives who is having the access at the project level
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="user:support@gcpbatch22.in" \
+    --role="roles/storage.admin"
+
+
+Now you can see the bucket 
+
+
+
+---
+
+### **Introduction: What You Will Learn**
+
+In this guide, we will cover how to manage **IAM policies** in Google Cloud Platform (GCP) by working with users to grant and revoke permissions on resources. Specifically, you will learn how to:
+
+1. Investigate and manage access to **Google Cloud Storage (GCS)** for a user.
+2. Add and remove **IAM policy bindings** to grant appropriate permissions.
+
+---
+
+### **Overview of IAM Policies in GCP**
+
+In Google Cloud Platform (GCP), **policies** are a set of rules that define who can access which resources and what actions they can perform on those resources. Policies are critical for managing and securing access to cloud resources.
+
+#### Key Components of a GCP Policy:
+1. **Members**: The identities (users, groups, service accounts, etc.) that request access to resources.
+   - Examples: `user:example@gmail.com`, `serviceAccount:my-sa@my-project.iam.gserviceaccount.com`, `group:devops@example.com`
+
+2. **Roles**: Define a set of permissions that determine what actions a member can perform on a resource.
+   - Examples: `roles/viewer` (read-only access), `roles/editor` (read/write access), `roles/owner` (full control)
+
+3. **Permissions**: Each role consists of a set of permissions, which are fine-grained actions that can be performed on specific resources (like viewing, creating, or deleting resources).
+
+4. **Resources**: The GCP entities to which the policies apply, such as projects, compute instances, storage buckets, etc.
+
+5. **Bindings**: A policy is made up of one or more bindings, each binding connects a **member** to a **role** for a specific **resource**.
+
+---
+
+### **Scenario: Managing Access to GCS for a User**
+
+
+```bash
+#### Step 0: Get the Dynamic Project ID
+#Retrieve the active project ID dynamically from your gcloud configuration:
+PROJECT_ID=$(gcloud config get-value project)
+
+#### Step 1: User Tries to Access GCS without Appropriate Permissions
+
+- **User**: `akash@gcpbatch22.in`
+- **Project**: A GCP project with the ID `your-project-id`
+- **Resource**: A Google Cloud Storage (GCS) bucket in the project.
+- **Pre-access**: Make sure `akash` has Compute Admin Access only and no other access.
+
+**akash**, who is part of the GCP project `your-project-id`, logs into the GCP Console using his account (`akash@gcpbatch22.in`) and tries to access a GCS bucket in the project. However, akash cannot access the bucket because he hasn’t been assigned any roles that permit GCS access.
+
+#### Step 2: No Access to GCS
+
+akash is unable to access the GCS bucket because, by default, he only has the roles and permissions explicitly granted to him. In this case, akash needs a specific role, such as `roles/storage.objectViewer` or `roles/storage.admin`, to interact with GCS.
+
+#### Step 3: Investigating the Issue
+
+To understand why akash cannot access the GCS bucket, we need to check the current IAM policies associated with the project. This will allow us to see which roles are assigned to akash.
+
+##### Command to List IAM Policies:
+
+```bash
+gcloud projects get-iam-policy $PROJECT_ID
+```
+
+- **`$PROJECT_ID`**: The project ID where the GCS bucket exists. You can retrieve it dynamically with:
+
+  ```bash
+  PROJECT_ID=$(gcloud config get-value project)
+  ```
+
+By listing the current IAM policies, we can verify that akash does not have any roles that allow him to interact with the GCS bucket, such as `roles/storage.objectViewer`.
+
+---
+
+### **View IAM Policy in Different Formats**
+
+#### View IAM Policy in JSON Format:
+```bash
+gcloud projects get-iam-policy $PROJECT_ID --format=json
+```
+
+#### View IAM Policy in YAML Format:
+```bash
+gcloud projects get-iam-policy $PROJECT_ID --format=yaml
+```
+
+---
+
+### **Granting Full Access to akash with `roles/storage.admin`**
+
+#### Step 4: Granting Full Access to akash
+
+To allow **akash** (`akash@gcpbatch22.in`) full access to manage the Google Cloud Storage bucket, we will grant him the **Storage Admin** role, which provides full control over the bucket and its contents.
+
+##### Command to Add GCS Admin Access for akash:
+
+```bash
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="user:akash@gcpbatch22.in" \
+    --role="roles/storage.admin"
+```
+
+- **`--member="user:akash@gcpbatch22.in"`**: Specifies the user who needs the role.
+- **`--role="roles/storage.admin"`**: Grants full control over Cloud Storage, including the ability to modify objects and permissions.
+
+#### Step 5: Verify the Role Assignment
+
+Once you've granted the `storage.admin` role, verify that the policy has been successfully updated by checking the project's IAM policies.
+
+##### Command to Verify the Policy:
+
+```bash
+gcloud projects get-iam-policy $PROJECT_ID --format=yaml
+```
+
+#### Step 6: akash Tries to Access GCS Again
+
+With the `roles/storage.admin` role assigned, akash now has full control over the GCS bucket. He can:
+- Create new objects in the bucket.
+- Delete or modify existing objects.
+- Change permissions for the bucket or its contents.
+
+akash should log back into the GCP Console and verify that he can perform all of these actions in the GCS bucket.
+
+
+      1. Create a SVC account using cli 
+      2. Create a key to the SVC account using cli 
+      3. Assign storage admin role to the SVC account from cli 
+
+
+
+
+
+
+
+
+
+
+============================================================================================
+I went through your notes. They cover **GCP IAM Custom Roles, IAM Policy Bindings, and gcloud CLI**, which are very important topics for GCP Cloud Engineer, DevOps, and SRE interviews. 
+
+Below are **detailed interview-quality notes** that are much easier to understand and remember.
+
+---
+
+# GCP IAM (Identity and Access Management)
+
+## What is IAM?
+
+IAM (Identity and Access Management) is a service that controls:
+
+* **Who** can access GCP resources.
+* **What** they can access.
+* **What actions** they can perform.
+
+Example:
+
+```
+Adarsha
+     ↓
+Can access
+     ↓
+Compute Engine
+     ↓
+Only Start and Stop VM
+```
+
+Without IAM, anyone in the project could perform every action, which is a security risk.
+
+---
+
+# Why is IAM Important?
+
+Suppose your company has three employees.
+
+```
+Admin
+Developer
+Support Engineer
+```
+
+Should all of them delete VMs?
+
+No.
+
+Different people require different permissions.
+
+Example:
+
+| User      | Permissions        |
+| --------- | ------------------ |
+| Admin     | Full Control       |
+| Developer | Create VM, View VM |
+| Support   | View Logs          |
+
+This follows the
+
+> Principle of Least Privilege (PoLP)
+
+which means
+
+**Give only the permissions required to perform the job and nothing more.**
+
+This is one of the most frequently asked interview questions.
+
+---
+
+# Components of IAM
+
+There are five important components.
+
+```
+IAM
+
+├── Members
+├── Roles
+├── Permissions
+├── Resources
+└── Policies
+```
+
+---
+
+## 1. Member (Identity)
+
+A member is the identity requesting access.
+
+Examples
+
+```
+User
+Group
+Service Account
+Domain
+```
+
+Example
+
+```
+user:adarsha@gmail.com
+
+group:devops@example.com
+
+serviceAccount:terraform@project.iam.gserviceaccount.com
+```
+
+Think of a Member as:
+
+**WHO wants access?**
+
+---
+
+## 2. Resource
+
+The object to which access is granted.
+
+Examples
+
+```
+Project
+
+VM
+
+Cloud Storage Bucket
+
+Cloud SQL
+
+BigQuery Dataset
+```
+
+Example
+
+```
+Compute VM
+
+storage bucket
+
+Cloud SQL instance
+```
+
+---
+
+## 3. Permission
+
+Permission is the smallest level of access.
+
+Examples
+
+```
+compute.instances.create
+
+compute.instances.delete
+
+storage.objects.create
+
+storage.objects.delete
+```
+
+Each permission allows one action.
+
+Example
+
+```
+compute.instances.start
+```
+
+Means
+
+Start VM only.
+
+---
+
+## 4. Role
+
+A Role is a collection of permissions.
+
+Example
+
+```
+Role
+
+↓
+
+Permissions
+
+↓
+
+compute.instances.get
+
+compute.instances.list
+
+compute.instances.start
+
+compute.instances.stop
+```
+
+Instead of assigning 100 permissions individually, Google groups them into Roles.
+
+---
+
+## Types of Roles
+
+There are three types.
+
+### 1. Basic Roles
+
+```
+Viewer
+
+Editor
+
+Owner
+```
+
+Viewer
+
+Read Only
+
+Editor
+
+Read + Write
+
+Owner
+
+Everything
+
+---
+
+### 2. Predefined Roles
+
+Google already created them.
+
+Examples
+
+```
+roles/compute.admin
+
+roles/storage.admin
+
+roles/cloudsql.admin
+
+roles/viewer
+```
+
+These are used most frequently.
+
+---
+
+### 3. Custom Roles
+
+Created by your organization.
+
+Example
+
+```
+Company wants
+
+Create VM
+
+Start VM
+
+Stop VM
+
+Nothing else
+```
+
+Create a Custom Role.
+
+---
+
+# Why Create a Custom Role?
+
+Suppose a junior DevOps engineer should only
+
+✔ Create VM
+
+✔ View VM
+
+✔ Start VM
+
+✔ Stop VM
+
+But should NOT
+
+❌ Delete VM
+
+❌ Delete VPC
+
+❌ Delete Project
+
+So create
+
+```
+Custom Role
+
+compute.instances.create
+
+compute.instances.list
+
+compute.instances.start
+
+compute.instances.stop
+```
+
+This improves security.
+
+---
+
+# Useful gcloud Commands
+
+## Check Active Project
+
+```
+gcloud config get-value project
+```
+
+Output
+
+```
+dev-project-123
+```
+
+---
+
+## Save Project ID
+
+```
+PROJECT_ID=$(gcloud config get-value project)
+```
+
+Now
+
+```
+echo $PROJECT_ID
+```
+
+Output
+
+```
+dev-project-123
+```
+
+Why?
+
+Automation.
+
+Instead of writing
+
+```
+--project=my-project
+```
+
+every time,
+
+write
+
+```
+--project=$PROJECT_ID
+```
+
+---
+
+## View Current Configuration
+
+```
+gcloud config list
+```
+
+Shows
+
+```
+Project
+
+Account
+
+Region
+
+Zone
+```
+
+---
+
+## Switch Project
+
+```
+gcloud config set project PROJECT_ID
+```
+
+Example
+
+```
+gcloud config set project my-demo-project
+```
+
+---
+
+# Custom IAM Role using YAML
+
+Create file
+
+```
+iam-role.yaml
+```
+
+Example
+
+```yaml
+title: "VM Creator"
+
+description: "Create Compute Engine VM"
+
+stage: "GA"
+
+includedPermissions:
+
+- compute.instances.create
+- compute.instances.list
+- compute.disks.create
+```
+
+---
+
+## Meaning of Each Field
+
+### title
+
+Display name.
+
+```
+VM Creator
+```
+
+---
+
+### description
+
+Purpose of the role.
+
+```
+Allows VM Creation
+```
+
+---
+
+### stage
+
+Possible values
+
+```
+ALPHA
+
+BETA
+
+GA
+
+DISABLED
+```
+
+GA means
+
+Production Ready.
+
+---
+
+### includedPermissions
+
+Actual permissions.
+
+Example
+
+```
+compute.instances.create
+```
+
+Break it
+
+```
+compute
+
+↓
+
+instances
+
+↓
+
+create
+```
+
+Meaning
+
+Create VM.
+
+---
+
+# Important Compute Permissions
+
+### Create VM
+
+```
+compute.instances.create
+```
+
+---
+
+### View VM
+
+```
+compute.instances.list
+```
+
+---
+
+### Get VM Details
+
+```
+compute.instances.get
+```
+
+---
+
+### Start VM
+
+```
+compute.instances.start
+```
+
+---
+
+### Stop VM
+
+```
+compute.instances.stop
+```
+
+---
+
+### Create Disk
+
+```
+compute.disks.create
+```
+
+---
+
+### View Network
+
+```
+compute.networks.get
+```
+
+---
+
+### View Regions
+
+```
+compute.regions.list
+```
+
+---
+
+### View Zones
+
+```
+compute.zones.list
+```
+
+---
+
+### Use Subnetwork
+
+```
+compute.subnetworks.use
+```
+
+Needed during VM creation.
+
+---
+
+### External IP
+
+```
+compute.subnetworks.useExternalIp
+```
+
+Allows assigning Public IP.
+
+---
+
+# Create Role using YAML
+
+```
+gcloud iam roles create vmcreator \
+    --project=$PROJECT_ID \
+    --file=iam-role.yaml
+```
+
+---
+
+# Describe Role
+
+```
+gcloud iam roles describe vmcreator \
+    --project=$PROJECT_ID
+```
+
+Displays
+
+```
+Role Name
+
+Permissions
+
+Stage
+
+etag
+```
+
+---
+
+# Create Role without YAML
+
+```
+gcloud iam roles create vmcreator \
+  --project=$PROJECT_ID \
+  --permissions=compute.instances.create,compute.instances.list \
+  --title="VM Creator" \
+  --description="VM Role" \
+  --stage=GA
+```
+
+---
+
+# Update Custom Role
+
+Add permission
+
+```
+gcloud iam roles update vmcreator \
+    --project=$PROJECT_ID \
+    --add-permissions=compute.networks.get
+```
+
+Remove permission
+
+```
+gcloud iam roles update vmcreator \
+    --project=$PROJECT_ID \
+    --remove-permissions=compute.instances.create
+```
+
+---
+
+# IAM Policy
+
+An IAM Policy decides
+
+```
+WHO
+
+↓
+
+gets
+
+↓
+
+WHICH ROLE
+
+↓
+
+on WHICH RESOURCE
+```
+
+Policy consists of
+
+```
+Bindings
+```
+
+---
+
+# What is Role Binding?
+
+Binding means
+
+```
+Member
+
+↓
+
+Role
+
+↓
+
+Resource
+```
+
+Example
+
+```
+Role
+
+Storage Admin
+
+↓
+
+Members
+
+adarsha@gmail.com
+
+support@gmail.com
+
+dev@gmail.com
+```
+
+One Role can have multiple Members.
+
+---
+
+# Structure of IAM Policy
+
+```
+Policy
+
+↓
+
+Bindings
+
+↓
+
+Role
+
+↓
+
+Members
+```
+
+Example
+
+```
+roles/storage.admin
+
+↓
+
+user:adarsha@gmail.com
+
+↓
+
+user:support@gmail.com
+```
+
+---
+
+# View IAM Policy
+
+```
+gcloud projects get-iam-policy $PROJECT_ID
+```
+
+JSON
+
+```
+gcloud projects get-iam-policy $PROJECT_ID --format=json
+```
+
+YAML
+
+```
+gcloud projects get-iam-policy $PROJECT_ID --format=yaml
+```
+
+---
+
+# Grant IAM Role
+
+Example
+
+```
+Support Engineer
+```
+
+needs Storage Admin.
+
+```
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+--member="user:support@gmail.com" \
+--role="roles/storage.admin"
+```
+
+Now
+
+Support can
+
+✔ Create Bucket
+
+✔ Delete Bucket
+
+✔ Upload Objects
+
+✔ Delete Objects
+
+---
+
+# Remove IAM Role
+
+```
+gcloud projects remove-iam-policy-binding $PROJECT_ID \
+--member="user:support@gmail.com" \
+--role="roles/storage.admin"
+```
+
+Access is revoked.
+
+---
+
+# Real Company Workflow
+
+```
+Developer joins company
+
+↓
+
+Needs VM creation
+
+↓
+
+Admin creates Custom Role
+
+↓
+
+Assign Role
+
+↓
+
+Developer logs in
+
+↓
+
+Can create VM
+
+↓
+
+Cannot delete Project
+```
+
+This is exactly how enterprise organizations manage secure access.
+
+---
+
+# Frequently Asked Interview Questions
+
+1. What is IAM?
+2. What is the Principle of Least Privilege?
+3. Difference between Basic, Predefined, and Custom Roles?
+4. What is an IAM Policy?
+5. What is a Role Binding?
+6. Difference between Permissions and Roles?
+7. How do you create a Custom Role using YAML?
+8. How do you assign a role to a user?
+9. How do you update a Custom Role?
+10. How do you view IAM Policies?
+11. Why use `PROJECT_ID=$(gcloud config get-value project)` in automation?
+12. Why are YAML files preferred over long CLI commands for role creation?
+
+These notes are based on the concepts and commands from the uploaded material, organized into a structured format that's easier to study and revise. 
+
+
+
+This is a very common **GCP DevOps hands-on lab** and is frequently asked in interviews. Let's do it step by step.
+
+---
+
+# Lab: Create a Service Account and Assign Storage Admin Role Using gcloud CLI
+
+## Prerequisites
+
+Verify you're authenticated:
+
+```bash
+gcloud auth list
+```
+
+Check the current project:
+
+```bash
+gcloud config get-value project
+```
+
+Store the project ID in a variable:
+
+```bash
+PROJECT_ID=$(gcloud config get-value project)
+echo $PROJECT_ID
+```
+
+---
+
+# Step 1: Create a Service Account
+
+## Syntax
+
+```bash
+gcloud iam service-accounts create SERVICE_ACCOUNT_NAME \
+    --display-name="DISPLAY_NAME"
+```
+
+## Example
+
+```bash
+gcloud iam service-accounts create storage-sa \
+    --display-name="Storage Service Account"
+```
+
+### Explanation
+
+* `gcloud iam service-accounts create` → Creates a new service account.
+* `storage-sa` → Service account ID (must be unique within the project).
+* `--display-name` → Friendly name shown in the GCP Console.
+
+### Verify the Service Account
+
+```bash
+gcloud iam service-accounts list
+```
+
+Example output:
+
+```text
+EMAIL                                                   DISPLAY NAME
+storage-sa@my-project.iam.gserviceaccount.com           Storage Service Account
+```
+
+---
+
+# Step 2: Create a Key for the Service Account
+
+Applications outside GCP (Terraform, Jenkins, Ansible, CI/CD pipelines) authenticate using a service account key.
+
+## Syntax
+
+```bash
+gcloud iam service-accounts keys create KEY_FILE \
+    --iam-account=SERVICE_ACCOUNT_EMAIL
+```
+
+## Example
+
+```bash
+gcloud iam service-accounts keys create storage-sa-key.json \
+    --iam-account=storage-sa@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+### Explanation
+
+* `keys create` → Generates a new private key.
+* `storage-sa-key.json` → JSON key file saved locally.
+* `--iam-account` → Specifies which service account receives the key.
+
+### Verify
+
+```bash
+ls
+```
+
+You should see:
+
+```text
+storage-sa-key.json
+```
+
+> **Important:** This JSON key contains credentials. Never commit it to GitHub or share it publicly.
+
+---
+
+# Step 3: Assign the Storage Admin Role
+
+Grant the service account the predefined **Storage Admin** role.
+
+## Syntax
+
+```bash
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SERVICE_ACCOUNT_EMAIL" \
+    --role="roles/storage.admin"
+```
+
+## Example
+
+```bash
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:storage-sa@$PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/storage.admin"
+```
+
+### Explanation
+
+* `add-iam-policy-binding` → Adds a new IAM binding to the project.
+* `serviceAccount:` → Specifies the member type.
+* `roles/storage.admin` → Grants full Cloud Storage administration permissions.
+
+---
+
+# Step 4: Verify the Role Assignment
+
+List the IAM policy:
+
+```bash
+gcloud projects get-iam-policy $PROJECT_ID
+```
+
+Or filter only the service account:
+
+```bash
+gcloud projects get-iam-policy $PROJECT_ID \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:storage-sa@$PROJECT_ID.iam.gserviceaccount.com"
+```
+
+Example output:
+
+```text
+ROLE
+roles/storage.admin
+```
+
+---
+
+# Step 5: Verify the Service Account Key
+
+List all keys:
+
+```bash
+gcloud iam service-accounts keys list \
+    --iam-account=storage-sa@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+---
+
+# Architecture
+
+```text
+                  GCP Project
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+ Service Account                 IAM Policy
+ storage-sa                          │
+        │                            │
+        │                     roles/storage.admin
+        │                            │
+        └──────────────┬─────────────┘
+                       │
+              Can manage Cloud Storage
+              ✔ Create buckets
+              ✔ Upload objects
+              ✔ Delete objects
+              ✔ Manage bucket settings
+```
+
+---
+
+# Complete Lab Commands
+
+```bash
+# Get current project
+PROJECT_ID=$(gcloud config get-value project)
+
+# Create Service Account
+gcloud iam service-accounts create storage-sa \
+    --display-name="Storage Service Account"
+
+# Create Service Account Key
+gcloud iam service-accounts keys create storage-sa-key.json \
+    --iam-account=storage-sa@$PROJECT_ID.iam.gserviceaccount.com
+
+# Assign Storage Admin Role
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:storage-sa@$PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/storage.admin"
+
+# Verify Service Account
+gcloud iam service-accounts list
+
+# Verify IAM Role
+gcloud projects get-iam-policy $PROJECT_ID
+
+# Verify Keys
+gcloud iam service-accounts keys list \
+    --iam-account=storage-sa@$PROJECT_ID.iam.gserviceaccount.com
+```
+
+## Interview Questions
+
+**1. What is a Service Account?**
+A Service Account is a special Google-managed identity used by applications, VMs, and automation tools (such as Terraform, Jenkins, or CI/CD pipelines) to securely authenticate and access GCP resources.
+
+**2. Why do we create a Service Account key?**
+A JSON key allows applications running outside GCP to authenticate as the service account. It should be protected carefully because anyone with the key can act as that service account.
+
+**3. What does `roles/storage.admin` provide?**
+It grants full administrative access to Cloud Storage resources, including creating and deleting buckets, managing objects, and configuring bucket settings.
+
+**4. How is a Service Account different from a User?**
+
+| User                             | Service Account                                |
+| -------------------------------- | ---------------------------------------------- |
+| Represents a human               | Represents an application or workload          |
+| Authenticates with passwords/MFA | Authenticates with keys or attached identities |
+| Used for interactive login       | Used for automation and services               |
+
+====================================================================================================================================
