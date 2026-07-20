@@ -6382,3 +6382,786 @@ It grants full administrative access to Cloud Storage resources, including creat
 | Used for interactive login       | Used for automation and services               |
 
 ====================================================================================================================================
+# GCP VPC Deep Dive Notes (Interview + Real Time)
+
+---
+
+# 1. IAM Before Creating Infrastructure
+
+Whenever you create a new GCP Project, the **first thing** is usually IAM.
+
+IAM decides:
+
+* Who can access the project
+* What permissions they have
+* Which resources they can manage
+
+Example:
+
+```bash
+mkdir 2007
+cd 2007
+```
+
+Backup the IAM policy
+
+```bash
+gcloud projects get-iam-policy PROJECT_ID --format=json > 2007.json
+```
+
+Example
+
+```bash
+gcloud projects get-iam-policy boutique-np-prod --format=json > iam-backup.json
+```
+
+This exports the entire IAM policy into a JSON file.
+
+---
+
+### Modify IAM
+
+Open the file
+
+```bash
+vim iam-backup.json
+```
+
+or
+
+```bash
+nano iam-backup.json
+```
+
+Suppose you want to add
+
+```
+support@gmail.com
+```
+
+inside a role.
+
+Example
+
+```json
+{
+  "role": "roles/viewer",
+  "members": [
+    "user:admin@gmail.com",
+    "user:support@gmail.com"
+  ]
+}
+```
+
+Now update IAM
+
+```bash
+gcloud projects set-iam-policy PROJECT_ID iam-backup.json
+```
+
+Verify
+
+```bash
+gcloud projects get-iam-policy PROJECT_ID
+```
+
+---
+
+## Important IAM Terms
+
+| Term      | Meaning                      |
+| --------- | ---------------------------- |
+| Principal | User, Service Account, Group |
+| Member    | Same as Principal            |
+| Identity  | User identity                |
+| Role      | Collection of permissions    |
+| Policy    | Complete IAM configuration   |
+
+Project → IAM → Members (Principals)
+
+```
+Project
+      │
+      ├── User
+      ├── Group
+      ├── Service Account
+      └── Domain
+```
+
+---
+
+# What is a VPC?
+
+VPC stands for
+
+**Virtual Private Cloud**
+
+Think of it as your own private network inside Google Cloud.
+
+Without a network,
+
+* VM cannot communicate
+* Database cannot communicate
+* Applications cannot communicate
+
+Everything inside GCP runs inside a VPC.
+
+---
+
+Imagine your office.
+
+```
+Office Building
+      │
+      ├── Floor 1
+      ├── Floor 2
+      └── Floor 3
+```
+
+Similarly,
+
+```
+Google Cloud
+       │
+       └── VPC
+              │
+              ├── VM
+              ├── Database
+              ├── Load Balancer
+              ├── GKE
+              └── Storage
+```
+
+Everything lives inside the VPC.
+
+---
+
+# Does GCP Create a Default VPC?
+
+Yes.
+
+Whenever a project is created,
+
+Google automatically creates one VPC called
+
+```
+default
+```
+
+This VPC contains
+
+* firewall rules
+* subnets
+* routes
+
+It is mainly useful for
+
+* learning
+* testing
+
+**Not recommended for Production.**
+
+---
+
+# VPC is NOT a Virtual Machine
+
+One correction.
+
+You wrote
+
+```
+VM -> Virtual Private Cloud
+```
+
+This is incorrect.
+
+Correct
+
+```
+VM = Virtual Machine
+
+VPC = Virtual Private Cloud
+```
+
+---
+
+# Default VPC Limits
+
+You wrote
+
+```
+Google supports only 5 VPC
+```
+
+This is incorrect.
+
+Actually,
+
+Each project has quotas.
+
+Normally,
+
+* many VPCs can be created (subject to quotas)
+* default quota is much higher than 5 and can be increased.
+
+---
+
+# Why Do We Need VPC?
+
+Without VPC
+
+```
+VM1
+
+VM2
+
+Database
+
+Application
+```
+
+None of them know how to communicate.
+
+VPC provides
+
+* IP Addressing
+* Routing
+* Firewall
+* DNS
+* Internal communication
+
+---
+
+Diagram
+
+```
+                Google Cloud
+
+        +---------------------------+
+
+             Virtual Private Cloud
+
+        +---------------------------+
+
+          │          │          │
+
+        VM1        VM2       Database
+
+          │          │          │
+
+             Internal Network
+```
+
+---
+
+# Public vs Private Application
+
+Usually,
+
+```
+Internet
+      │
+      │
+Load Balancer
+      │
+      ▼
+Web Server
+      │
+      ▼
+Application Server
+      │
+      ▼
+Database
+```
+
+Only
+
+```
+Load Balancer
+```
+
+is public.
+
+Everything else remains private.
+
+---
+
+# Firewall
+
+Firewall controls
+
+Who can communicate.
+
+Example
+
+Allow
+
+```
+Port 22
+```
+
+Only from
+
+```
+Your Office IP
+```
+
+Allow
+
+```
+Port 80
+```
+
+From Internet
+
+Block
+
+Everything else
+
+---
+
+Diagram
+
+```
+Internet
+
+     │
+
+Firewall
+
+ ├── Allow 80
+ ├── Allow 443
+ ├── Deny Others
+
+     │
+
+Web Server
+```
+
+---
+
+# Hybrid Connectivity
+
+Suppose company already has
+
+```
+On-premises Datacenter
+```
+
+and wants to connect to GCP.
+
+Diagram
+
+```
+Company DC
+
+     │
+
+Dedicated Connection
+
+     │
+
+Google Cloud
+
+     │
+
+VPC
+```
+
+Possible methods
+
+* Cloud VPN
+* Cloud Interconnect
+
+---
+
+# Subnets
+
+Inside one VPC,
+
+we divide the network into multiple subnets.
+
+Example
+
+```
+VPC
+
+│
+
+├── App Subnet
+
+├── Web Subnet
+
+└── DB Subnet
+```
+
+Each subnet
+
+* belongs to one region
+* has its own CIDR range
+
+---
+
+Example
+
+Project
+
+```
+boutique-np-prod
+```
+
+```
+VPC
+
+│
+
+├── Web Subnet
+│      us-central1
+│      10.1.0.0/24
+
+├── App Subnet
+│      us-central1
+│      10.1.1.0/24
+
+└── DB Subnet
+       us-central1
+       10.1.2.0/24
+```
+
+---
+
+# CIDR
+
+CIDR
+
+Classless Inter Domain Routing
+
+Example
+
+```
+10.1.0.0/16
+```
+
+Meaning
+
+```
+Network
+
+10.1.0.0
+
+Subnet Mask
+
+255.255.0.0
+```
+
+Total addresses
+
+```
+65536
+```
+
+---
+
+Example
+
+```
+10.1.1.0/24
+```
+
+Subnet mask
+
+```
+255.255.255.0
+```
+
+Usable
+
+```
+254 IPs
+```
+
+---
+
+# RFC1918 Private IP Ranges
+
+Very important interview question.
+
+Private IPs
+
+```
+10.0.0.0/8
+
+172.16.0.0/12
+
+192.168.0.0/16
+```
+
+These cannot be accessed directly from the Internet.
+
+---
+
+# About Classes
+
+Your notes mention:
+
+```
+Class A /10
+Class B /12
+Class C /192
+```
+
+This is **not correct**.
+
+The old classful ranges are:
+
+| Class | Range                       | Default Mask |
+| ----- | --------------------------- | ------------ |
+| A     | 1.0.0.0 – 126.255.255.255   | /8           |
+| B     | 128.0.0.0 – 191.255.255.255 | /16          |
+| C     | 192.0.0.0 – 223.255.255.255 | /24          |
+
+Modern networking uses **CIDR**, not classes, so focus on CIDR for GCP.
+
+---
+
+# Who Decides CIDR?
+
+Usually
+
+Not DevOps.
+
+Network Team
+
+or
+
+Cloud Architect
+
+will decide.
+
+Reason
+
+To avoid IP overlap.
+
+---
+
+# Region vs VPC
+
+One important concept.
+
+VPC
+
+is
+
+**Global**
+
+Subnets
+
+are
+
+**Regional**
+
+Diagram
+
+```
+Global VPC
+
+      │
+
+ ├──────────────┐
+
+ │              │
+
+US Central    Asia South
+
+Subnet        Subnet
+
+10.1.0.0      10.2.0.0
+```
+
+---
+
+# Can Two VMs in Different Regions Communicate?
+
+Yes.
+
+Your note:
+
+> I can communicate between the DB or application even though my subnets are in different regions.
+
+This is **correct**, with an important clarification.
+
+If the VMs are in **subnets that belong to the same VPC**, they can communicate using **private IP addresses**, even if the subnets are in different regions, because a GCP VPC is global.
+
+Example:
+
+```
+Global VPC
+│
+├── us-central1
+│     App VM (10.1.0.5)
+│
+└── asia-south1
+      DB VM (10.2.0.10)
+```
+
+The App VM can connect directly to the DB VM over Google's private network (assuming firewall rules allow it).
+
+---
+
+# VPC Peering
+
+Suppose
+
+```
+VPC A
+
+10.1.0.0/16
+```
+
+and
+
+```
+VPC B
+
+10.2.0.0/16
+```
+
+Normally
+
+they cannot communicate.
+
+```
+VPC A      X      VPC B
+```
+
+After VPC Peering
+
+```
+VPC A  <-------> VPC B
+```
+
+Now
+
+VMs can communicate using private IPs.
+
+Requirements:
+
+* Non-overlapping CIDR ranges
+* Peering configured on both VPCs
+
+---
+
+# Shared VPC
+
+Used by large organizations.
+
+Instead of each project creating its own network,
+
+one **Host Project** owns the VPC, and multiple **Service Projects** use it.
+
+Diagram:
+
+```
+                  Organization
+                       │
+                Host Project
+                (Shared VPC)
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+ Service Project A  Service Project B  Service Project C
+     App VM            Web VM            DB VM
+```
+
+Benefits:
+
+* Centralized network management
+* Better security
+* Easier firewall control
+* Common networking across projects
+
+---
+
+# Auto Mode VPC
+
+Google automatically creates
+
+one subnet
+
+for every GCP region.
+
+Example
+
+```
+Region1
+
+Subnet
+
+10.128.x.x
+
+Region2
+
+Subnet
+
+10.132.x.x
+
+Region3
+
+Subnet
+
+10.136.x.x
+```
+
+Today, as Google adds more regions, Auto Mode continues to create subnets for those new regions as well.
+
+**Not recommended for Production**, because you have little control over IP planning.
+
+---
+
+# Custom Mode VPC
+
+You create
+
+everything yourself.
+
+Example
+
+```
+VPC
+
+│
+
+├── us-central1
+
+│     10.1.0.0/24
+
+├── asia-south1
+
+│     10.2.0.0/24
+
+└── europe-west1
+
+      10.3.0.0/24
+```
+
+Advantages:
+
+* Better IP planning
+* Better security
+* Preferred for production environments
+
+---
+
+# Interview Summary
+
+* IAM is typically configured before creating infrastructure.
+* A VPC is a **global** private network in GCP.
+* Subnets are **regional** resources.
+* VMs in different regions can communicate over private IPs if they are in the same VPC and firewall rules permit.
+* Firewalls control inbound and outbound traffic.
+* Use **Custom Mode VPC** for production.
+* **Auto Mode VPC** is mainly for learning or simple environments.
+* **VPC Peering** connects two separate VPCs with non-overlapping CIDR ranges.
+* **Shared VPC** allows multiple projects to use a centrally managed VPC.
+* Use RFC1918 private address ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) for internal networking.
+* Focus on **CIDR notation** rather than legacy Class A/B/C networking, as CIDR is the modern standard used in GCP.
