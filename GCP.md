@@ -7165,3 +7165,2143 @@ Advantages:
 * **Shared VPC** allows multiple projects to use a centrally managed VPC.
 * Use RFC1918 private address ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) for internal networking.
 * Focus on **CIDR notation** rather than legacy Class A/B/C networking, as CIDR is the modern standard used in GCP.
+
+
+Absolutely. Let's go through it **step by step like a real GCP networking class**, starting from the basics.
+
+---
+
+# Step 1: What is a Network?
+
+Imagine your company has **100 employees**.
+
+If no network exists,
+
+* Employee A cannot send files to Employee B.
+* Printers cannot be shared.
+* Servers cannot communicate.
+
+A network connects devices together.
+
+```
+Laptop1  -------- Laptop2
+      \            /
+       \          /
+        \        /
+        Switch
+           |
+        Server
+```
+
+The same concept applies in the cloud.
+
+---
+
+# Step 2: What is a VPC?
+
+VPC stands for **Virtual Private Cloud**.
+
+It is your **private network inside Google Cloud**.
+
+Think of Google Cloud as a huge apartment building.
+
+```
+Google Cloud
+---------------------------------------------------------
+
+Customer A
+
+Customer B
+
+Customer C
+
+Customer D
+
+---------------------------------------------------------
+```
+
+Every customer gets their own private network.
+
+```
+Google Cloud
+
++------------------------------------+
+|                                    |
+|     Your VPC (Private Network)     |
+|                                    |
+|  VM1      VM2      Database        |
+|                                    |
++------------------------------------+
+```
+
+Nobody outside your VPC can communicate unless you allow it.
+
+---
+
+# Step 3: Why Do We Need a VPC?
+
+Suppose you deploy
+
+* Web Server
+* Application Server
+* Database
+
+Without a VPC,
+
+```
+Web Server
+
+Application
+
+Database
+```
+
+There is **no network** connecting them.
+
+With a VPC,
+
+```
+                VPC
+
+   Web ---- App ---- Database
+```
+
+Now every resource can communicate.
+
+That's why every VM, GKE cluster, database, etc., is attached to a VPC.
+
+---
+
+# Step 4: Real Production Example
+
+Suppose Amazon is hosting its website.
+
+```
+Internet
+
+      |
+
+Load Balancer
+
+      |
+
+Web Server
+
+      |
+
+Application Server
+
+      |
+
+Database
+```
+
+All these servers are inside one VPC.
+
+The VPC provides:
+
+* Private IP addresses
+* Routing
+* Firewall
+* DNS
+* Communication
+
+---
+
+# Step 5: Is VPC Global?
+
+**Yes.**
+
+This is one of the most important GCP interview questions.
+
+Unlike AWS, a **GCP VPC is Global**.
+
+```
+                Global VPC
+
+         +---------------------+
+
+          us-central1
+
+               |
+
+            VM1
+
+               |
+
+          asia-south1
+
+               |
+
+            VM2
+
+         +---------------------+
+```
+
+One VPC can span multiple regions.
+
+---
+
+# Step 6: Then What is Regional?
+
+Subnets.
+
+A subnet belongs to **only one region**.
+
+```
+Global VPC
+
+      |
+
+--------------------------------
+
+|                              |
+
+US Central                 Asia South
+
+Subnet A                  Subnet B
+
+10.1.0.0/24              10.2.0.0/24
+```
+
+Notice:
+
+The VPC is global.
+
+The subnet is regional.
+
+---
+
+# Step 7: Why Do We Create Subnets?
+
+Suppose your company has
+
+* Web servers
+* Application servers
+* Databases
+
+Would you put everything together?
+
+No.
+
+We separate them.
+
+```
+VPC
+
+|
+
++----------------------------+
+
+|                            |
+
+Web Subnet
+
+|
+
+App Subnet
+
+|
+
+DB Subnet
+
++----------------------------+
+```
+
+Each subnet has a different IP range.
+
+Example
+
+```
+Web
+
+10.1.1.0/24
+
+App
+
+10.1.2.0/24
+
+DB
+
+10.1.3.0/24
+```
+
+This improves
+
+* Security
+* Organization
+* Management
+
+---
+
+# Step 8: What is CIDR?
+
+CIDR means
+
+**Classless Inter-Domain Routing**
+
+It defines a network.
+
+Example
+
+```
+10.1.0.0/24
+```
+
+Break it down
+
+```
+10.1.0.0
+
+Network Address
+
+/24
+
+Subnet Mask
+```
+
+/24 means
+
+```
+255.255.255.0
+```
+
+Total IPs
+
+```
+256
+```
+
+Usable
+
+```
+254
+```
+
+because
+
+* Network Address
+* Broadcast Address
+
+cannot be assigned to hosts in traditional networking (note: GCP also reserves additional addresses in each subnet).
+
+---
+
+# Step 9: Private IP Ranges
+
+RFC1918 defines private IP ranges.
+
+```
+10.0.0.0/8
+
+172.16.0.0/12
+
+192.168.0.0/16
+```
+
+These IPs cannot be accessed directly from the Internet.
+
+Example
+
+```
+VM
+
+10.1.0.5
+```
+
+This VM is private.
+
+To access it from the Internet, you need
+
+* External IP
+* Load Balancer
+* VPN
+* Bastion Host
+
+---
+
+# Step 10: Public vs Private Server
+
+Example
+
+```
+Internet
+
+     |
+
+Load Balancer
+
+     |
+
+Web Server
+
+     |
+
+App Server
+
+     |
+
+Database
+```
+
+Only the Load Balancer (or sometimes the web server) is exposed to the Internet.
+
+The App Server and Database use only private IPs.
+
+This is a common production architecture.
+
+---
+
+# Step 11: Firewall
+
+Imagine your house.
+
+```
+House
+
+Door
+
+Security Guard
+```
+
+The guard decides who can enter.
+
+Firewall works the same way.
+
+Example
+
+```
+Allow
+
+22
+
+From Office IP
+
+Allow
+
+80
+
+From Internet
+
+Allow
+
+443
+
+From Internet
+
+Deny
+
+Everything else
+```
+
+Firewall rules control traffic into and out of your resources.
+
+---
+
+# Step 12: Can Different Regions Communicate?
+
+Suppose
+
+```
+VM1
+
+us-central1
+
+10.1.0.10
+```
+
+and
+
+```
+Database
+
+asia-south1
+
+10.2.0.10
+```
+
+Both belong to the **same VPC**.
+
+```
+Global VPC
+
+|
+
+US Central
+
+VM
+
+|
+
+Google Private Network
+
+|
+
+Asia South
+
+Database
+```
+
+Can they communicate?
+
+**Yes.**
+
+Because the VPC is global.
+
+Firewall rules must allow the traffic.
+
+This is what your notes meant. The communication is over Google's private backbone, not the public Internet.
+
+---
+
+# Step 13: What if They Are in Different VPCs?
+
+Example
+
+```
+VPC A
+
+10.1.0.0/16
+```
+
+```
+VPC B
+
+10.2.0.0/16
+```
+
+Normally,
+
+```
+VPC A      ❌      VPC B
+```
+
+No communication.
+
+---
+
+## Solution → VPC Peering
+
+```
+VPC A
+
+10.1.0.0/16
+
+      ||
+
+      ||
+
+VPC Peering
+
+      ||
+
+      ||
+
+VPC B
+
+10.2.0.0/16
+```
+
+Now
+
+VMs communicate using private IPs.
+
+Requirements:
+
+* Non-overlapping CIDR ranges
+* Peering configured between the VPCs
+
+---
+
+# Step 14: Shared VPC
+
+Large companies have many projects.
+
+Example
+
+```
+Finance Project
+
+HR Project
+
+Development Project
+
+Testing Project
+```
+
+Should every project create its own network?
+
+Usually, **no**.
+
+Instead,
+
+```
+Host Project
+
+|
+
+Shared VPC
+
+|
+
+-----------------------------------
+
+|           |          |
+
+Finance    HR      Development
+```
+
+All projects use one centrally managed VPC.
+
+Benefits:
+
+* Easier management
+* Centralized security
+* Consistent networking
+
+---
+
+# Step 15: Auto Mode VPC
+
+Google automatically creates one subnet in every available GCP region.
+
+```
+VPC
+
+|
+
+--------------------------------------------
+
+US
+
+Europe
+
+Asia
+
+Australia
+
+South America
+
+...
+
+(Subnet in every region)
+```
+
+Good for learning.
+
+Not ideal for production because you don't control the IP plan.
+
+---
+
+# Step 16: Custom Mode VPC
+
+You create only the subnets you need.
+
+```
+VPC
+
+|
+
+US
+
+10.1.0.0/24
+
+|
+
+India
+
+10.2.0.0/24
+
+|
+
+Europe
+
+10.3.0.0/24
+```
+
+Production environments almost always use **Custom Mode VPC** because it gives full control over IP ranges, regions, and growth.
+
+---
+
+# Real-Time Example (E-commerce Application)
+
+```
+                    Internet
+                        |
+                  External Load Balancer
+                        |
+                  Web Subnet (Public)
+                 10.1.1.0/24
+                        |
+                App Subnet (Private)
+                 10.1.2.0/24
+                        |
+                 DB Subnet (Private)
+                 10.1.3.0/24
+```
+
+* Users access the website through the Load Balancer.
+* The Load Balancer forwards requests to web servers.
+* Web servers call the application servers.
+* Application servers connect to the database.
+* The database is never directly exposed to the Internet.
+
+This is a common production design and is a great example to explain in interviews.
+
+---
+
+## Interview Questions You Should Be Able to Answer
+
+1. **What is a VPC?**
+
+   * A logically isolated, private network in Google Cloud where cloud resources communicate.
+
+2. **Is a VPC regional?**
+
+   * No. A GCP VPC is **global**.
+
+3. **Are subnets global?**
+
+   * No. Subnets are **regional**.
+
+4. **Can two VMs in different regions communicate?**
+
+   * Yes, if they are in the same VPC and firewall rules allow the traffic.
+
+5. **Can two VPCs communicate by default?**
+
+   * No. You need **VPC Peering**, **Cloud VPN**, **Cloud Interconnect**, or another connectivity solution.
+
+6. **Which VPC mode is recommended for production?**
+
+   * **Custom Mode VPC**.
+
+
+
+This screenshot is the **gcloud CLI command generated by Google Cloud Console** when creating a Virtual Machine (VM). It shows every configuration that will be applied to the VM.
+
+Let's break it down line by line.
+
+---
+
+# Overall Command
+
+```bash
+gcloud compute instances create instance-20250820-033811
+```
+
+This creates a new Compute Engine VM.
+
+Think of it like:
+
+```text
+Create a VM
+    |
+    +--> Name
+    +--> Project
+    +--> Zone
+    +--> Machine Type
+    +--> Network
+    +--> Disk
+    +--> Service Account
+    +--> Firewall
+```
+
+---
+
+# 1. VM Name
+
+```bash
+gcloud compute instances create instance-20250820-033811
+```
+
+The VM name is
+
+```
+instance-20250820-033811
+```
+
+You could replace it with:
+
+```bash
+gcloud compute instances create web-server
+```
+
+or
+
+```bash
+gcloud compute instances create db-server
+```
+
+---
+
+# 2. Project
+
+```bash
+--project=boanthos-prod
+```
+
+Every resource belongs to a GCP Project.
+
+Example:
+
+```text
+Organization
+
+      |
+
+------------------------
+
+|          |
+
+Project A  Project B
+```
+
+This VM will be created inside
+
+```
+boanthos-prod
+```
+
+---
+
+# 3. Zone
+
+```bash
+--zone=us-central1-c
+```
+
+A **Zone** is a physical data center within a region.
+
+```text
+Region (us-central1)
+
+       |
+
+-----------------------
+
+|         |          |
+
+Zone-a   Zone-b    Zone-c
+```
+
+Your VM will be deployed in
+
+```
+us-central1-c
+```
+
+---
+
+# 4. Machine Type
+
+```bash
+--machine-type=e2-medium
+```
+
+This decides the VM's CPU and RAM.
+
+For example:
+
+| Machine Type  | vCPU     | Memory |
+| ------------- | -------- | ------ |
+| e2-micro      | 2 shared | 1 GB   |
+| e2-small      | 2        | 2 GB   |
+| e2-medium     | 2        | 4 GB   |
+| e2-standard-4 | 4        | 16 GB  |
+
+Here:
+
+```
+e2-medium
+```
+
+means:
+
+* 2 vCPUs
+* 4 GB RAM
+
+---
+
+# 5. Network Interface
+
+```bash
+--network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=subnet-a
+```
+
+This is one of the most important parameters.
+
+It tells the VM:
+
+* Which VPC/Subnet to connect to
+* Which IP version to use
+* Which network tier to use
+
+Let's break it down.
+
+---
+
+## network-tier=PREMIUM
+
+Google has two network tiers.
+
+### Premium Tier
+
+```text
+User
+
+   |
+
+Google Backbone Network
+
+   |
+
+VM
+```
+
+Traffic stays on Google's global backbone.
+
+Advantages:
+
+* Lower latency
+* Faster
+* Better reliability
+
+---
+
+### Standard Tier
+
+```text
+User
+
+   |
+
+Internet
+
+   |
+
+VM
+```
+
+Traffic uses the public Internet for part of the route.
+
+Less expensive but generally higher latency.
+
+---
+
+## stack-type=IPV4_ONLY
+
+Means:
+
+```
+Only IPv4
+```
+
+No IPv6 address will be assigned.
+
+Other option:
+
+```
+IPV4_IPV6
+```
+
+---
+
+## subnet=subnet-a
+
+This VM connects to
+
+```
+subnet-a
+```
+
+Diagram:
+
+```text
+Global VPC
+
+        |
+
+-----------------------------
+
+|             |
+
+Subnet-a    Subnet-b
+
+     |
+
+    VM
+```
+
+The VM gets a private IP from `subnet-a`.
+
+---
+
+# 6. Metadata
+
+```bash
+--metadata=enable-osconfig=TRUE
+```
+
+Metadata is additional configuration passed to the VM.
+
+Here
+
+```
+enable-osconfig=TRUE
+```
+
+enables **OS Config**, which helps with:
+
+* Patch management
+* OS inventory
+* Remote package installation
+* Configuration management
+
+Useful in enterprise environments.
+
+---
+
+# 7. Maintenance Policy
+
+```bash
+--maintenance-policy=MIGRATE
+```
+
+Sometimes Google performs maintenance on physical hosts.
+
+Options:
+
+### MIGRATE
+
+Google automatically moves your running VM to another host.
+
+```text
+Host A
+
+     |
+
+VM Running
+
+Google Maintenance
+
+     |
+
+Live Migration
+
+     |
+
+Host B
+
+VM Still Running
+```
+
+No reboot in most cases.
+
+---
+
+### TERMINATE
+
+The VM stops during maintenance and must restart later.
+
+Mostly used with GPUs because live migration isn't supported.
+
+---
+
+# 8. Provisioning Model
+
+```bash
+--provisioning-model=STANDARD
+```
+
+Options:
+
+* STANDARD → Regular VM
+* SPOT → Very cheap, but Google can stop it at any time.
+
+Here:
+
+```
+STANDARD
+```
+
+means a normal production VM.
+
+---
+
+# 9. Service Account
+
+```bash
+--service-account=545142624767-compute@developer.gserviceaccount.com
+```
+
+A Service Account is the VM's identity.
+
+Think of it as a login account for the VM.
+
+Instead of:
+
+```
+Username
+Password
+```
+
+the VM authenticates using this Service Account.
+
+---
+
+# 10. OAuth Scopes
+
+```bash
+--scopes=
+```
+
+This grants the VM permission to access Google APIs.
+
+Examples shown include:
+
+* Cloud Logging
+* Monitoring
+* Service Management
+* Trace
+
+Example:
+
+```text
+VM
+
+     |
+
+Service Account
+
+     |
+
+Cloud Logging API
+
+     |
+
+Logs written
+```
+
+> **Note:** Modern GCP best practice is to rely on IAM roles attached to the service account. Scopes are still present for compatibility but are less important than IAM permissions.
+
+---
+
+# 11. Boot Disk
+
+```bash
+--create-disk=
+```
+
+This creates the VM's boot disk.
+
+Parameters include:
+
+* Debian 12 image
+* 10 GB size
+* Balanced persistent disk (pd-balanced)
+* Boot disk enabled
+* Auto-delete when VM is deleted
+
+Diagram:
+
+```text
+VM
+
+   |
+
+Boot Disk
+
+Debian 12
+
+10 GB
+```
+
+---
+
+# 12. Shielded VM
+
+```bash
+--no-shielded-secure-boot
+```
+
+Secure Boot is disabled.
+
+Secure Boot protects against boot-level malware.
+
+---
+
+```bash
+--shielded-vtpm
+```
+
+Enables a virtual Trusted Platform Module (vTPM).
+
+Used to securely store encryption keys and verify system integrity.
+
+---
+
+```bash
+--shielded-integrity-monitoring
+```
+
+Continuously checks whether the VM has been modified unexpectedly.
+
+If malware changes boot files, Google can detect it.
+
+---
+
+# 13. Labels
+
+```bash
+--labels=goog-ops-agent-policy=...
+```
+
+Labels are key-value pairs used for organization.
+
+Example:
+
+```text
+Environment=Production
+
+Owner=DevOps
+
+Application=Ecommerce
+```
+
+They help with:
+
+* Billing
+* Filtering
+* Automation
+
+---
+
+# 14. Reservation Affinity
+
+```bash
+--reservation-affinity=any
+```
+
+This tells GCP whether to use reserved compute capacity.
+
+Here:
+
+```
+any
+```
+
+means the VM can use reserved or non-reserved capacity if available.
+
+---
+
+# 15. OS Config Agent YAML
+
+```bash
+printf 'agentsRule:
+...
+' > config.yaml
+```
+
+This creates a YAML file.
+
+Example:
+
+```yaml
+agentsRule:
+  packageState: installed
+  version: latest
+```
+
+It tells GCP:
+
+> Install the latest Ops Agent on matching VMs.
+
+---
+
+# 16. Create Ops Agent Policy
+
+```bash
+gcloud compute instances ops-agents policies create
+```
+
+This creates an **Ops Agent policy**.
+
+The Ops Agent collects:
+
+* CPU usage
+* Memory usage
+* Disk usage
+* Logs
+* Metrics
+
+Diagram:
+
+```text
+VM
+
+     |
+
+Ops Agent
+
+     |
+
+Cloud Monitoring
+
+     |
+
+Cloud Logging
+```
+
+---
+
+# Complete Flow
+
+```text
+                 Create VM
+                     |
+     ---------------------------------
+     |               |               |
+  Project          Zone        Machine Type
+     |               |               |
+     ---------------------------------
+                     |
+                 Attach VPC
+                     |
+                 Attach Subnet
+                     |
+                Assign Private IP
+                     |
+                Create Boot Disk
+                     |
+             Attach Service Account
+                     |
+               Enable Monitoring
+                     |
+              Install Ops Agent
+                     |
+                VM Ready to Use
+```
+
+## Interview Questions Based on This Command
+
+1. **What does `--zone` specify?**
+
+   * It specifies the availability zone where the VM will be created.
+
+2. **What is the purpose of `--network-interface`?**
+
+   * It attaches the VM to a specific subnet and configures networking options like network tier and IP stack.
+
+3. **What is a Service Account?**
+
+   * It provides an identity for the VM to securely access Google Cloud services without using user credentials.
+
+4. **What is the difference between `MIGRATE` and `TERMINATE` maintenance policies?**
+
+   * `MIGRATE` attempts live migration during host maintenance, while `TERMINATE` stops the VM during maintenance.
+
+5. **Why install the Ops Agent?**
+
+   * To collect logs and system metrics for Cloud Logging and Cloud Monitoring.
+
+This command is an excellent example of what happens behind the scenes when you click **"Create VM"** in the Google Cloud Console. Understanding each flag will make Compute Engine and VPC concepts much easier to grasp.
+
+
+```
+gcloud compute instances create instance-20250820-033811 \
+    --project=boanthos-prod \
+    --zone=us-central1-c \
+    --machine-type=e2-medium \
+    --network-interface=network-tier=PREMIUM,stack-type=IPV4_ONLY,subnet=subnet-a \
+    --metadata=enable-osconfig=TRUE \
+    --maintenance-policy=MIGRATE \
+    --provisioning-model=STANDARD \
+    --service-account=545142624767-compute@developer.gserviceaccount.com \
+    --scopes=https://www.googleapis.com/auth/devstorage.read_only,\
+https://www.googleapis.com/auth/logging.write,\
+https://www.googleapis.com/auth/monitoring.write,\
+https://www.googleapis.com/auth/service.management.readonly,\
+https://www.googleapis.com/auth/servicecontrol,\
+https://www.googleapis.com/auth/trace.append \
+    --create-disk=auto-delete=yes,boot=yes,device-name=instance-20250820-033811,disk-resource-policy=projects/boanthos-prod/regions/us-central1/resourcePolicies/default-schedule-1,image=projects/debian-cloud/global/images/debian-12-bookworm-v20250812,mode=rw,size=10,type=pd-balanced \
+    --no-shielded-secure-boot \
+    --shielded-vtpm \
+    --shielded-integrity-monitoring \
+    --labels=goog-ops-agent-policy=v2-x86-template-1-4-0,goog-ec-src=vm_add-gcloud \
+    --reservation-affinity=any
+```
+
+
+==========================================================================================================================================================
+
+
+# GCP VPC & Subnet (Console + CLI) – Detailed Notes with Scenarios
+
+---
+
+# 1. Default VPC in GCP
+
+When you create a **new GCP project**, Google automatically creates a **Default VPC** (unless your organization disables it).
+
+Example:
+
+```text
+Project: my-first-project
+
+│
+
+├── Default VPC
+│
+├── Firewall Rules
+│
+├── Routes
+│
+└── Subnets
+```
+
+### How to View It
+
+Google Cloud Console
+
+```text
+Navigation Menu
+        │
+VPC Network
+        │
+VPC Networks
+```
+
+You'll see
+
+```text
+default
+```
+
+Click it to see
+
+* Subnets
+* Firewall Rules
+* Routes
+* Connected VMs
+
+---
+
+# Real-Time Production
+
+In most companies,
+
+**there is NO Default VPC.**
+
+Why?
+
+Because:
+
+* Auto-created firewall rules are not secure enough.
+* Auto-created subnets waste IP ranges.
+* Companies want full control over networking.
+
+Therefore,
+
+Companies usually:
+
+```text
+Delete Default VPC
+
+↓
+
+Create Custom VPC
+```
+
+This is considered a **best practice**.
+
+---
+
+# 2. VM Creation and VPC
+
+Every VM must be connected to
+
+* One VPC
+* One Subnet
+
+Without a subnet,
+
+**VM creation will fail.**
+
+Diagram
+
+```text
+                VPC
+
+      +--------------------+
+
+      Subnet-A
+
+      10.1.0.0/24
+
+            │
+
+           VM
+```
+
+VM gets an IP address from the subnet.
+
+Example
+
+Subnet
+
+```text
+10.1.0.0/24
+```
+
+VM receives
+
+```text
+10.1.0.5
+```
+
+---
+
+# Interview Question
+
+### Can I create a VM without a subnet?
+
+**Answer**
+
+No.
+
+Every Compute Engine VM must belong to a subnet.
+
+---
+
+# 3. Auto Mode VPC
+
+Command
+
+```bash
+gcloud compute networks create my-auto-vpc
+```
+
+Since no subnet mode is specified,
+
+Google creates an
+
+```text
+AUTO MODE VPC
+```
+
+---
+
+Diagram
+
+```text
+Auto VPC
+
+|
+
+--------------------------------------------
+
+US Central
+
+Subnet
+
+10.128.x.x
+
+|
+
+Europe
+
+Subnet
+
+10.132.x.x
+
+|
+
+Asia
+
+Subnet
+
+10.136.x.x
+
+|
+
+Australia
+
+Subnet
+
+...
+
+(All GCP Regions)
+```
+
+Google automatically creates one subnet in every available region.
+
+---
+
+## Why Auto Mode is Bad for Production?
+
+Suppose your company uses only
+
+* Bangalore
+* Mumbai
+
+Why create subnets in
+
+* Europe
+* Tokyo
+* Australia
+* South America
+
+?
+
+It wastes IP planning and reduces flexibility.
+
+Therefore,
+
+Auto Mode is useful only for
+
+* Learning
+* Testing
+* Small projects
+
+---
+
+# Delete Auto Mode VPC After Practice
+
+Console
+
+```text
+VPC Networks
+
+↓
+
+Delete
+```
+
+CLI
+
+```bash
+gcloud compute networks delete my-auto-vpc
+```
+
+---
+
+# 4. Create Auto VPC in Another Project
+
+Without changing the active project
+
+```bash
+gcloud compute networks create my-auto-vpc \
+    --project=PROJECT_ID
+```
+
+Example
+
+```bash
+gcloud compute networks create my-auto-vpc \
+    --project=boutique-prod
+```
+
+---
+
+# Or Change Project First
+
+```bash
+gcloud config set project PROJECT_ID
+```
+
+Verify
+
+```bash
+gcloud config get-value project
+```
+
+Now all commands run inside that project.
+
+---
+
+# 5. Create Custom VPC
+
+Production Best Practice
+
+```bash
+gcloud compute networks create my-custom-vpc \
+    --subnet-mode=custom
+```
+
+Notice
+
+```text
+No subnet created
+```
+
+Only VPC is created.
+
+Diagram
+
+```text
+Custom VPC
+
+|
+
+(No Subnets Yet)
+```
+
+Now you create each subnet manually.
+
+---
+
+# 6. Create Subnet
+
+**Correction:** In your command, the `--region` value should be a **region**, not a zone.
+
+❌ Incorrect:
+
+```bash
+--region=us-central1-a
+```
+
+`us-central1-a` is a **zone**.
+
+✅ Correct:
+
+```bash
+gcloud compute networks subnets create my-subnet-central \
+    --range=10.0.1.0/24 \
+    --region=us-central1 \
+    --network=my-custom-vpc
+```
+
+---
+
+Diagram
+
+```text
+Global VPC
+
+|
+
+--------------------------------
+
+|
+
+US Central Region
+
+|
+
+Subnet
+
+10.0.1.0/24
+```
+
+Notice
+
+Subnet belongs to
+
+```text
+us-central1
+```
+
+NOT
+
+```text
+us-central1-a
+```
+
+---
+
+# 7. Can I Create Multiple Subnets?
+
+Yes.
+
+Example
+
+```text
+My VPC
+
+|
+
+------------------------------------
+
+|
+
+Web
+
+10.0.1.0/24
+
+|
+
+App
+
+10.0.2.0/24
+
+|
+
+DB
+
+10.0.3.0/24
+```
+
+Each subnet has
+
+* Different CIDR
+* Different purpose
+
+---
+
+# 8. Duplicate CIDR
+
+Suppose
+
+Already exists
+
+```text
+Web
+
+10.0.1.0/24
+```
+
+Now create
+
+```text
+DB
+
+10.0.1.0/24
+```
+
+Inside
+
+Same VPC
+
+Google returns
+
+```text
+ERROR
+
+Subnet range overlaps with an existing subnet.
+```
+
+Because routing becomes impossible.
+
+Diagram
+
+```text
+VPC
+
+|
+
+---------------------
+
+|
+
+Web
+
+10.0.1.0/24
+
+|
+
+DB
+
+10.0.1.0/24
+
+❌ Duplicate
+```
+
+---
+
+# Interview Question
+
+### Can two subnets have the same CIDR inside one VPC?
+
+Answer
+
+**No.**
+
+CIDR ranges must not overlap.
+
+---
+
+# Scenario
+
+Company has
+
+```text
+Web
+
+10.1.1.0/24
+```
+
+Developer tries
+
+```text
+App
+
+10.1.1.0/24
+```
+
+Google rejects it because both networks use identical IP ranges.
+
+---
+
+# 9. Same CIDR in Different VPCs
+
+Suppose
+
+```text
+VPC A
+
+Web
+
+10.1.0.0/24
+```
+
+and
+
+```text
+VPC B
+
+DB
+
+10.1.0.0/24
+```
+
+Allowed?
+
+**Yes.**
+
+Diagram
+
+```text
+VPC A
+
+10.1.0.0/24
+
+------------------
+
+VPC B
+
+10.1.0.0/24
+```
+
+Because
+
+They are different networks.
+
+---
+
+## But What Happens During VPC Peering?
+
+Suppose
+
+```text
+VPC A
+
+10.1.0.0/24
+
+↓
+
+Peer
+
+↓
+
+VPC B
+
+10.1.0.0/24
+```
+
+Google says
+
+```text
+ERROR
+
+Overlapping CIDR
+```
+
+Because
+
+Which
+
+```text
+10.1.0.20
+```
+
+should packets go to?
+
+Google cannot decide.
+
+Hence
+
+VPC Peering requires
+
+```text
+Non-overlapping CIDRs
+```
+
+---
+
+# 10. Can I Change CIDR After Creating a Subnet?
+
+This is a common interview question.
+
+## Scenario
+
+Created subnet
+
+```text
+10.1.1.0/24
+```
+
+Later
+
+Need
+
+```text
+10.1.0.0/16
+```
+
+Can you simply modify it?
+
+### Answer
+
+**Not directly.**
+
+* You **cannot change the starting IP address** (network prefix) of an existing subnet.
+* GCP **does allow expanding** the subnet range (for example, from `/24` to `/23` or `/22`) if the new range does not overlap with other subnets.
+* You **cannot shrink** a subnet.
+
+Example:
+
+Current subnet:
+
+```text
+10.1.0.0/24
+```
+
+Possible expansion:
+
+```text
+10.1.0.0/23
+```
+
+Not allowed:
+
+```text
+10.2.0.0/24
+```
+
+because that changes the network itself.
+
+If you need a completely different CIDR, the common production approach is:
+
+1. Create a new subnet with the desired CIDR.
+2. Move or recreate workloads in the new subnet.
+3. Delete the old subnet if no longer needed.
+
+---
+
+# Scenario Question
+
+Your production subnet
+
+```text
+10.1.1.0/24
+```
+
+has become full.
+
+Only 254 usable IPs.
+
+Need 1000 servers.
+
+What will you do?
+
+**Recommended Answer:**
+
+* If possible, expand the subnet to a larger CIDR (such as `/22`) if there is no overlap.
+* If expansion isn't possible due to existing address allocations, create a new subnet with a larger CIDR and migrate workloads.
+
+---
+
+# 11. Latency Between Different Regions
+
+Suppose
+
+```text
+App VM
+
+us-central1
+```
+
+Database
+
+```text
+asia-south1
+```
+
+Can they communicate?
+
+**Yes**, if they are in the same VPC (or otherwise connected).
+
+But latency is higher because the data must travel between geographically distant regions.
+
+Diagram
+
+```text
+US Central
+     |
+     |  Google's Private Backbone
+     |
+India (Asia South)
+```
+
+Approximate round-trip latency between the US and India can be around **150–250 ms**, depending on the exact locations and network conditions.
+
+### Best Practice
+
+Keep applications and databases that communicate frequently in the **same region** whenever possible.
+
+Good architecture:
+
+```text
+us-central1
+
+App
+
+↓
+
+Database
+```
+
+Bad architecture (unless required):
+
+```text
+US
+
+↓
+
+India
+
+↓
+
+Europe
+```
+
+This increases latency and can affect application performance.
+
+---
+
+# Production Best Practices
+
+| Item                        | Recommendation                                                           |
+| --------------------------- | ------------------------------------------------------------------------ |
+| Default VPC                 | Delete it in production environments                                     |
+| VPC Type                    | Use Custom Mode                                                          |
+| Subnet Planning             | Plan CIDRs carefully before deployment                                   |
+| Duplicate CIDR              | Never within the same VPC                                                |
+| Same CIDR in Different VPCs | Allowed, but prevents VPC Peering                                        |
+| VM Creation                 | Every VM must belong to a subnet                                         |
+| App & DB                    | Prefer the same region for low latency                                   |
+| CIDR Changes                | Expand if supported; otherwise create a new subnet and migrate workloads |
+|-----------------------------|--------------------------------------------------------------------------|
+
+
