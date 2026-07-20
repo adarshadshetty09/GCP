@@ -9305,3 +9305,4 @@ This increases latency and can affect application performance.
 |-----------------------------|--------------------------------------------------------------------------|
 
 
+create vm in default and custome vpc and try to ssh and try to ping eachother servers.
