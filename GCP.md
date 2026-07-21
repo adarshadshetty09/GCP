@@ -11477,3 +11477,1347 @@ Priority Number   Meaning
 > **Smaller priority number = Checked first = Higher priority.**
 
 
+
+
+
+# Google Cloud Firewall Rules – Complete Hands-on Notes (Ingress, Egress, Service Accounts, Priority)
+
+---
+
+# Table of Contents
+
+1. Introduction
+2. Firewall Architecture
+3. Firewall Rule Components
+4. Ingress Firewall
+5. Egress Firewall
+6. Firewall using Service Accounts
+7. Firewall Priority (Most Important)
+8. Hands-on Lab 1 (Apache + Service Account Firewall)
+9. Hands-on Lab 2 (Firewall Priority)
+10. Hands-on Lab 3 (Egress Filtering)
+11. Real-Time Production Scenarios
+12. Best Practices
+13. Interview Questions
+14. Summary
+
+---
+
+# Introduction
+
+A **Google Cloud Firewall Rule** controls the network traffic entering or leaving Compute Engine VM instances.
+
+Unlike traditional firewalls installed inside operating systems,
+
+Google Cloud Firewall
+
+* works at VPC level
+* is distributed
+* is stateful
+* managed by Google
+* highly available
+
+Think of it like a security guard standing at every VM network interface.
+
+```
+                Internet
+                    |
+                    |
+          ---------------------
+          Google Cloud VPC
+          ---------------------
+                 |
+        Firewall Rule Engine
+                 |
+      -----------------------
+      |                     |
+     VM1                  VM2
+```
+
+The firewall decides
+
+> Can this packet enter?
+>
+> Can this packet leave?
+
+---
+
+# Firewall is Stateful
+
+This is one of the most important interview questions.
+
+Suppose
+
+```
+Laptop
+   |
+   | HTTP Request
+   |
+Firewall ---> VM
+```
+
+The request reaches VM.
+
+VM sends response
+
+```
+VM
+ |
+ | HTTP Response
+ |
+Firewall
+ |
+Laptop
+```
+
+Even if there is no egress allow rule,
+
+the response is automatically allowed.
+
+Because
+
+Google Firewall is
+
+**STATEFUL**
+
+It remembers
+
+"I already allowed this connection."
+
+No need to create another rule.
+
+---
+
+# Firewall Rule Components
+
+Every firewall rule contains
+
+```
+Name
+
+Direction
+
+Priority
+
+Action
+
+Protocol
+
+Port
+
+Source
+
+Destination
+
+Target
+
+Network
+```
+
+Example
+
+```
+Name
+
+allow-http
+
+Direction
+
+INGRESS
+
+Priority
+
+1000
+
+Action
+
+ALLOW
+
+Protocol
+
+tcp
+
+Port
+
+80
+
+Source
+
+0.0.0.0/0
+
+Target
+
+Web Server Service Account
+
+Network
+
+custom-network
+```
+
+---
+
+# Ingress Firewall
+
+Ingress means
+
+Traffic entering VM.
+
+```
+Laptop
+   |
+   |
+   V
+ Firewall
+   |
+   |
+  VM
+```
+
+Examples
+
+SSH
+
+HTTP
+
+HTTPS
+
+RDP
+
+MySQL
+
+PostgreSQL
+
+---
+
+Example
+
+Allow HTTP
+
+```
+Internet
+
+      |
+      |
+
+Firewall
+
+      |
+
+Apache Server
+```
+
+Traffic
+
+```
+Internet
+
+↓
+
+TCP 80
+
+↓
+
+Firewall
+
+↓
+
+Apache
+```
+
+---
+
+# Egress Firewall
+
+Egress means
+
+Traffic leaving VM.
+
+```
+VM
+ |
+ |
+Firewall
+ |
+ |
+Internet
+```
+
+Example
+
+```
+VM
+
+↓
+
+Google DNS
+
+↓
+
+8.8.8.8
+```
+
+or
+
+```
+VM
+
+↓
+
+GitHub
+
+↓
+
+Package Download
+```
+
+---
+
+# Default Behavior
+
+## Ingress
+
+Default
+
+```
+DENY
+```
+
+Meaning
+
+Nobody can access VM
+
+unless
+
+you explicitly allow.
+
+---
+
+## Egress
+
+Default
+
+```
+ALLOW
+```
+
+Meaning
+
+VM can access internet
+
+Example
+
+```
+sudo apt update
+
+yum install
+
+dnf install
+
+curl google.com
+
+wget github.com
+```
+
+All work.
+
+---
+
+# Service Account Based Firewall
+
+Instead of applying firewall to VM names,
+
+Google recommends applying firewall
+
+using
+
+Service Accounts.
+
+Example
+
+```
+VM1
+
+↓
+
+Default Compute Service Account
+
+↓
+
+Firewall Rule
+```
+
+Another VM
+
+```
+VM2
+
+↓
+
+Same Service Account
+
+↓
+
+Firewall automatically applies
+```
+
+No need to modify firewall again.
+
+Very useful in production.
+
+---
+
+# Why Service Account?
+
+Suppose today
+
+```
+WebServer-1
+```
+
+Tomorrow
+
+```
+WebServer-2
+```
+
+Next week
+
+```
+WebServer-100
+```
+
+Instead of adding 100 VM names,
+
+just attach
+
+```
+web-server-sa
+```
+
+Firewall automatically works.
+
+---
+
+# Hands-on Lab 1
+
+## Create VM
+
+```
+gcloud compute instances create fw-vm-sa \
+    --zone us-central1-a \
+    --subnet=subnet-b \
+    --machine-type=e2-medium
+```
+
+---
+
+SSH
+
+```
+gcloud compute ssh fw-vm-sa \
+    --zone us-central1-a
+```
+
+---
+
+Install Apache
+
+```
+sudo apt update -y
+
+sudo apt install apache2 -y
+```
+
+Verify
+
+```
+curl localhost
+```
+
+Output
+
+```
+Apache Default Page
+```
+
+---
+
+Replace HTML
+
+```
+sudo vim /var/www/html/index.html
+```
+
+```
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Firewall Demo</title>
+
+</head>
+
+<body>
+
+<h1>Google Cloud Firewall</h1>
+
+<p>Apache Server Running</p>
+
+</body>
+
+</html>
+```
+
+Verify
+
+```
+curl localhost
+```
+
+Works.
+
+Browser
+
+Doesn't work.
+
+Why?
+
+Because
+
+Firewall blocks port 80.
+
+---
+
+Create Firewall
+
+```
+gcloud compute firewall-rules create allow-ingress-80-sa \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+```
+
+Now
+
+```
+Internet
+
+↓
+
+Firewall
+
+↓
+
+Apache
+
+↓
+
+Success
+```
+
+Browser works.
+
+---
+
+# Firewall Priority (Most Important Topic)
+
+This is asked in interviews frequently.
+
+Many firewall rules can match
+
+the same packet.
+
+Google must decide
+
+which one wins.
+
+It uses
+
+Priority.
+
+---
+
+Rule Priority
+
+Lower number
+
+=
+
+Higher Priority
+
+```
+0
+
+Highest
+
+↓
+
+100
+
+↓
+
+500
+
+↓
+
+900
+
+↓
+
+1000
+
+↓
+
+2000
+
+↓
+
+65535
+
+Lowest
+```
+
+---
+
+Example
+
+Rule 1
+
+```
+Priority
+
+900
+
+DENY
+```
+
+Rule 2
+
+```
+Priority
+
+1000
+
+ALLOW
+```
+
+Packet comes.
+
+Google checks
+
+900 first.
+
+Packet denied.
+
+It never checks 1000.
+
+---
+
+Diagram
+
+```
+Internet
+
+↓
+
+Rule Priority 900
+
+DENY
+
+↓
+
+Packet Dropped
+
+↓
+
+Rule 1000
+
+Never Evaluated
+```
+
+---
+
+Suppose
+
+Rule 1
+
+```
+Priority
+
+1000
+
+ALLOW
+```
+
+Rule 2
+
+```
+Priority
+
+900
+
+DENY
+```
+
+Result
+
+```
+DENY
+```
+
+Because
+
+900 executes first.
+
+---
+
+Very Important
+
+Google does NOT say
+
+DENY is always stronger.
+
+Instead
+
+**The rule with the lowest priority number is evaluated first.**
+
+If both an ALLOW and DENY rule match the same traffic:
+
+* A **DENY** rule with priority **900** beats an **ALLOW** rule with priority **1000**.
+* An **ALLOW** rule with priority **900** beats a **DENY** rule with priority **1000**.
+
+So **priority decides first**, not the action itself.
+
+---
+
+Example
+
+Company
+
+```
+500 Employees
+```
+
+Everyone
+
+can access website.
+
+But
+
+CEO says
+
+Block one hacker.
+
+Firewall
+
+```
+Allow Everyone
+
+Priority
+
+1000
+```
+
+```
+Deny Hacker IP
+
+Priority
+
+900
+```
+
+Flow
+
+```
+Hacker
+
+↓
+
+Rule 900
+
+DENY
+
+↓
+
+Blocked
+```
+
+Other users
+
+```
+Employee
+
+↓
+
+Rule 900
+
+Not Matching
+
+↓
+
+Rule 1000
+
+ALLOW
+
+↓
+
+Website Opens
+```
+
+---
+
+Best Practice
+
+Always leave gaps.
+
+Instead of
+
+```
+1000
+
+1001
+
+1002
+```
+
+Use
+
+```
+900
+
+1000
+
+1100
+
+1200
+
+1300
+```
+
+Later
+
+you can insert
+
+950
+
+without changing everything.
+
+---
+
+# Hands-on Lab 2
+
+Create VM
+
+```
+priority-vm-example
+```
+
+Install Apache.
+
+Verify
+
+```
+curl localhost
+```
+
+Browser
+
+Fails.
+
+Allow HTTP
+
+```
+Priority
+
+1000
+
+ALLOW
+```
+
+Browser
+
+Works.
+
+---
+
+Find your public IP
+
+```
+whatismyip
+```
+
+Example
+
+```
+45.117.122.200
+```
+
+Create deny rule
+
+```
+gcloud compute firewall-rules create deny-my-ip \
+    --direction=INGRESS \
+    --priority=900 \
+    --network=custom-network \
+    --action=DENY \
+    --rules=tcp:80 \
+    --source-ranges=45.117.122.200/32 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+```
+
+Now
+
+You
+
+```
+Cannot Access
+```
+
+Friend
+
+```
+Can Access
+```
+
+Diagram
+
+```
+           Internet
+
+      /                 \
+
+ Your Laptop        Friend
+
+      |                |
+
+Rule 900          Rule 900
+
+DENY             Doesn't Match
+
+      |                |
+
+Blocked         Rule1000 ALLOW
+
+                     |
+
+                 Apache
+```
+
+---
+
+# Egress Firewall
+
+Normally
+
+```
+VM
+
+↓
+
+Internet
+
+↓
+
+Allowed
+```
+
+Because
+
+Default Egress
+
+ALLOW
+
+---
+
+Suppose company policy
+
+Production server
+
+should
+
+ONLY
+
+talk to
+
+```
+GitHub
+
+NTP
+
+Google DNS
+
+Company API
+```
+
+Everything else
+
+Blocked.
+
+This is
+
+Egress Filtering.
+
+---
+
+# Hands-on Lab 3
+
+Create
+
+VM1
+
+```
+allow-ping-google
+```
+
+VM2
+
+```
+No Tag
+```
+
+---
+
+Rule
+
+```
+Priority
+
+900
+
+ALLOW
+```
+
+Destination
+
+```
+8.8.8.8
+```
+
+Target Tag
+
+```
+allow-ping-google
+```
+
+---
+
+Rule
+
+```
+Priority
+
+1000
+
+DENY
+```
+
+Destination
+
+```
+8.8.8.8
+```
+
+All Others
+
+---
+
+Diagram
+
+```
+VM1(Tag)
+
+↓
+
+Allow Rule
+
+↓
+
+8.8.8.8
+
+SUCCESS
+
+
+
+VM2(No Tag)
+
+↓
+
+Allow Rule
+
+No Match
+
+↓
+
+Deny Rule
+
+↓
+
+BLOCKED
+```
+
+---
+
+Test
+
+```
+ping 8.8.8.8
+```
+
+VM1
+
+```
+PING SUCCESS
+```
+
+VM2
+
+```
+Destination Host Unreachable
+```
+
+---
+
+# Real-Time Scenarios
+
+## Scenario 1
+
+Web Server
+
+```
+Internet
+
+↓
+
+Allow
+
+80
+
+443
+```
+
+SSH
+
+Only
+
+```
+Company VPN
+```
+
+---
+
+## Scenario 2
+
+Database
+
+Never expose
+
+3306
+
+or
+
+5432
+
+to internet.
+
+Allow only
+
+Application Servers.
+
+---
+
+## Scenario 3
+
+HR Application
+
+Only HR subnet
+
+can access.
+
+Everyone else
+
+Blocked.
+
+---
+
+## Scenario 4
+
+Developer VM
+
+Allow
+
+GitHub
+
+Docker Hub
+
+Google APIs
+
+Block
+
+Everything else.
+
+---
+
+## Scenario 5
+
+Finance Server
+
+Allow
+
+Bank API
+
+Company Backup Server
+
+Deny
+
+Entire Internet.
+
+---
+
+# Best Practices
+
+* Use **service accounts** instead of VM names whenever possible.
+* Use **network tags** for grouping similar workloads.
+* Leave priority gaps (900, 1000, 1100...) for future rules.
+* Grant only the minimum required access (principle of least privilege).
+* Avoid `0.0.0.0/0` unless the service is intentionally public.
+* Prefer specific IP ranges over broad ones.
+* Test firewall rules before applying them to production.
+* Use firewall logging for troubleshooting and auditing.
+
+---
+
+# Common Interview Questions
+
+### Q1. Is Google Cloud Firewall Stateful?
+
+Yes.
+
+---
+
+### Q2. Default Ingress?
+
+DENY.
+
+---
+
+### Q3. Default Egress?
+
+ALLOW.
+
+---
+
+### Q4. Lower priority number means?
+
+Higher precedence.
+
+---
+
+### Q5. Which wins?
+
+Priority **900** or **1000**?
+
+Answer:
+
+**900**.
+
+---
+
+### Q6. Can firewall be applied using Service Accounts?
+
+Yes.
+
+Recommended by Google.
+
+---
+
+### Q7. Difference between Tags and Service Accounts?
+
+| Network Tags                  | Service Accounts                        |
+| ----------------------------- | --------------------------------------- |
+| Manual labels attached to VMs | Identity attached to VMs                |
+| Easy for grouping VMs         | Better for security and IAM integration |
+| Can be changed easily         | Preferred for production workloads      |
+
+---
+
+### Q8. Difference between Source Ranges and Destination Ranges?
+
+**Source Ranges**
+
+* Used mainly in **Ingress** rules.
+* Specifies where incoming traffic originates.
+* Example: `0.0.0.0/0`, `10.0.0.0/8`.
+
+**Destination Ranges**
+
+* Used in **Egress** rules.
+* Specifies where outgoing traffic is allowed or denied.
+* Example: `8.8.8.8/32`, `192.168.10.0/24`.
+
+---
+
+# Final Summary
+
+```
+Firewall
+
+↓
+
+Works at VPC Level
+
+↓
+
+Stateful
+
+↓
+
+Ingress Default = DENY
+
+↓
+
+Egress Default = ALLOW
+
+↓
+
+Priority
+
+Lower Number = Higher Priority
+
+↓
+
+Service Accounts
+
+Recommended
+
+↓
+
+Network Tags
+
+Useful for Grouping
+
+↓
+
+Destination Ranges
+
+Egress
+
+↓
+
+Source Ranges
+
+Ingress
+
+↓
+
+Best Practice
+
+Least Privilege + Priority Gaps + Service Accounts
+```
+
+These concepts—especially **stateful behavior, priority evaluation, service account targeting, ingress vs. egress, and destination/source filtering**—are among the most frequently tested topics in **Google Cloud Associate Cloud Engineer** and **Professional Cloud Network Engineer** interviews and are commonly encountered in real production environments.
