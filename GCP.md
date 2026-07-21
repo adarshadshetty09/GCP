@@ -10420,3 +10420,1060 @@ This is a good hands-on lab to practice:
 * ICMP allow/deny rules
 * Firewall priorities
 * GCP networking troubleshooting
+
+
+This firewall rule allows **HTTP (Port 80)** traffic **only to VMs using a specific Service Account**, instead of using **Network Tags**.
+
+---
+
+## Command
+
+```bash
+gcloud compute firewall-rules create allow-ingress-80-sa \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+```
+
+---
+
+# What is `--target-service-accounts`?
+
+Normally, we use **Network Tags** to decide which VMs a firewall rule applies to.
+
+Example:
+
+```text
+Firewall Rule
+      |
+      |
+Target Tag = web-server
+      |
+      |
+-------------------------
+| VM1 | VM2 | VM3 |
+-------------------------
+```
+
+Only VMs with the **web-server** tag receive the firewall rule.
+
+---
+
+With **Service Accounts**, the firewall rule is attached based on the VM's **identity**.
+
+```text
+Firewall Rule
+        |
+Target Service Account
+        |
+compute-engine@project.iam.gserviceaccount.com
+        |
+--------------------------
+| VM1 | VM2 |
+--------------------------
+
+VM3 (Different Service Account)
+
+No access
+```
+
+Only VMs using that Service Account are affected.
+
+---
+
+# What does each option mean?
+
+```bash
+gcloud compute firewall-rules create allow-ingress-80-sa
+```
+
+Creates a firewall rule named:
+
+```
+allow-ingress-80-sa
+```
+
+---
+
+```bash
+--direction=INGRESS
+```
+
+Traffic coming **into** the VM.
+
+```
+Internet
+    |
+    |
+    V
+Firewall
+    |
+    V
+VM
+```
+
+---
+
+```bash
+--priority=1000
+```
+
+Rule priority.
+
+Smaller number = Higher priority.
+
+Example
+
+```
+Priority 100
+
+DENY
+
+Priority 1000
+
+ALLOW
+```
+
+Result
+
+```
+DENY
+```
+
+because Priority **100** is evaluated first.
+
+---
+
+```bash
+--network=custom-network
+```
+
+The firewall rule belongs to this VPC.
+
+```
+Project
+
+    |
+
+custom-network
+
+    |
+
+Firewall Rule
+```
+
+---
+
+```bash
+--action=ALLOW
+```
+
+Allow the traffic.
+
+Could also be
+
+```
+ALLOW
+
+DENY
+```
+
+---
+
+```bash
+--rules=tcp:80
+```
+
+Allow only
+
+```
+TCP
+
+Port 80
+```
+
+which is
+
+```
+HTTP
+```
+
+---
+
+```bash
+--source-ranges=0.0.0.0/0
+```
+
+Traffic is allowed from
+
+```
+Anywhere
+
+Internet
+```
+
+```
+0.0.0.0/0
+```
+
+means every IPv4 address.
+
+---
+
+```bash
+--target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+```
+
+Apply this firewall rule **only** to VMs using the specified service account.
+
+Example
+
+```
+web-sa@my-project.iam.gserviceaccount.com
+```
+
+---
+
+# How do I find the VM's Service Account?
+
+## Method 1: Console (Easiest)
+
+Go to:
+
+```
+Compute Engine
+      ↓
+VM Instances
+      ↓
+Click the VM
+      ↓
+Security and API Access
+```
+
+You will see something like:
+
+```
+Service Account
+
+123456789-compute@developer.gserviceaccount.com
+```
+
+or
+
+```
+my-web-sa@project-id.iam.gserviceaccount.com
+```
+
+Use that email in the firewall rule.
+
+Example:
+
+```bash
+gcloud compute firewall-rules create allow-ingress-80-sa \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --target-service-accounts=123456789-compute@developer.gserviceaccount.com
+```
+
+---
+
+## Method 2: Using gcloud
+
+Describe the VM:
+
+```bash
+gcloud compute instances describe VM_NAME \
+    --zone=ZONE
+```
+
+Example:
+
+```bash
+gcloud compute instances describe web-vm \
+    --zone=us-central1-a
+```
+
+Look for:
+
+```yaml
+serviceAccounts:
+- email: 123456789-compute@developer.gserviceaccount.com
+```
+
+---
+
+## Method 3: List all Service Accounts
+
+```bash
+gcloud iam service-accounts list
+```
+
+Example output:
+
+```
+EMAIL
+-----------------------------------------------
+123456789-compute@developer.gserviceaccount.com
+web-sa@my-project.iam.gserviceaccount.com
+db-sa@my-project.iam.gserviceaccount.com
+```
+
+---
+
+# Service Account vs Network Tag
+
+| Feature                    | Network Tag    | Service Account                   |
+| -------------------------- | -------------- | --------------------------------- |
+| Based on                   | VM tag         | VM identity (IAM Service Account) |
+| Managed by                 | Compute Engine | IAM                               |
+| Easy to assign             | ✅ Yes          | Requires service account          |
+| More secure                | No             | ✅ Yes                             |
+| Recommended for production | Sometimes      | ✅ Yes                             |
+
+---
+
+# Real Production Example
+
+Suppose you have:
+
+```
+Frontend VM
+↓
+
+web-sa@project.iam.gserviceaccount.com
+```
+
+and
+
+```
+Database VM
+↓
+
+db-sa@project.iam.gserviceaccount.com
+```
+
+You create a firewall rule:
+
+```bash
+--target-service-accounts=web-sa@project.iam.gserviceaccount.com
+```
+
+Result:
+
+| VM          | Service Account | HTTP Allowed? |
+| ----------- | --------------- | ------------- |
+| Web VM      | web-sa          | ✅ Yes         |
+| App VM      | web-sa          | ✅ Yes         |
+| Database VM | db-sa           | ❌ No          |
+
+This is more secure than network tags because the rule follows the VM's authenticated identity rather than a manually assigned label. In production GCP environments, **service account-based firewall rules are often preferred** for fine-grained access control.
+
+
+# Firewall Priority in Google Cloud (Very Important Interview Topic)
+
+Firewall **priority** decides **which firewall rule is evaluated first** when multiple rules match the same network traffic.
+
+Think of it as a **queue**.
+
+The firewall checks the rules from the **smallest priority number to the largest priority number**.
+
+* Smaller number = Higher priority
+* Larger number = Lower priority
+
+---
+
+# Think Like a Security Guard
+
+Imagine a security guard checking visitors.
+
+There are two instructions:
+
+```
+Rule 1
+Priority = 100
+
+Don't allow unknown visitors.
+```
+
+```
+Rule 2
+Priority = 1000
+
+Allow everyone.
+```
+
+A stranger arrives.
+
+Which rule will the guard follow?
+
+Rule 1, because it has the **higher priority** (100).
+
+The second rule is never checked.
+
+The same happens in GCP Firewall.
+
+---
+
+# Rule Evaluation Flow
+
+```text
+Incoming Packet
+       |
+       |
+       V
++----------------+
+| Priority = 100 |
++----------------+
+      Match?
+       |
+   Yes | No
+       |-------> Check Priority 200
+       |
+       V
+ Apply Action
+ (ALLOW / DENY)
+
+STOP
+```
+
+Once a matching rule is found, **evaluation stops**. GCP does **not** continue checking lower-priority rules.
+
+---
+
+# Important Rule
+
+The firewall evaluates:
+
+```
+Priority 10
+
+↓
+
+Priority 50
+
+↓
+
+Priority 100
+
+↓
+
+Priority 500
+
+↓
+
+Priority 1000
+
+↓
+
+Priority 65535
+```
+
+Not
+
+```
+1000
+
+↓
+
+500
+
+↓
+
+100
+```
+
+---
+
+# Default Priority
+
+If you don't specify
+
+```bash
+--priority
+```
+
+GCP assigns
+
+```
+1000
+```
+
+---
+
+# Valid Priority Range
+
+```
+0
+↓
+
+65535
+```
+
+Where
+
+```
+0
+
+Highest Priority
+```
+
+```
+65535
+
+Lowest Priority
+```
+
+---
+
+# Scenario 1 (ALLOW vs DENY)
+
+Suppose you have two firewall rules.
+
+## Rule 1
+
+```
+Name
+
+deny-http
+```
+
+```
+Priority
+
+100
+```
+
+```
+Action
+
+DENY
+```
+
+```
+Port
+
+80
+```
+
+---
+
+## Rule 2
+
+```
+Name
+
+allow-http
+```
+
+```
+Priority
+
+1000
+```
+
+```
+Action
+
+ALLOW
+```
+
+```
+Port
+
+80
+```
+
+Diagram
+
+```text
+Internet
+    |
+    |
+HTTP Request
+    |
+    V
+
+Firewall
+
+↓
+
+Priority 100
+DENY HTTP
+
+↓
+
+Priority 1000
+ALLOW HTTP
+```
+
+A user opens
+
+```
+http://server-ip
+```
+
+What happens?
+
+The packet reaches the firewall.
+
+The firewall checks Priority 100 first.
+
+It matches.
+
+Action = DENY.
+
+The packet is dropped.
+
+The Priority 1000 rule is **never evaluated**.
+
+Result
+
+```
+Website will NOT open.
+```
+
+---
+
+# Scenario 2 (Reverse Priority)
+
+Now change the priorities.
+
+Rule
+
+```
+ALLOW
+
+Priority 100
+```
+
+Rule
+
+```
+DENY
+
+Priority 1000
+```
+
+Firewall
+
+```text
+Packet
+
+↓
+
+Priority 100
+
+ALLOW
+
+↓
+
+STOP
+
+Priority 1000
+
+Never Checked
+```
+
+Result
+
+```
+Website opens successfully.
+```
+
+---
+
+# Scenario 3 (SSH)
+
+Rule
+
+```
+Allow SSH
+
+Priority = 1000
+```
+
+Another Rule
+
+```
+Deny All TCP
+
+Priority = 100
+```
+
+Packet
+
+```
+SSH
+
+TCP 22
+```
+
+Firewall
+
+```
+Priority 100
+
+DENY ALL TCP
+
+↓
+
+Packet Dropped
+```
+
+SSH fails.
+
+Even though
+
+```
+Allow SSH
+
+Exists
+```
+
+it is never reached.
+
+---
+
+# Scenario 4 (Production Company)
+
+Suppose a company has
+
+```
+Web Server
+
+Port 80
+```
+
+Employees should access it.
+
+Hackers should not.
+
+Firewall Rules
+
+### Rule 1
+
+```
+Priority = 100
+
+DENY
+
+Source
+
+45.12.10.0/24
+```
+
+Known malicious IPs.
+
+---
+
+### Rule 2
+
+```
+Priority = 1000
+
+ALLOW
+
+0.0.0.0/0
+```
+
+Everyone else.
+
+Diagram
+
+```text
+                Internet
+
+             /            \
+
+      Hacker IP        Employee IP
+
+          |                 |
+
+          V                 V
+
+     Firewall
+
+ Priority 100
+ DENY Hacker
+
+ Priority 1000
+ ALLOW Everyone
+```
+
+Result
+
+```
+Hacker
+
+❌ Blocked
+```
+
+```
+Employee
+
+✅ Allowed
+```
+
+---
+
+# Scenario 5 (Most Common in Production)
+
+Allow SSH only from your office network.
+
+Rule
+
+```
+Priority 100
+
+ALLOW
+
+TCP 22
+
+192.168.1.0/24
+```
+
+Rule
+
+```
+Priority 1000
+
+DENY
+
+TCP 22
+
+0.0.0.0/0
+```
+
+Diagram
+
+```text
+Office Network
+
+↓
+
+Priority 100
+
+ALLOW SSH
+
+↓
+
+Connected
+
+
+
+Internet User
+
+↓
+
+Priority 100
+
+No Match
+
+↓
+
+Priority 1000
+
+DENY SSH
+
+↓
+
+Blocked
+```
+
+Only office employees can log in.
+
+---
+
+# Real Packet Flow
+
+Suppose
+
+```
+VM
+
+IP
+
+10.0.0.5
+```
+
+Firewall Rules
+
+| Priority | Rule                       | Action |
+| -------- | -------------------------- | ------ |
+| 100      | Deny SSH from 10.1.0.0/24  | DENY   |
+| 500      | Allow SSH from Company VPN | ALLOW  |
+| 1000     | Allow SSH from Anywhere    | ALLOW  |
+
+Now different users try SSH.
+
+### User A
+
+```
+IP
+
+10.1.0.10
+```
+
+Firewall
+
+```
+Priority 100
+
+Match
+
+↓
+
+DENY
+
+↓
+
+STOP
+```
+
+Blocked.
+
+---
+
+### User B
+
+```
+Company VPN
+```
+
+Firewall
+
+```
+Priority 100
+
+No Match
+
+↓
+
+Priority 500
+
+Match
+
+↓
+
+ALLOW
+
+↓
+
+STOP
+```
+
+Allowed.
+
+---
+
+### User C
+
+```
+Home Internet
+```
+
+Firewall
+
+```
+Priority 100
+
+No Match
+
+↓
+
+Priority 500
+
+No Match
+
+↓
+
+Priority 1000
+
+Match
+
+↓
+
+ALLOW
+```
+
+Allowed.
+
+---
+
+# Best Practice
+
+Use priorities to make **specific rules** take precedence over **general rules**.
+
+Example:
+
+| Priority | Rule                      | Reason                     |
+| -------- | ------------------------- | -------------------------- |
+| 100      | Deny malicious IPs        | Check first                |
+| 200      | Allow company VPN         | Trusted users              |
+| 500      | Allow application traffic | Business requirement       |
+| 1000     | General allow rule        | Fallback                   |
+| 65535    | Implied deny              | Default if nothing matches |
+
+---
+
+# Common Interview Questions
+
+### 1. What is the default firewall priority?
+
+**1000**
+
+---
+
+### 2. Which priority is higher: 100 or 1000?
+
+**100** (lower number means higher priority).
+
+---
+
+### 3. If two firewall rules match the same traffic, which one is applied?
+
+The rule with the **highest priority** (lowest numeric value). After a match is found, GCP stops evaluating additional rules.
+
+---
+
+### 4. What happens if no firewall rule matches?
+
+GCP applies the **implied deny** rule and blocks the traffic.
+
+---
+
+### 5. Can an ALLOW rule override a DENY rule?
+
+Yes, **if the ALLOW rule has a higher priority** (a lower priority number). Likewise, a higher-priority DENY rule will block traffic even if a lower-priority ALLOW rule exists.
+
+---
+
+# Easy Trick to Remember
+
+```text
+Priority Number   Meaning
+
+0        → Highest Priority ⭐⭐⭐⭐⭐
+
+100      → Checked First
+
+500      → Checked Next
+
+1000     → Default Priority
+
+65535    → Lowest Priority
+```
+
+**Memory tip:** Don't think "bigger number = more important." In Google Cloud firewalls, it's the opposite:
+
+> **Smaller priority number = Checked first = Higher priority.**
+
+

@@ -189,3 +189,165 @@ This is a good hands-on lab to practice:
 * ICMP allow/deny rules
 * Firewall priorities
 * GCP networking troubleshooting
+
+
+
+=============================================================================================================================================================================
+
+Let's Create the Firewall vm configuration at the service account level.
+
+
+mkdir 2107 
+cd 2107 
+
+Create a vm via gcloud command 
+
+gcloud compute instances create fw-vm-sa --zone us-central1-a --subnet=subnet-b --machine-type=e2-medium 
+
+
+
+via gcloud command i am login 
+
+gcloud compute ssh --zone "us-central1-a" "fw-vm-sa" --project <project-ID>
+
+When you create the first time it may ask you enter the to generate the keys. (It will create the finger print ssh key pub and private key)
+
+
+ls -la ./.ssh/
+
+sudo apt update -y 
+
+# INstall apache server 
+sudo apt install apache2 -y 
+
+ls /var/www/html/ 
+ls  here content will display
+
+curl localhost
+
+sudo rm -rf /var/www/html/index.html
+
+ls /var/www/html 
+update new code html code and update 
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+
+</body>
+</html>
+
+curl localhost 
+
+inside the machine my apache server is running. But this not exposed to public network so open the port 80 in fierewall rule. 
+
+Try to do via salary , allowing all over the service account. 
+
+When you creating the VM the default service account is assigned to a that compute instance . we can modify this also.
+
+
+gcloud compute firewall-rules create allow-ingress-80-sa \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+
+
+
+Now try fetch from the apache server you will get --> Port 80 is allowed
+
+Now delete the instance that we created 
+
+gcloud compute instances delete  fw-vm-sa --zone us-central1-a
+
+type yes if it asks
+
+gcloud compute instances delete  fw-vm-sa --zone us-central1-a --quite
+
+### Priority ?????  in firewal very important explain in details with scenario and example.
+
+
+Create a Server
+
+gcloud compute instances create priority-vm-example --zone us-central1-a --subnet=subnet-b --machine-type=e2-medium 
+
+Login to VM 
+
+gcloud compute ssh --zone "us-central1-a" "priority-vm-example" --project <project-ID>
+
+sudo apt update -y 
+curl localhost
+sudo apt install apache2 -y 
+
+curl localhost 
+
+vim /var/www/html/index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>GCP</h1>
+<p>Firewall Priority</p>
+
+</body>
+</html>
+
+curl localhost 
+
+Try to open via browser
+It will not open 
+
+Filter Network:custom-network
+
+gcloud compute firewall-rules create allow-ingress-80-sa \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=ALLOW \
+    --rules=tcp:80 \
+    --source-ranges=0.0.0.0/0 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+
+All can accesssssssssssssssssssssssssssssssss
+
+
+
+whatsmyip   get the ipv4 
+
+create the firwal rule
+
+gcloud compute firewall-rules create deny-siva \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=custom-network \
+    --action=DENY \
+    --rules=tcp:80 \
+    --source-ranges=Ipv4/32 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
+
+now i cannot access the web browser but other devices can acccessss....
+
+Deny will have the highest priority
+Best Practice keep the priority gap 
+
+gcloud compute firewall-rules create deny-siva \
+    --direction=INGRESS \
+    --priority=900 \
+    --network=custom-network \
+    --action=DENY \
+    --rules=tcp:80 \
+    --source-ranges=Ipv4/32 \
+    --target-service-accounts=<SERVICE_ACCOUNT_EMAIL>
