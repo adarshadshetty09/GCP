@@ -9306,3 +9306,1117 @@ This increases latency and can affect application performance.
 
 
 create vm in default and custome vpc and try to ssh and try to ping eachother servers.
+
+
+=====================================
+Let's break down this command flag by flag.
+
+```bash
+gcloud compute firewall-rules create allow-ssh-vpc1 \
+      --description="This will allow port 22 to login to vms in vpc1" \
+      --direction=INGRESS \
+      --priority=1000 \
+      --network=vpc-1 \
+      --action=ALLOW \
+      --rules=tcp:22 \
+      --source-ranges=0.0.0.0/0
+```
+
+## 1. `gcloud`
+
+The Google Cloud CLI command.
+
+## 2. `compute`
+
+Specifies you're working with **Compute Engine** resources.
+
+## 3. `firewall-rules`
+
+The resource type you're managing.
+
+## 4. `create`
+
+Creates a new firewall rule.
+
+## 5. `allow-ssh-vpc1`
+
+This is the **name of the firewall rule**.
+
+You can choose any unique name.
+
+---
+
+## 6. `--description`
+
+```bash
+--description="This will allow port 22 to login to VMs in vpc1"
+```
+
+Adds a human-readable description.
+
+It has **no impact** on how the firewall behaves.
+
+---
+
+## 7. `--direction=INGRESS`
+
+Specifies the direction of traffic.
+
+There are two possible values:
+
+### INGRESS
+
+Traffic coming **into** the VM.
+
+Example:
+
+```
+Laptop
+   │
+   ▼
+VM
+```
+
+Examples:
+
+* SSH (22)
+* HTTP (80)
+* HTTPS (443)
+
+---
+
+### EGRESS
+
+Traffic leaving the VM.
+
+Example:
+
+```
+VM
+ │
+ ▼
+Internet
+```
+
+Examples:
+
+* VM downloading packages
+* VM calling an API
+
+---
+
+## 8. `--priority=1000`
+
+Firewall rules are evaluated by priority.
+
+Lower number = Higher priority.
+
+Examples
+
+| Priority | Preference |
+| -------- | ---------- |
+| 100      | First      |
+| 500      | Second     |
+| 1000     | Third      |
+| 65535    | Last       |
+
+If multiple rules match, the rule with the **lowest priority number** is evaluated first.
+
+---
+
+## 9. `--network=vpc-1`
+
+Specifies **which VPC** this firewall rule belongs to.
+
+If your project has:
+
+```
+default
+vpc-1
+production
+testing
+```
+
+Only VMs inside **vpc-1** will use this firewall rule.
+
+---
+
+## 10. `--action=ALLOW`
+
+Specifies what happens when traffic matches the rule.
+
+Possible values:
+
+```
+ALLOW
+DENY
+```
+
+Here:
+
+```
+ALLOW
+```
+
+means the traffic is permitted.
+
+---
+
+## 11. `--rules=tcp:22`
+
+Defines:
+
+* Protocol
+* Port
+
+```
+tcp:22
+```
+
+means:
+
+Protocol:
+
+```
+TCP
+```
+
+Port:
+
+```
+22
+```
+
+Other examples:
+
+```
+tcp:80
+```
+
+HTTP
+
+```
+tcp:443
+```
+
+HTTPS
+
+```
+tcp:5432
+```
+
+PostgreSQL
+
+```
+udp:53
+```
+
+DNS
+
+You can also specify multiple rules:
+
+```bash
+--rules=tcp:22,tcp:80,tcp:443
+```
+
+---
+
+## 12. `--source-ranges=0.0.0.0/0`
+
+Specifies **who is allowed to connect**.
+
+```
+0.0.0.0/0
+```
+
+means
+
+> Every IPv4 address on the Internet.
+
+Examples:
+
+```
+192.168.1.0/24
+```
+
+Only your office network.
+
+```
+10.0.0.0/8
+```
+
+Only private network.
+
+```
+35.235.240.0/20
+```
+
+Only Google's Identity-Aware Proxy (IAP) IP range.
+
+For production environments, avoid `0.0.0.0/0` for SSH. Instead, restrict access to trusted IP ranges or use IAP.
+
+---
+
+# Visual flow
+
+```
+                 Internet
+           (0.0.0.0/0 = Everyone)
+                     │
+                     │
+                     ▼
+         Firewall Rule (allow-ssh-vpc1)
+      Direction : INGRESS
+      Action    : ALLOW
+      Protocol  : TCP
+      Port      : 22
+      Priority  : 1000
+      Network   : vpc-1
+                     │
+                     ▼
+               VM in vpc-1
+```
+
+### Interview explanation
+
+> "This command creates a firewall rule named `allow-ssh-vpc1` in the `vpc-1` network. It allows inbound (INGRESS) TCP traffic on port 22 for SSH from any IPv4 address (`0.0.0.0/0`). The rule has a priority of 1000, meaning it is evaluated after any matching rules with lower priority numbers. The `ALLOW` action permits matching traffic to reach VMs attached to the `vpc-1` network."
+
+===============================================================================================================================================================================================================================
+# **Google Cloud VPC Firewall - Complete Detailed Notes (Interview + Hands-on)**
+
+---
+
+# Google Cloud VPC Firewall
+
+## What is a Firewall?
+
+A **Firewall** is a security mechanism that controls which network traffic is allowed or denied.
+
+Think of it as a **security gate** placed in front of your Virtual Private Cloud (VPC).
+
+```
+Internet
+    |
+    |
++--------------------+
+|    Firewall        |  <-- Security Gate
++--------------------+
+         |
+         |
++--------------------+
+|       VPC          |
+|                    |
+|  VM1     VM2       |
+|                    |
+|  VM3     VM4       |
++--------------------+
+```
+
+The firewall checks every incoming and outgoing packet and decides whether to:
+
+* Allow
+* Deny
+
+based on firewall rules.
+
+---
+
+# Important Point
+
+When a new GCP Project is created,
+
+Google creates a **default VPC** (unless the organization disables it).
+
+The default VPC contains:
+
+* Automatic mode subnet creation
+* Default firewall rules
+* SSH allowed
+* RDP allowed
+* Internal communication allowed
+* ICMP allowed
+
+Because of these default rules, you can SSH into the VM immediately.
+
+---
+
+## Custom VPC
+
+In production, companies never use the default VPC.
+
+Instead they create a **Custom VPC**.
+
+Example
+
+```
+Production VPC
+Development VPC
+Testing VPC
+DR VPC
+```
+
+A Custom VPC does **NOT** contain any firewall rules.
+
+Therefore,
+
+If you create a VM,
+
+SSH will fail.
+
+Because
+
+Port **22** is blocked.
+
+---
+
+# Common Ports
+
+| Service    | Port |
+| ---------- | ---- |
+| SSH        | 22   |
+| HTTP       | 80   |
+| HTTPS      | 443  |
+| MySQL      | 3306 |
+| PostgreSQL | 5432 |
+| RDP        | 3389 |
+
+Example
+
+To access Linux VM
+
+Open Port
+
+```
+22
+```
+
+For Web Server
+
+```
+80
+```
+
+Secure Website
+
+```
+443
+```
+
+---
+
+# Traffic Types
+
+## Ingress
+
+Traffic entering the VM.
+
+```
+Laptop
+   |
+   |
+   V
+
+ VM
+
+```
+
+Example
+
+SSH
+
+Browser
+
+Ping
+
+HTTP Request
+
+---
+
+## Egress
+
+Traffic leaving the VM.
+
+```
+VM
+ |
+ |
+ V
+
+Internet
+```
+
+Example
+
+VM downloading packages
+
+```
+sudo yum update
+
+sudo apt update
+
+wget
+
+curl
+
+```
+
+---
+
+# Firewall Scope
+
+Firewall rules are created at the **VPC level**.
+
+```
+Project
+
+   |
+
+ VPC
+
+   |
+
+Firewall Rules
+
+   |
+
+VMs
+```
+
+You cannot attach a firewall rule directly to a VM. Instead:
+
+* Create the firewall rule for the VPC.
+* Optionally restrict it to selected VMs using **Network Tags** or **Service Accounts**.
+
+---
+
+# Network Tags
+
+Network Tags allow firewall rules to apply only to selected VMs.
+
+Example
+
+```
+Firewall Rule
+
+allow-ssh
+
+↓
+
+Target Tag
+
+allow-ssh
+
+↓
+
+VM1
+
+allow-ssh
+
+VM2
+
+allow-ssh
+
+VM3
+
+(no tag)
+```
+
+Result
+
+```
+VM1 ✔ SSH
+
+VM2 ✔ SSH
+
+VM3 ❌ SSH
+```
+
+---
+
+# Firewall Evaluation
+
+Every packet is checked.
+
+```
+Packet
+
+↓
+
+Firewall Rules
+
+↓
+
+Allow ?
+
+↓
+
+YES
+
+↓
+
+VM
+```
+
+If no rule matches,
+
+traffic is denied.
+
+---
+
+# Firewall Components
+
+Every firewall rule contains
+
+```
+Name
+
+Network
+
+Direction
+
+Priority
+
+Action
+
+Protocol
+
+Ports
+
+Source
+
+Target
+
+```
+
+---
+
+# Firewall Priority
+
+Smaller number = Higher Priority
+
+```
+Priority 100
+
+↓
+
+Priority 500
+
+↓
+
+Priority 1000
+
+↓
+
+Priority 65535
+```
+
+Example
+
+```
+Priority 100
+
+DENY
+
+Priority 1000
+
+ALLOW
+```
+
+Result
+
+```
+DENY
+```
+
+because 100 is evaluated first.
+
+---
+
+# Protocols
+
+Common protocols
+
+```
+TCP
+
+UDP
+
+ICMP
+```
+
+---
+
+TCP Examples
+
+```
+22
+
+80
+
+443
+
+3306
+```
+
+---
+
+ICMP
+
+Used for
+
+```
+Ping
+
+Traceroute
+```
+
+---
+
+# Correct CLI Commands
+
+## Create Custom VPC
+
+```bash
+gcloud compute networks create vpc-1 \
+    --subnet-mode=custom
+```
+
+> **Correction:** The command is `networks create`, not `network creat`.
+
+---
+
+## Create Subnet 1
+
+```bash
+gcloud compute networks subnets create subnet-1 \
+    --network=vpc-1 \
+    --region=us-central1 \
+    --range=10.0.0.0/24
+```
+
+> **Correction:** Use `subnets create` and a valid CIDR (`10.0.0.0/24`).
+
+---
+
+## Create Subnet 2
+
+```bash
+gcloud compute networks subnets create subnet-2 \
+    --network=vpc-1 \
+    --region=asia-southeast1 \
+    --range=10.1.0.0/24
+```
+
+---
+
+# Create VM in subnet-1
+
+```bash
+gcloud compute instances create central-vm-vpc1 \
+    --zone=us-central1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-1
+```
+
+---
+
+# Create VM in subnet-2
+
+```bash
+gcloud compute instances create central-vm-vpc2 \
+    --zone=asia-southeast1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-2
+```
+
+---
+
+# SSH Problem
+
+Suppose
+
+```
+Laptop
+
+↓
+
+central-vm-vpc1
+```
+
+You try
+
+```
+gcloud compute ssh central-vm-vpc1
+```
+
+You receive
+
+```
+Connection timed out
+```
+
+Reason
+
+Firewall blocks TCP Port 22.
+
+---
+
+# Allow SSH
+
+```bash
+gcloud compute firewall-rules create allow-ssh-vpc1 \
+    --description="Allow SSH to VMs in vpc-1" \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=vpc-1 \
+    --action=ALLOW \
+    --rules=tcp:22 \
+    --source-ranges=0.0.0.0/0
+```
+
+---
+
+# Allow Ping
+
+Ping uses
+
+```
+ICMP
+```
+
+Create firewall
+
+```bash
+gcloud compute firewall-rules create allow-icmp-vpc1 \
+    --description="Allow ICMP" \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=vpc-1 \
+    --action=ALLOW \
+    --rules=icmp \
+    --source-ranges=0.0.0.0/0
+```
+
+Now
+
+```
+VM1
+
+ping VM2
+
+✔ Success
+```
+
+---
+
+# Secure SSH using Network Tags
+
+Create firewall
+
+```bash
+gcloud compute firewall-rules create allow-ssh-tagged \
+    --description="Allow SSH only to tagged VMs" \
+    --direction=INGRESS \
+    --priority=1000 \
+    --network=vpc-1 \
+    --action=ALLOW \
+    --rules=tcp:22 \
+    --source-ranges=0.0.0.0/0 \
+    --target-tags=allow-ssh
+```
+
+---
+
+Add tag to VM
+
+```bash
+gcloud compute instances add-tags secure-vm \
+    --zone=us-central1-a \
+    --tags=allow-ssh
+```
+
+Now only that VM accepts SSH.
+
+---
+
+# Hands-on Lab
+
+## Step 1
+
+Create VPC
+
+```bash
+gcloud compute networks create vpc-1 \
+    --subnet-mode=custom
+```
+
+---
+
+## Step 2
+
+Create subnet-a
+
+```bash
+gcloud compute networks subnets create subnet-a \
+    --network=vpc-1 \
+    --region=us-central1 \
+    --range=10.2.1.0/24
+```
+
+Create subnet-b
+
+```bash
+gcloud compute networks subnets create subnet-b \
+    --network=vpc-1 \
+    --region=asia-southeast1 \
+    --range=10.2.2.0/24
+```
+
+---
+
+## Step 3
+
+Create VMs
+
+```bash
+gcloud compute instances create instance-1a \
+    --zone=us-central1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-a
+
+gcloud compute instances create instance-1b \
+    --zone=us-central1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-a
+
+gcloud compute instances create instance-1c \
+    --zone=us-central1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-a
+
+gcloud compute instances create instance-2 \
+    --zone=asia-southeast1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-b
+
+gcloud compute instances create instance-3 \
+    --zone=asia-southeast1-a \
+    --machine-type=e2-micro \
+    --subnet=subnet-b
+```
+
+---
+
+# Network Design
+
+```
+                    VPC-1
++------------------------------------------------------+
+
+Subnet-A (us-central1)
+
+instance-1a
+
+instance-1b
+
+instance-1c
+
+
+Subnet-B (asia-southeast1)
+
+instance-2
+
+instance-3
+
++------------------------------------------------------+
+```
+
+---
+
+# Requirement
+
+```
+instance-1a
+
+↓
+
+Ping
+
+↓
+
+instance-2
+
+✔ Allowed
+
+----------------
+
+instance-1b
+
+↓
+
+Ping
+
+↓
+
+instance-2
+
+✔ Allowed
+
+----------------
+
+instance-1c
+
+↓
+
+Ping
+
+↓
+
+instance-2
+
+❌ Denied
+
+----------------
+
+All instances
+
+↓
+
+Ping
+
+↓
+
+instance-3
+
+❌ Denied
+```
+
+---
+
+# Solution Using Network Tags
+
+Assign tags:
+
+* `instance-2` → `allow-ping`
+* `instance-3` → `deny-ping`
+
+Assign source tags:
+
+* `instance-1a`, `instance-1b` → `ping-source`
+* `instance-1c` → no `ping-source` tag
+
+Allow ICMP only from VMs with the `ping-source` tag to VMs with the `allow-ping` tag:
+
+```bash
+gcloud compute firewall-rules create allow-ping-to-instance2 \
+    --network=vpc-1 \
+    --direction=INGRESS \
+    --priority=1000 \
+    --action=ALLOW \
+    --rules=icmp \
+    --source-tags=ping-source \
+    --target-tags=allow-ping
+```
+
+Do **not** create any ICMP allow rule for `instance-3`. Since firewall rules are deny-by-default, no VM will be able to ping it.
+
+---
+
+# Firewall Troubleshooting Checklist
+
+If SSH or Ping fails:
+
+1. Check the VM status:
+
+   ```bash
+   gcloud compute instances list
+   ```
+
+2. Verify firewall rules:
+
+   ```bash
+   gcloud compute firewall-rules list
+   ```
+
+3. Check the VM's network tags:
+
+   ```bash
+   gcloud compute instances describe INSTANCE_NAME --zone=ZONE
+   ```
+
+4. Confirm the VM is in the expected VPC and subnet.
+
+5. Ensure the correct protocol (`tcp:22` for SSH or `icmp` for ping) is allowed.
+
+6. Verify rule priority—higher priority (lower number) deny rules may override allow rules.
+
+---
+
+# Interview Questions
+
+**Q1. Where are GCP firewall rules applied?**
+At the **VPC network** level. They can be targeted to specific VMs using network tags or service accounts.
+
+**Q2. What is the default firewall action if no rule matches?**
+**Deny** (implied deny).
+
+**Q3. Which protocol does `ping` use?**
+**ICMP**.
+
+**Q4. Which port is used for SSH?**
+**TCP 22**.
+
+**Q5. Can you attach a firewall rule directly to a VM?**
+Not directly. Firewall rules are created on the VPC and can be limited to specific VMs using **network tags** or **service accounts**.
+
+**Q6. What determines which firewall rule is evaluated first?**
+**Priority**. Lower numeric values have higher priority.
+
+These corrected notes align with current GCP terminology, fix the CLI syntax errors in the original draft, and follow recommended networking practices.
+
+
+# Task
+
+```text
+1) Create a VPC called vpc-1
+
+2) Create 2 subnets in vpc-1
+   - subnet-a
+     * Region: us-central1
+     * CIDR Range: 10.2.1.0/24
+
+   - subnet-b
+     * Region: asia-southeast1
+     * CIDR Range: 10.2.2.0/24
+
+3) Create 3 VMs in subnet-a
+   - instance-1a
+   - instance-1b
+   - instance-1c
+
+4) Create 2 VMs in subnet-b
+   - instance-2
+   - instance-3
+
+5) Create a firewall rule to allow SSH (Port 22) to the VMs.
+
+6) Network Requirement:
+   - instance-1a and instance-1b should be able to ping instance-2.
+
+7) Network Restriction:
+   - instance-1c should NOT be able to ping instance-2.
+
+8) Network Restriction:
+   - instance-1a, instance-1b, and instance-1c should NOT be able to ping instance-3.
+```
+
+This is a good hands-on lab to practice:
+
+* VPC creation
+* Subnet creation
+* VM creation
+* Network tags
+* Firewall rules (INGRESS)
+* ICMP allow/deny rules
+* Firewall priorities
+* GCP networking troubleshooting
